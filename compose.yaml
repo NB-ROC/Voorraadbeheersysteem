@@ -1,10 +1,33 @@
-services:
+﻿services:
   db:
-    image: mariadb:latest
+    image: mariadb
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT}
       MARIADB_DATABASE: ${DB_NAME}
       MARIADB_USER: ${DB_USER}
       MARIADB_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/mysql
+    
+  
+  backend:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_SERVER: "db" # This is the docker name for the container, e.g. 'db'
     ports:
-      - "3306:3306"
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
