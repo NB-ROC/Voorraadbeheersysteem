@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace StorageBorrowManagement.ViewModels;
+namespace Frontend.ViewModels;
 
 public abstract class ViewModelBase : ObservableObject
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 
-namespace StorageBorrowManagement;
+namespace Frontend;
 
 internal sealed class Program
 {

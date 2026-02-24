@@ -1,4 +1,4 @@
-﻿namespace StorageBorrowManagement.ViewModels;
+﻿namespace Frontend.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {

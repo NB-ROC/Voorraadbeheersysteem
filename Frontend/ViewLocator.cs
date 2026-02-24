@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using StorageBorrowManagement.ViewModels;
+using Frontend.ViewModels;
 
-namespace StorageBorrowManagement;
+namespace Frontend;
 
 /// <summary>
 ///     Given a view model, returns the corresponding view if possible.

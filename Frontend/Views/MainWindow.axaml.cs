@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace StorageBorrowManagement.Views;
+namespace Frontend.Views;
 
 public partial class MainWindow : Window
 {

@@ -3,10 +3,10 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using StorageBorrowManagement.ViewModels;
-using StorageBorrowManagement.Views;
+using Frontend.ViewModels;
+using Frontend.Views;
 
-namespace StorageBorrowManagement;
+namespace Frontend;
 
 public class App : Application
 {
