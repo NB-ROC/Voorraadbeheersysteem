@@ -1,4 +1,6 @@
-🚀 Voorraadbeheersysteem 🚀🚀
+🚀 Voorraadbeheersysteem
+
+GitHub repository: 24-02-2026 Voorraadbeheer Systeem
 
 📖 Beschrijving
 
@@ -202,3 +204,106 @@ Betrouwbaarder
 Controleerbaar
 
 Het systeem zorgt voor minder fouten, betere verantwoordelijkheid en volledig inzicht in productgebruik en defecten.
+
+Als je wilt kan ik hier ook nog aan toevoegen:
+
+🔧 Technische architectuur (database structuur + ERD uitleg)
+
+🛠️ Installatie & technologie stack
+
+📊 Use-case diagram uitleg
+
+🔐 Security-architectuur
+
+🎓 Extra “stage-proof” formulering voor beoordelaars
+
+Wil je het meer technisch of meer functioneel houden?
+
+een meer kort en simpel
+
+Hier is een kortere en simpelere README versie 👇
+
+🚀 Voorraadbeheersysteem
+
+Repository: 24-02-2026 Voorraadbeheer Systeem
+
+📖 Beschrijving
+
+Dit voorraadbeheersysteem is ontwikkeld voor het beheren en uitlenen van materialen binnen een onderwijsinstelling.
+
+Het systeem wordt gebruikt voor het uitlenen van bijvoorbeeld:
+
+💻 Laptops
+
+🖨️ 3D-printers
+
+🧪 Sensoren
+
+🖥️ IT-apparatuur
+
+Het doel is om overzicht te houden over wie wat heeft geleend en wat de status van een product is.
+
+🎯 Doel
+
+Het systeem zorgt voor:
+
+Registratie van producten
+
+Uitlenen en innemen van materialen
+
+Inzicht in wie een product heeft
+
+Registratie van defecten
+
+Bijhouden van producthistorie
+
+👥 Rollen
+Studenten
+
+Kunnen producten lenen
+
+Hebben beperkte rechten
+
+Docenten
+
+Kunnen producten lenen
+
+Hebben extra rechten
+
+Beheerders
+
+Scannen producten bij uitgifte en inname
+
+Beheren de voorraad
+
+Registreren schade of defecten
+
+Sommige producten mogen alleen door specifieke rollen worden geleend (bijvoorbeeld 3D-printers alleen voor docenten).
+
+🔄 Uitleenproces
+
+Gebruiker scant NFC-kaart
+
+Beheerder scant het product
+
+Het systeem registreert:
+
+Wie het product leent
+
+Datum en tijd
+
+Verwachte inleverdatum
+
+Bij inleveren wordt de status aangepast naar ingeleverd en wordt eventuele schade geregistreerd.
+
+📌 Samenvatting
+
+Dit systeem zorgt voor:
+
+Overzicht
+
+Snellere verwerking
+
+Minder fouten
+
+Betere controle op materialen
