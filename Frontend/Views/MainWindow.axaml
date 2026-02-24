@@ -7,7 +7,7 @@
         x:Class="StorageBorrowManagement.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="StorageBorrowManagement">
+        Title="Frontend">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -17,7 +17,7 @@
 
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Button HorizontalAlignment="Center" Click="Button_OnClick">
+        <Button HorizontalAlignment="Center">
             <TextBlock Text="Test" />
         </Button>
     </StackPanel>
