@@ -6,10 +6,6 @@
       MARIADB_DATABASE: ${DB_NAME}
       MARIADB_USER: ${DB_USER}
       MARIADB_PASSWORD: ${DB_PASS}
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 5s
-      retries: 5
     volumes:
       - db_data:/var/lib/mysql
     
@@ -25,9 +21,8 @@
       DB_SERVER: "db" # This is the docker name for the container, e.g. 'db'
     ports:
       - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
+    depends_on: 
+    - db
 
 volumes:
   db_data:
