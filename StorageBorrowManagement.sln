@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontendAdmin", "FrontendAdmin\FrontendAdmin.csproj", "{E355816F-BE6D-461D-A328-FA8E653289C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +25,9 @@ Global
 		{FA8ADF5E-66A8-4E45-AC80-E45EA72E8BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA8ADF5E-66A8-4E45-AC80-E45EA72E8BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA8ADF5E-66A8-4E45-AC80-E45EA72E8BD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E355816F-BE6D-461D-A328-FA8E653289C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E355816F-BE6D-461D-A328-FA8E653289C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E355816F-BE6D-461D-A328-FA8E653289C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E355816F-BE6D-461D-A328-FA8E653289C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
