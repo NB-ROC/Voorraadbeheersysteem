@@ -1,5 +1,4 @@
 # Voorraadbeheer
--------------------------------------------------------------------------------------------
 Dit project is een digitaal systeem voor het uitlenen en terugbrengen van schoolmaterialen.
 Het systeem is ontwikkeld om beheerders en gebruikers overzicht te geven in:
 - Welke producten zijn uitgeleend
@@ -9,7 +8,6 @@ Het systeem is ontwikkeld om beheerders en gebruikers overzicht te geven in:
 Het doel is om het uitleenproces binnen een onderwijsinstelling efficiënt en overzichtelijk te maken.
 
 ## Functionaliteiten
--------------------------------------------------------------------------------------------
 - Inloggen en registreren van gebruikers
 - Producten zoeken en reserveren
 - Producten uitlenen en terugbrengen
@@ -18,13 +16,11 @@ Het doel is om het uitleenproces binnen een onderwijsinstelling efficiënt en ov
 - Registratie van productstatus en historie
 
 ## Technieken
--------------------------------------------------------------------------------------------
 - Backend: Laravel (PHP), MySQL
 - Frontend: HTML, CSS, JavaScript
 - Tools: GitHub, Figma, Trello (Scrum)
 
 ## Gebruikersrollen
--------------------------------------------------------------------------------------------
 ### Lener
 - Kan producten bekijken
 - Kan producten reserveren
@@ -41,14 +37,12 @@ Het doel is om het uitleenproces binnen een onderwijsinstelling efficiënt en ov
 - Kan wijzigingen en beheeracties uitvoeren
 
 ## Links
--------------------------------------------------------------------------------------------
 - GitHub Wiki – Uitleg over de projectstructuur, functies en planning
 - Figma Design
 - Trello Bord – Scrumplanning
 - ERD – Database structuur
 
 ## Projectgroep
--------------------------------------------------------------------------------------------
 - Anouar Tel
 - Kiano Klootwijk
 - Hawa Ahmed
