@@ -1,84 +1,56 @@
-🚀 Voorraadbeheersysteem
+# Voorraadbeheer
+-------------------------------------------------------------------------------------------
+Dit project is een digitaal systeem voor het uitlenen en terugbrengen van schoolmaterialen.
+Het systeem is ontwikkeld om beheerders en gebruikers overzicht te geven in:
+- Welke producten zijn uitgeleend
+- Aan wie een product is gekoppeld
+- Wanneer het product terug moet worden gebracht
+- De huidige status van materialen
+Het doel is om het uitleenproces binnen een onderwijsinstelling efficiënt en overzichtelijk te maken.
 
-Repository: 24-02-2026 Voorraadbeheer Systeem
+## Functionaliteiten
+-------------------------------------------------------------------------------------------
+- Inloggen en registreren van gebruikers
+- Producten zoeken en reserveren
+- Producten uitlenen en terugbrengen
+- Dashboard voor beheerders om producten en gebruikers te beheren
+- Overzicht van geleende producten per gebruiker
+- Registratie van productstatus en historie
 
-📖 Beschrijving
+## Technieken
+-------------------------------------------------------------------------------------------
+- Backend: Laravel (PHP), MySQL
+- Frontend: HTML, CSS, JavaScript
+- Tools: GitHub, Figma, Trello (Scrum)
 
-Dit voorraadbeheersysteem is bedoeld voor het beheren en uitlenen van materialen binnen een onderwijsinstelling.
+## Gebruikersrollen
+-------------------------------------------------------------------------------------------
+### Lener
+- Kan producten bekijken
+- Kan producten reserveren
+- Kan producten lenen en terugbrengen
+- Heeft beperkte rechten
+### Docent
+- Kan producten bekijken, reserveren, lenen en terugbrengen
+- Heeft iets uitgebreidere rechten dan een lener
+- Beperkte beheermogelijkheden
+### Beheerder
+- Heeft toegang tot het dashboard
+- Beheert producten en gebruikers
+- Houdt toezicht op de volledige voorraad
+- Kan wijzigingen en beheeracties uitvoeren
 
-Denk aan het uitlenen van:
+## Links
+-------------------------------------------------------------------------------------------
+- GitHub Wiki – Uitleg over de projectstructuur, functies en planning
+- Figma Design
+- Trello Bord – Scrumplanning
+- ERD – Database structuur
 
-💻 Laptops
-🖨️ 3D-printers
-🧪 Sensoren
-🖥️ IT-apparatuur
-
-Het systeem zorgt voor overzicht in wie wat heeft geleend en wat de status van een product is.
-
-🎯 Doel
-
-Het systeem biedt:
-
-Registratie van producten
-
-Uitlenen en innemen van materialen
-
-Beheer van gebruikersrechten
-
-Registratie van defecten
-
-Inzicht in producthistorie
-
-👥 Rollen
-Studenten
-
-Kunnen producten lenen
-
-Hebben beperkte rechten
-
-Docenten
-
-Kunnen producten lenen
-
-Hebben extra rechten
-
-Beheerders
-
-Scannen producten bij uitgifte en inname
-
-Beheren de voorraad
-
-Registreren schade of defecten
-
-Sommige producten zijn alleen beschikbaar voor specifieke rollen (bijvoorbeeld 3D-printers alleen voor docenten).
-
-🔄 Uitleenproces
-
-Gebruiker scant NFC-kaart
-
-Beheerder scant product
-
-Het systeem registreert:
-
-Wie het product leent
-
-Datum en tijd
-
-Verwachte inleverdatum
-
-Bij inleveren wordt de status aangepast naar ingeleverd en wordt eventuele schade geregistreerd.
-
-🛠️ Installatie
-
-[Installatie instructies]
-
-⚙️ Configuratie
-
-[Configuratie instellingen]
-
-🧪 Setup
-
-[Database setup]
-[NFC configuratie]
-[Gebruikersrollen instellen]
-[Server instellingen]
+## Projectgroep
+-------------------------------------------------------------------------------------------
+- Anouar Tel
+- Kiano Klootwijk
+- Hawa Ahmed
+- Joe Willems
+- Bart Peters
