@@ -10,7 +10,7 @@ public class GreetTest
     [SetUp]
     public void Setup()
     {
-        GrpcChannel channel = GrpcChannel.ForAddress("http://127.0.0.1:8080");
+        GrpcChannel channel = GrpcChannel.ForAddress("https://127.0.0.1:8080");
         _client = new Greeter.GreeterClient(channel);
     }
 
