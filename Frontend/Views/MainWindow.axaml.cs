@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Grpc.Net.Client;
+using Shared;
 
 namespace Frontend.Views;
 
