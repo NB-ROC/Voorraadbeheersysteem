@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Components\" />
         <Folder Include="Models\"/>
         <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
@@ -41,5 +42,28 @@
             <OutputDir>obj\Debug/net10.0/</OutputDir>
             <Generator>MSBuild:Compile</Generator>
         </Protobuf>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\ItemsView.axaml.cs">
+        <DependentUpon>ItemsView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\LeningenView.axaml.cs">
+        <DependentUpon>LeningenView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\ProfielView.axaml.cs">
+        <DependentUpon>ProfielView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\DashboardView.axaml.cs">
+        <DependentUpon>DashboardView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\ReserveringView.axaml.cs">
+        <DependentUpon>ReserveringView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
