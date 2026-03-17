@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Shared;
 
 namespace Backend.Services;
 

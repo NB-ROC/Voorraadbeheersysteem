@@ -1,24 +1,29 @@
+using Backend.Database;
 using Backend.Services;
+using Microsoft.EntityFrameworkCore;
 
-namespace Backend;
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var env = builder.Environment.EnvironmentName;
 
-public static class Program
+builder.Services.AddGrpc();
+
+if (env == "Test")
 {
-    public static void Main(string[] args)
-    {
-        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-        builder.Services.AddGrpc();
-
-        WebApplication app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        app.MapGrpcService<GreeterService>();
-        app.MapGet("/",
-            () =>
-                "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-
-        app.Run();
-    }
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseInMemoryDatabase("testing")); // TODO: Make this actually work lmao
 }
+else
+{
+    builder.Services.AddDbContext<AppDbContext>();
+}
+
+builder.Services.AddDbContext<AppDbContext>();
+
+WebApplication app = builder.Build();
+
+app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+
+app.MapGrpcService<GreeterService>();
+app.MapGrpcService<UserService>();
+
+app.Run();

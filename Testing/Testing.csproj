@@ -10,16 +10,16 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.4"/>
-        <PackageReference Include="Google.Protobuf" Version="3.34.0-rc2" />
-        <PackageReference Include="Grpc.Net.Client" Version="2.76.0" />
+        <PackageReference Include="Google.Protobuf" Version="3.34.0"/>
+        <PackageReference Include="Grpc.Net.Client" Version="2.76.0"/>
         <PackageReference Include="Grpc.Tools" Version="2.78.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0"/>
-        <PackageReference Include="NUnit" Version="4.3.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0"/>
+        <PackageReference Include="NUnit" Version="4.5.1"/>
         <PackageReference Include="NUnit.Analyzers" Version="4.7.0"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="5.0.0"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="6.1.0"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -27,18 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Protobuf Include="Protos\greet.proto">
-        <GrpcServices>Client</GrpcServices>
-        <Access>Public</Access>
-        <ProtoCompile>True</ProtoCompile>
-        <CompileOutputs>True</CompileOutputs>
-        <OutputDir>obj/Debug/net10.0/</OutputDir>
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Backend\Backend.csproj" />
+        <ProjectReference Include="..\Shared\Shared.csproj"/>
+        <Protobuf Include="..\Shared\Protos\**\*.proto" GrpcServices="Client"/>
     </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@
 
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Button HorizontalAlignment="Center" Click="TestRequest">
+        <Button HorizontalAlignment="Center">
             <TextBlock Text="Test" />
         </Button>
     </StackPanel>
