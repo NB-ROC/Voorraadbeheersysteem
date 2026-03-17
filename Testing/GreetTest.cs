@@ -1,5 +1,6 @@
 ﻿using Backend;
 using Grpc.Net.Client;
+using NUnit.Framework;
 
 namespace Testing;
 

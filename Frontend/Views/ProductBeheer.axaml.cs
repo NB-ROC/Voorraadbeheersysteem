@@ -1,13 +1,15 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Grpc.Net.Client;
 
 namespace Frontend.Views;
 
-public partial class UserControl1 : UserControl
+public partial class ProductBeheer : Window
 {
-    public UserControl1()
+    public ProductBeheer()
     {
         InitializeComponent();
     }
+    
 }
