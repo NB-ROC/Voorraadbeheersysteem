@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="FrontendAdmin.Views.ReserveringView">
+
+    <DockPanel Background="White">
+
+        <!-- Bottom buttons -->
+        <Grid DockPanel.Dock="Bottom" Margin="15,10,15,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="Annuleer"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="40"
+                    Background="#6a69ad"
+                    Foreground="White"
+                    CornerRadius="4"
+                    HorizontalContentAlignment="Center"
+                    Click="OnAnnuleerClick"/>
+
+            <Button Grid.Column="2"
+                    Content="Bevestig"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    Height="40"
+                    Background="#6a69ad"
+                    Foreground="White"
+                    CornerRadius="4"
+                    HorizontalContentAlignment="Center"
+                    Click="OnBevestigClick"/>
+        </Grid>
+
+        <!-- Main content -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="15" Margin="30">
+
+            <!-- Image placeholder -->
+            <Border Width="180" Height="150"
+                    BorderBrush="#cccccc"
+                    BorderThickness="1"
+                    Background="#eeeeee"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="🖼" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
+            </Border>
+
+            <!-- Item name -->
+            <TextBlock Text="Item Naam"
+                       Foreground="#aaaaaa"
+                       FontSize="18"
+                       HorizontalAlignment="Center"/>
+
+            <!-- Divider -->
+            <Border Height="1" Background="#aaaaaa" HorizontalAlignment="Stretch"/>
+
+            <!-- Date -->
+            <TextBlock Text="Datum: 12-15 Juni"
+                       Foreground="#aaaaaa"
+                       FontSize="14"
+                       HorizontalAlignment="Center"/>
+
+        </StackPanel>
+
+    </DockPanel>
+
+</UserControl>

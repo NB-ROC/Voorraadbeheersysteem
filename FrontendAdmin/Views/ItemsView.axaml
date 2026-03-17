@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="FrontendAdmin.Views.ItemsView">
+
+    <DockPanel Background="White">
+        <TextBlock DockPanel.Dock="Top"
+                   Text="Items Overzicht"
+                   Foreground="#aaaaaa"
+                   FontSize="20"
+                   Margin="15,15,15,10"/>
+
+        <Grid DockPanel.Dock="Top" Margin="15,0,15,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    BorderBrush="#cccccc"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="8,6"
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center">
+                <TextBlock Text="🔍  Zoek..."
+                           Foreground="#aaaaaa"
+                           FontSize="13"/>
+            </Border>
+
+            <Button Grid.Column="1"
+                    Content="Filters"
+                    Height="35"
+                    Background="#6a69ad"
+                    Foreground="White"
+                    BorderThickness="0"
+                    CornerRadius="4"
+                    Padding="15,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"/>
+        </Grid>
+
+        <ScrollViewer DockPanel.Dock="Top">
+            <StackPanel>
+                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0"
+                                Width="60" Height="60"
+                                BorderBrush="#cccccc"
+                                BorderThickness="1"
+                                Background="#eeeeee">
+                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,0,0">
+                            <TextBlock Text="Afbeelding" Foreground="#aaaaaa" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Item Naam" Foreground="#aaaaaa"  FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Content="Reserveer"
+                                Background="#6a69ad"
+                                Click="OnReserveerClick"
+                                Foreground="White"
+                                BorderThickness="0"
+                                CornerRadius="4"
+                                Padding="10,4"
+                                FontSize="12"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </DockPanel>
+
+</UserControl>
