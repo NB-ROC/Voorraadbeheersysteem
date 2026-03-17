@@ -4,20 +4,23 @@ Repository: 24-02-2026 Voorraadbeheer Systeem
 
 📖 Beschrijving
 
-Dit voorraadbeheersysteem is bedoeld voor het beheren en uitlenen van materialen binnen een onderwijsinstelling.
+Dit voorraadbeheersysteem is ontwikkeld voor het beheren en uitlenen van materialen binnen een onderwijsinstelling. Het systeem houdt bij wie welk product heeft geleend en wat de status ervan is.
 
-Denk aan het uitlenen van:
+Voorbeelden van materialen die beheerd kunnen worden:
 
 💻 Laptops
+
 🖨️ 3D-printers
+
 🧪 Sensoren
+
 🖥️ IT-apparatuur
 
-Het systeem zorgt voor overzicht in wie wat heeft geleend en wat de status van een product is.
+Het systeem biedt een overzichtelijk beheer van uitgifte, inname en productstatussen.
 
 🎯 Doel
 
-Het systeem biedt:
+Het systeem ondersteunt de volgende functionaliteiten:
 
 Registratie van producten
 
@@ -25,9 +28,9 @@ Uitlenen en innemen van materialen
 
 Beheer van gebruikersrechten
 
-Registratie van defecten
+Registratie van defecten of schade
 
-Inzicht in producthistorie
+Inzicht in de producthistorie
 
 👥 Rollen
 Studenten
@@ -40,7 +43,7 @@ Docenten
 
 Kunnen producten lenen
 
-Hebben extra rechten
+Hebben uitgebreide rechten
 
 Beheerders
 
@@ -50,35 +53,48 @@ Beheren de voorraad
 
 Registreren schade of defecten
 
-Sommige producten zijn alleen beschikbaar voor specifieke rollen (bijvoorbeeld 3D-printers alleen voor docenten).
+Opmerking: sommige producten zijn alleen beschikbaar voor specifieke rollen (bijvoorbeeld 3D-printers alleen voor docenten).
 
 🔄 Uitleenproces
 
 Gebruiker scant NFC-kaart
 
-Beheerder scant product
+Beheerder scant het product
 
 Het systeem registreert:
 
 Wie het product leent
 
-Datum en tijd
+Datum en tijd van uitlening
 
 Verwachte inleverdatum
 
-Bij inleveren wordt de status aangepast naar ingeleverd en wordt eventuele schade geregistreerd.
+Bij inlevering wordt de status aangepast naar ingeleverd en wordt eventuele schade of defect geregistreerd.
 
 🛠️ Installatie
 
-[Installatie instructies]
+Volg de onderstaande stappen om het systeem te installeren:
 
+[Installatie instructies invoegen]
 ⚙️ Configuratie
 
-[Configuratie instellingen]
+Configureer het systeem met de juiste instellingen:
 
+[Configuratie instellingen invoegen]
 🧪 Setup
 
-[Database setup]
-[NFC configuratie]
-[Gebruikersrollen instellen]
-[Server instellingen]
+Database setup
+
+[Database setup instructies invoegen]
+
+NFC-configuratie
+
+[NFC configuratie instructies invoegen]
+
+Gebruikersrollen instellen
+
+[Instructies voor het instellen van gebruikersrollen invoegen]
+
+Server instellingen
+
+[Server configuratie-instructies invoegen]
