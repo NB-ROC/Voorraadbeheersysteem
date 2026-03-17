@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace Frontend.Views;
+namespace FrontendAdmin.Views;
 
 public partial class LeningenView : UserControl
 {

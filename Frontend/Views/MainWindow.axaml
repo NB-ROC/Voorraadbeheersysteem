@@ -1,73 +1,20 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:Frontend.Views"
+        xmlns:vm="using:Frontend.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Frontend.Views.MainWindow"
-        Width="800"
-        Height="450"
-        Background="#F5F5F7"
-        Title="Frontend">
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="FrontendAdmin">
 
-    <DockPanel>
-        <!-- Header bovenaan -->
-        <Border Background="#6a69ad" Height="60" DockPanel.Dock="Top">
-            <Grid>
-                <TextBlock Text="Welkom [Naam gebruiker]"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Padding="20,0,0,0"
-                           Foreground="White"
-                           FontSize="18"/>
-            </Grid>
-        </Border>
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
 
-        <!-- Bottom Navigation Bar -->
-        <Border Background="#3b3b5c" Height="60" DockPanel.Dock="Bottom">
-            <UniformGrid Rows="1" Columns="4">
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Click="OnDashboardClick">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
-                    </StackPanel>
-                </Button>
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Click="OnItemsClick">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Items" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
-                    </StackPanel>
-                </Button>
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Click="OnLeningenClick">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
-                    </StackPanel>
-                </Button>
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Click="OnProfielClick">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Profiel" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
-                    </StackPanel>
-                </Button>
-            </UniformGrid>
-        </Border>
-        
-        <ContentControl x:Name="PageContent"/>
-
-    </DockPanel>
+    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
 </Window>

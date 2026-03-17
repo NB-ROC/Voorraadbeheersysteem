@@ -45,24 +45,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\ItemsView.axaml.cs">
-        <DependentUpon>ItemsView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\LeningenView.axaml.cs">
-        <DependentUpon>LeningenView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ProfielView.axaml.cs">
-        <DependentUpon>ProfielView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\DashboardView.axaml.cs">
-        <DependentUpon>DashboardView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ReserveringView.axaml.cs">
-        <DependentUpon>ReserveringView.axaml</DependentUpon>
+      <Compile Update="Views\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>

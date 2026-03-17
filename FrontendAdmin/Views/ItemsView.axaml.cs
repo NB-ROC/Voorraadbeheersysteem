@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace Frontend.Views;
+namespace FrontendAdmin.Views;
 
 public partial class ItemsView : UserControl
 {
