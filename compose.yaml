@@ -1,6 +1,9 @@
 ﻿services:
   db:
     image: mariadb
+    # Remove port exposure in production
+    ports:
+      - "3306:3306"
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT}
       MARIADB_DATABASE: ${DB_NAME}
@@ -8,21 +11,22 @@
       MARIADB_PASSWORD: ${DB_PASS}
     volumes:
       - db_data:/var/lib/mysql
-    
   
   backend:
     build:
       context: .
       dockerfile: Backend/Dockerfile
     environment:
+      DB_SERVER: db
+      DB_PORT: 3306
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
-      DB_SERVER: "db" # This is the docker name for the container, e.g. 'db'
     ports:
       - "8080:8080"
-    depends_on: 
-    - db
+      - "8081:8081"
+    depends_on:
+      - db
 
 volumes:
   db_data:
