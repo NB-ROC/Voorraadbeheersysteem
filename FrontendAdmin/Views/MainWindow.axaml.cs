@@ -31,14 +31,4 @@ public partial class MainWindow : Window
     private void OnItemsClick(object? sender, RoutedEventArgs e)     => NavigateTo("Items");
     private void OnLeningenClick(object? sender, RoutedEventArgs e)  => NavigateTo("Leningen");
     private void OnProfielClick(object? sender, RoutedEventArgs e)   => NavigateTo("Profiel");
-    
-
-    private void TestRequest(object? sender, RoutedEventArgs e)
-    {
-        GrpcChannel channel = GrpcChannel.ForAddress("http://127.0.0.1:8080");
-        Greeter.GreeterClient client = new(channel);
-        HelloReply reply = client.SayHello(new HelloRequest { Name = "World" });
-
-        Console.WriteLine(reply.Message);
-    }
 }
