@@ -5,11 +5,14 @@ namespace FrontendAdmin.Views;
 
 public partial class ReserveringView : UserControl
 {
-    public ReserveringView() => InitializeComponent();
+    public ReserveringView()
+    {
+        InitializeComponent();
+    }
 
     private void OnAnnuleerClick(object? sender, RoutedEventArgs e)
     {
-        var mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
         mainWindow?.NavigateTo("Items");
     }
 

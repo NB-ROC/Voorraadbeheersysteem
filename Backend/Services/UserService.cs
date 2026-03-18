@@ -16,14 +16,14 @@ public class UserService : Users.UsersBase
         _context = context;
     }
 
-    public override async Task<GetResponse> Get(GetRequest request, ServerCallContext context)
+    public override async Task<UserGetResponse> Get(UserGetRequest request, ServerCallContext context)
     {
         List<User> users = await _context.Users
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync();
 
-        GetResponse response = new();
+        UserGetResponse response = new();
 
         response.Users.AddRange(users.Select(user => new MetaUser
         {
@@ -37,12 +37,11 @@ public class UserService : Users.UsersBase
         return response;
     }
 
-    public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
+    public override async Task<UserCreateResponse> Create(UserCreateRequest request, ServerCallContext context)
     {
-
         try
         {
-            var user = new User
+            User user = new()
             {
                 Id = request.Id.ToByteArray(),
                 Name = request.Name,
@@ -54,14 +53,14 @@ public class UserService : Users.UsersBase
                 user
             );
             await _context.SaveChangesAsync();
-            return new CreateResponse
+            return new UserCreateResponse
             {
                 Success = true
             };
         }
         catch (Exception)
         {
-            return new CreateResponse
+            return new UserCreateResponse
             {
                 Success = false
             };

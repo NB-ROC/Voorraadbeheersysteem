@@ -7,31 +7,37 @@
             <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
                 <Border Background="#6a69ad" Margin="0,0,8,0">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40" FontWeight="Bold"/>
-                        <TextBlock Text="Actieve Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="22" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="Actieve Leningen" Foreground="White" HorizontalAlignment="Center"
+                                   FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                     </StackPanel>
                 </Border>
                 <Border Background="#6a69ad" Margin="0,0,8,0">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40" FontWeight="Bold"/>
-                        <TextBlock Text="Bijna te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22"/>
+                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="Bijna te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22" />
                     </StackPanel>
                 </Border>
                 <Border Background="#6a69ad" Margin="0,0,8,0">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40" FontWeight="Bold"/>
-                        <TextBlock Text="Te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22"/>
+                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="Te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22" />
                     </StackPanel>
                 </Border>
                 <Border Background="#6a69ad">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40" FontWeight="Bold"/>
-                        <TextBlock Text="Beschikbare Items" Foreground="White" HorizontalAlignment="Center" FontSize="22" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="Beschikbare Items" Foreground="White" HorizontalAlignment="Center"
+                                   FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                     </StackPanel>
                 </Border>
             </UniformGrid>
         </Border>
-        
+
         <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="15,5,15,0">
             <Button HorizontalAlignment="Stretch"
                     Height="60"
@@ -42,7 +48,7 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="White"
-                           FontSize="14"/>
+                           FontSize="14" />
             </Button>
             <Button HorizontalAlignment="Stretch"
                     Height="60"
@@ -53,9 +59,9 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="White"
-                           FontSize="14"/>
+                           FontSize="14" />
             </Button>
         </StackPanel>
-        <Grid/>
+        <Grid />
     </DockPanel>
 </UserControl>

@@ -3,19 +3,15 @@ using Backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-var env = builder.Environment.EnvironmentName;
+string env = builder.Environment.EnvironmentName;
 
 builder.Services.AddGrpc();
 
 if (env == "Test")
-{
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseInMemoryDatabase("testing")); // TODO: Make this actually work lmao
-}
 else
-{
     builder.Services.AddDbContext<AppDbContext>();
-}
 
 builder.Services.AddDbContext<AppDbContext>();
 

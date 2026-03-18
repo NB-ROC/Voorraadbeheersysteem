@@ -4,11 +4,18 @@ namespace Backend.Entities;
 
 public class User
 {
-    public byte[] Id { get; set; } = new byte[7];
+    public const int IdLength = 7;
+    public const int StudentNumberLength = 6;
+    public const int StaffNumberLength = 7;
+    public const int EmailLength = 255;
+    public const int NameLength = 32;
+    
+    
+    public byte[] Id { get; set; } = new byte[IdLength];
 
-    [MaxLength(255)] public string Email { get; set; } = null!;
+    [MaxLength(EmailLength)] public string Email { get; set; } = null!;
 
-    [MaxLength(32)] public string Name { get; set; } = null!;
+    [MaxLength(NameLength)] public string Name { get; set; } = null!;
 
     public ushort Number { get; set; }
 

@@ -19,7 +19,11 @@ public class UserTests
     public void GetEmptyTest()
     {
         List<MetaUser>? users = null;
-        Assert.DoesNotThrow(() => { users = _client.Get(new GetRequest { Page = 1, PageSize = 10 }).Users.ToList(); });
+        Assert.DoesNotThrow(() =>
+        {
+            users = _client.Get(new UserGetRequest { Page = 1, PageSize = 10 })
+                .Users.ToList();
+        });
 
 
         Assert.That(users, Is.Empty);
