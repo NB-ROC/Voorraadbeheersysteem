@@ -1,3 +1,4 @@
+using System.Net.Mail;
 using Backend.Database.Managers;
 using Backend.Entities;
 using Google.Protobuf;
@@ -50,7 +51,10 @@ public class UserValidator : Validator
                 if (user == null) Throw("Invalid User");
                 ValidateNumber(request.Number, user!.Staff);
             }
-            else ValidateNumber(request.Number, request.Staff);
+            else
+            {
+                ValidateNumber(request.Number, request.Staff);
+            }
         }
     }
 
@@ -58,14 +62,14 @@ public class UserValidator : Validator
     {
         ValidateId(request.Id);
     }
-    
+
     private static int GetNumberLength(uint? num)
     {
         return num switch
         {
             null => -1,
             0 => 1,
-            _ => (int)Math.Floor(Math.Log10((double) num)) + 1
+            _ => (int)Math.Floor(Math.Log10((double)num)) + 1
         };
     }
 
@@ -78,8 +82,14 @@ public class UserValidator : Validator
     private static void ValidateEmail(string? email)
     {
         if (string.IsNullOrWhiteSpace(email)) Throw("Invalid email");
-        try { _ = new System.Net.Mail.MailAddress(email!); }
-        catch { Throw("Invalid email"); }
+        try
+        {
+            _ = new MailAddress(email!);
+        }
+        catch
+        {
+            Throw("Invalid email");
+        }
     }
 
     private static void ValidateName(string? name)
