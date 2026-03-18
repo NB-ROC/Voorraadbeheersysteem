@@ -1,5 +1,7 @@
 using Backend.Database;
+using Backend.Database.Managers;
 using Backend.Entities;
+using Backend.Services.Validation;
 using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
@@ -9,61 +11,30 @@ namespace Backend.Services;
 
 public class UserService : Users.UsersBase
 {
-    private readonly AppDbContext _context;
+    private readonly UserValidator _validator;
 
-    public UserService(AppDbContext context)
+    public UserService(UserManager manager)
     {
-        _context = context;
+        _validator = new UserValidator(manager);
     }
 
     public override async Task<UserGetResponse> Get(UserGetRequest request, ServerCallContext context)
     {
-        List<User> users = await _context.Users
-            .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync();
-
-        UserGetResponse response = new();
-
-        response.Users.AddRange(users.Select(user => new MetaUser
-        {
-            Id = ByteString.CopyFrom(user.Id),
-            Name = user.Name,
-            Email = user.Email,
-            Number = user.Number,
-            Staff = user.Staff
-        }));
-
-        return response;
+        throw new NotImplementedException();
     }
 
     public override async Task<UserCreateResponse> Create(UserCreateRequest request, ServerCallContext context)
     {
-        try
-        {
-            User user = new()
-            {
-                Id = request.Id.ToByteArray(),
-                Name = request.Name,
-                Email = request.Email,
-                Number = (ushort)request.Number,
-                Staff = request.Staff
-            };
-            await _context.Users.AddAsync(
-                user
-            );
-            await _context.SaveChangesAsync();
-            return new UserCreateResponse
-            {
-                Success = true
-            };
-        }
-        catch (Exception)
-        {
-            return new UserCreateResponse
-            {
-                Success = false
-            };
-        }
+        throw new NotImplementedException();
+    }
+
+    public override Task<UserModifyResponse> Modify(UserModifyRequest request, ServerCallContext context)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
+    {
+        throw new NotImplementedException();
     }
 }

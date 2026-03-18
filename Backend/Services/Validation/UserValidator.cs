@@ -1,15 +1,64 @@
-using Grpc.Core;
-using Shared;
+using Backend.Database.Managers;
 using Backend.Entities;
 using Google.Protobuf;
+using Shared;
 
 namespace Backend.Services.Validation;
 
 /**
- * This class is for validating every type of user request object, along
+ * This class is for validating every type of user request object. This throws RpcException for every wrongdoing.
  */
-public class UserValidator
+public class UserValidator : Validator
 {
+    private readonly UserManager _userManager;
+
+    public UserValidator(UserManager userManager)
+    {
+        _userManager = userManager;
+    }
+
+    public void ValidateGet(UserGetRequest request)
+    {
+        if (request.Page < 1)
+            Throw("Invalid page");
+        if (request.PageSize is < 1 or > 100)
+            Throw("Invalid page size");
+    }
+
+    public void ValidateCreate(UserCreateRequest request)
+    {
+        ValidateId(request.Id);
+        ValidateName(request.Name);
+        ValidateEmail(request.Email);
+        ValidateNumber(request.Number, request.Staff);
+    }
+
+    /**
+     * This is async due to the needed database logic here.
+     */
+    public async Task ValidateModify(UserModifyRequest request)
+    {
+        ValidateId(request.Id);
+        if (request.HasEmail) ValidateEmail(request.Email);
+        if (request.HasName) ValidateName(request.Name);
+
+        if (request.HasNumber)
+        {
+            if (!request.HasStaff)
+            {
+                User? user = await _userManager.GetUser(request.Id.ToByteArray());
+                if (user == null) Throw("Invalid User");
+                ValidateNumber(request.Number, user!.Staff);
+            }
+            else ValidateNumber(request.Number, request.Staff);
+        }
+    }
+
+    public void ValidateDelete(UserDeleteRequest request)
+    {
+        ValidateId(request.Id);
+    }
+    
     private static int GetNumberLength(uint? num)
     {
         return num switch
@@ -20,65 +69,6 @@ public class UserValidator
         };
     }
 
-    private static void Throw(string message) =>
-        throw new RpcException(new Status(StatusCode.InvalidArgument, message));
-
-    // ------------------------
-    // GET
-    // ------------------------
-    public void ValidateGet(UserGetRequest request)
-    {
-        if (request.Page < 0)
-            Throw("Invalid page");
-
-        if (request.PageSize <= 0 || request.PageSize > 100)
-            Throw("Invalid page size");
-    }
-
-    // ------------------------
-    // CREATE
-    // ------------------------
-    public void ValidateCreate(UserCreateRequest request)
-    {
-        ValidateId(request.Id);
-        ValidateEmail(request.Email);
-        ValidateName(request.Name);
-        ValidateNumber(request.Number, request.Staff);
-    }
-
-    // ------------------------
-    // MODIFY
-    // ------------------------
-    public void ValidateModify(UserModifyRequest request)
-    {
-        ValidateId(request.Id);
-
-        if (request.HasEmail)
-            ValidateEmail(request.Email);
-
-        if (request.HasName)
-            ValidateName(request.Name);
-
-        if (request.HasNumber)
-        {
-            // If staff is also provided, use it
-            bool isStaff = request.HasStaff && request.Staff;
-
-            ValidateNumber(request.Number, isStaff);
-        }
-    }
-
-    // ------------------------
-    // DELETE
-    // ------------------------
-    public void ValidateDelete(UserDeleteRequest request)
-    {
-        ValidateId(request.Id);
-    }
-
-    // ------------------------
-    // FIELD VALIDATORS
-    // ------------------------
     private static void ValidateId(ByteString? id)
     {
         if (id == null || id.Length != User.IdLength)
@@ -87,6 +77,7 @@ public class UserValidator
 
     private static void ValidateEmail(string? email)
     {
+        if (string.IsNullOrWhiteSpace(email)) Throw("Invalid email");
         try { _ = new System.Net.Mail.MailAddress(email!); }
         catch { Throw("Invalid email"); }
     }

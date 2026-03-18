@@ -1,4 +1,5 @@
 using Backend.Database;
+using Backend.Database.Managers;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ else
     builder.Services.AddDbContext<AppDbContext>();
 
 builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddScoped<UserManager>();
 
 WebApplication app = builder.Build();
 
