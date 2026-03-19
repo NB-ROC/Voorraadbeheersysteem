@@ -5,6 +5,8 @@ option csharp_namespace = "Shared";
 package user;
 
 service Users {
+  rpc Page (UserPageRequest) returns (UserPageResponse);
+
   rpc Get (UserGetRequest) returns (UserGetResponse);
 
   rpc Create (UserCreateRequest) returns (UserCreateResponse);
@@ -23,14 +25,23 @@ message MetaUser {
   bool staff = 5;
 }
 
-// Get
-message UserGetRequest {
+// Page
+message UserPageRequest {
   int32 page = 1;
   int32 page_size = 2;
 }
 
-message UserGetResponse {
+message UserPageResponse {
   repeated MetaUser users = 1;
+}
+
+// Get
+message UserGetRequest {
+  bytes id = 1;
+}
+
+message UserGetResponse {
+  MetaUser user = 1;
 }
 
 // Create
@@ -56,7 +67,7 @@ message UserModifyRequest {
 }
 
 message UserModifyResponse {
-  MetaUser user = 1;
+  bool success = 1;
 }
 
 // Delete

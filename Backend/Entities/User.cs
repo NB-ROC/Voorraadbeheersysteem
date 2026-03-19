@@ -9,8 +9,8 @@ public class User
     public const int StaffNumberLength = 7;
     public const int EmailLength = 255;
     public const int NameLength = 32;
-    
-    
+
+
     public byte[] Id { get; set; } = new byte[IdLength];
 
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;

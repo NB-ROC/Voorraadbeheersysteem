@@ -1,6 +1,6 @@
 using Grpc.Core;
 
-namespace Backend.Services.Validation;
+namespace Backend.Grpc.Validation;
 
 public abstract class Validator
 {

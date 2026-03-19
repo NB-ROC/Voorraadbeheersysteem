@@ -1,9 +1,10 @@
 using Backend.Database;
 using Backend.Database.Managers;
-using Backend.Services;
+using Backend.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
 
 #region DB
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string env = builder.Environment.EnvironmentName;
 
@@ -17,9 +18,11 @@ else
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<UserManager>();
+
 #endregion
 
 #region GRPC
+
 WebApplication app = builder.Build();
 
 app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
@@ -27,4 +30,5 @@ app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Da
 app.MapGrpcService<UserService>();
 
 app.Run();
+
 #endregion

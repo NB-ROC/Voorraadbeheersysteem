@@ -4,7 +4,7 @@ using Backend.Entities;
 using Google.Protobuf;
 using Shared;
 
-namespace Backend.Services.Validation;
+namespace Backend.Grpc.Validation;
 
 /**
  * This class is for validating every type of user request object. This throws RpcException for every wrongdoing.
@@ -18,12 +18,17 @@ public class UserValidator : Validator
         _userManager = userManager;
     }
 
-    public void ValidateGet(UserGetRequest request)
+    public void ValidatePage(UserPageRequest request)
     {
         if (request.Page < 1)
             Throw("Invalid page");
         if (request.PageSize is < 1 or > 100)
             Throw("Invalid page size");
+    }
+
+    public void ValidateGet(UserGetRequest request)
+    {
+        ValidateId(request.Id);
     }
 
     public void ValidateCreate(UserCreateRequest request)
@@ -37,25 +42,17 @@ public class UserValidator : Validator
     /**
      * This is async due to the needed database logic here.
      */
-    public async Task ValidateModify(UserModifyRequest request)
+    public async Task<User> ValidateModify(UserModifyRequest request)
     {
+        User? user = await _userManager.Get(request.Id.ToByteArray());
+        if (user == null) Throw("Invalid User");
+
         ValidateId(request.Id);
         if (request.HasEmail) ValidateEmail(request.Email);
         if (request.HasName) ValidateName(request.Name);
+        if (request.HasNumber) ValidateNumber(request.Number, request.HasStaff ? request.Staff : user!.Staff);
 
-        if (request.HasNumber)
-        {
-            if (!request.HasStaff)
-            {
-                User? user = await _userManager.Get(request.Id.ToByteArray());
-                if (user == null) Throw("Invalid User");
-                ValidateNumber(request.Number, user!.Staff);
-            }
-            else
-            {
-                ValidateNumber(request.Number, request.Staff);
-            }
-        }
+        return user!;
     }
 
     public void ValidateDelete(UserDeleteRequest request)

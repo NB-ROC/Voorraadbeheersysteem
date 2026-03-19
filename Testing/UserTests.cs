@@ -16,12 +16,12 @@ public class UserTests
     }
 
     [Test]
-    public void GetEmptyTest()
+    public void PageEmptyTest()
     {
         List<MetaUser>? users = null;
         Assert.DoesNotThrow(() =>
         {
-            users = _client.Get(new UserGetRequest { Page = 1, PageSize = 10 })
+            users = _client.Page(new UserPageRequest { Page = 1, PageSize = 10 })
                 .Users.ToList();
         });
 
