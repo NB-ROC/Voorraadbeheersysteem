@@ -6,7 +6,6 @@ namespace Testing;
 
 public class UserTests
 {
-
     [SetUp]
     public void Setup()
     {
@@ -16,7 +15,7 @@ public class UserTests
     public void CreateUserTest()
     {
         byte[] userId = [12, 12, 12, 12, 12, 12, 12];
-        
+
         List<MetaUser> empty = Client.Users.Page(new UserPageRequest
         {
             Page = 1,
@@ -29,9 +28,9 @@ public class UserTests
             Email = "1234567@student.roc-nijmegen.nl",
             Name = "Regu Larjoe",
             Number = 1234567,
-            Staff = false,
+            Staff = false
         }).Success;
-        
+
         List<MetaUser> size1 = Client.Users.Page(new UserPageRequest
         {
             Page = 1,
@@ -55,7 +54,7 @@ public class UserTests
             })
             .Users.ToList();
 
-        
+
         Assert.IsEmpty(empty);
         Assert.IsTrue(create);
         Assert.IsNotEmpty(size1);

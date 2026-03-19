@@ -11,7 +11,7 @@ string env = builder.Environment.EnvironmentName;
 builder.Services.AddGrpc();
 
 // TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
-builder.Services.AddDbContext<AppDbContext>(options => 
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("testing"));
 // builder.Services.AddDbContext<AppDbContext>();
 
