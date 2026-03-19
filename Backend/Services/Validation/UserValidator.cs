@@ -47,7 +47,7 @@ public class UserValidator : Validator
         {
             if (!request.HasStaff)
             {
-                User? user = await _userManager.GetUser(request.Id.ToByteArray());
+                User? user = await _userManager.Get(request.Id.ToByteArray());
                 if (user == null) Throw("Invalid User");
                 ValidateNumber(request.Number, user!.Staff);
             }
