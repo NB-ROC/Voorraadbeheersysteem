@@ -5,8 +5,8 @@ namespace Backend.Entities;
 public class User
 {
     public const int IdLength = 7;
-    public const int StudentNumberLength = 6;
-    public const int StaffNumberLength = 7;
+    public const int StaffNumberLength = 6;
+    public const int StudentNumberLength = 7;
     public const int EmailLength = 255;
     public const int NameLength = 32;
 
