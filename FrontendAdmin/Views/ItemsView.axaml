@@ -7,12 +7,12 @@
                    Text="Items Overzicht"
                    Foreground="#aaaaaa"
                    FontSize="20"
-                   Margin="15,15,15,10"/>
+                   Margin="15,15,15,10" />
 
         <Grid DockPanel.Dock="Top" Margin="15,0,15,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0"
@@ -24,7 +24,7 @@
                     VerticalAlignment="Center">
                 <TextBlock Text="🔍  Zoek..."
                            Foreground="#aaaaaa"
-                           FontSize="13"/>
+                           FontSize="13" />
             </Border>
 
             <Button Grid.Column="1"
@@ -37,7 +37,7 @@
                     Padding="15,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"/>
+                    VerticalContentAlignment="Center" />
         </Grid>
 
         <ScrollViewer DockPanel.Dock="Top">
@@ -45,9 +45,9 @@
                 <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="70" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <Border Grid.Column="0"
@@ -55,12 +55,13 @@
                                 BorderBrush="#cccccc"
                                 BorderThickness="1"
                                 Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
                         </Border>
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,0,0">
-                            <TextBlock Text="Afbeelding" Foreground="#aaaaaa" FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Text="Item Naam" Foreground="#aaaaaa"  FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Afbeelding" Foreground="#aaaaaa" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Item Naam" Foreground="#aaaaaa" FontWeight="Bold" FontSize="14"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
 
                         <Button Grid.Column="2"
@@ -72,7 +73,7 @@
                                 CornerRadius="4"
                                 Padding="10,4"
                                 FontSize="12"
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center" />
                     </Grid>
                 </Border>
 

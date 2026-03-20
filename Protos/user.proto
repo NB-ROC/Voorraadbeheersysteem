@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared";
+
+package user;
+
+service Users {
+  rpc Page (UserPageRequest) returns (UserPageResponse);
+
+  rpc Get (UserGetRequest) returns (UserGetResponse);
+
+  rpc Create (UserCreateRequest) returns (UserCreateResponse);
+
+  rpc Modify (UserModifyRequest) returns (UserModifyResponse);
+
+  rpc Delete (UserDeleteRequest) returns (UserDeleteResponse);
+}
+
+// Meta object
+message MetaUser {
+  bytes id = 1; // BINARY(7)
+  string email = 2;
+  string name = 3;
+  uint32 number = 4;
+  bool staff = 5;
+}
+
+// Page
+message UserPageRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message UserPageResponse {
+  repeated MetaUser users = 1;
+}
+
+// Get
+message UserGetRequest {
+  bytes id = 1;
+}
+
+message UserGetResponse {
+  MetaUser user = 1;
+}
+
+// Create
+message UserCreateRequest {
+  bytes id = 1;
+  string email = 2;
+  string name = 3;
+  uint32 number = 4;
+  bool staff = 5;
+}
+
+message UserCreateResponse {
+  bool success = 1;
+}
+
+// Modify
+message UserModifyRequest {
+  bytes id = 1;
+    optional string email = 2;
+    optional string name = 3;
+    optional uint32 number = 4;
+    optional bool staff = 5;
+}
+
+message UserModifyResponse {
+  bool success = 1;
+}
+
+// Delete
+message UserDeleteRequest {
+  bytes id = 1;
+}
+
+message UserDeleteResponse {
+  bool success = 1;
+}

@@ -17,13 +17,15 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.14"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.14" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.14"/>
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Shared\Shared.csproj"/>
-        <Protobuf Include="..\Shared\Protos\**\*.proto" GrpcServices="Server"/>
+        <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Server"/>
+        <Protobuf Update="..\Protos\product.proto">
+          <Link>Protos\product.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
     <ItemGroup>

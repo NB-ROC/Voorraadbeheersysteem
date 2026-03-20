@@ -5,11 +5,14 @@ namespace FrontendAdmin.Views;
 
 public partial class ItemsView : UserControl
 {
-    public ItemsView() => InitializeComponent();
+    public ItemsView()
+    {
+        InitializeComponent();
+    }
 
     private void OnReserveerClick(object? sender, RoutedEventArgs e)
     {
-        var mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
         mainWindow?.NavigateTo("Reservering");
     }
 }

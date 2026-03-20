@@ -7,13 +7,13 @@
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
-    
+
     <Application.Styles>
         <Styles>
             <!-- Hier kun je globale styles zetten -->
             <Style Selector="TextBox.NoFocusBackground">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
             </Style>
         </Styles>
     </Application.Styles>
@@ -21,5 +21,5 @@
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
-    
-</Application>  
+
+</Application>

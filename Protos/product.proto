@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared";
+
+package user;
+
+service Products {
+  rpc Page (ProductPageRequest) returns (ProductPageResponse);
+
+  rpc Get (ProductGetRequest) returns (ProductGetResponse);
+
+  rpc Create (ProductCreateRequest) returns (ProductCreateResponse);
+
+  rpc Modify (ProductModifyRequest) returns (ProductModifyResponse);
+
+  rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
+}
+
+// Meta object
+message MetaProduct {
+  bytes id = 1; // BINARY(7)
+  string email = 2;
+  string name = 3;
+  uint32 number = 4;
+  bool staff = 5;
+}
+
+// Page
+message ProductPageRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message ProductPageResponse {
+  repeated MetaProduct users = 1;
+}
+
+// Get
+message ProductGetRequest {
+  bytes id = 1;
+}
+
+message ProductGetResponse {
+  MetaProduct user = 1;
+}
+
+// Create
+message ProductCreateRequest {
+  bytes id = 1;
+  string email = 2;
+  string name = 3;
+  uint32 number = 4;
+  bool staff = 5;
+}
+
+message ProductCreateResponse {
+  bool success = 1;
+}
+
+// Modify
+message ProductModifyRequest {
+  bytes id = 1;
+  optional string email = 2;
+  optional string name = 3;
+  optional uint32 number = 4;
+  optional bool staff = 5;
+}
+
+message ProductModifyResponse {
+  bool success = 1;
+}
+
+// Delete
+message ProductDeleteRequest {
+  bytes id = 1;
+}
+
+message ProductDeleteResponse {
+  bool success = 1;
+}

@@ -1,6 +1,5 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:FrontendAdmin.Views"
         x:Class="FrontendAdmin.Views.MainWindow"
         Width="800"
         Height="450"
@@ -16,7 +15,7 @@
                            HorizontalAlignment="Left"
                            Padding="20,0,0,0"
                            Foreground="White"
-                           FontSize="18"/>
+                           FontSize="18" />
             </Grid>
         </Border>
 
@@ -29,8 +28,8 @@
                         VerticalContentAlignment="Center"
                         Click="OnDashboardClick">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
+                        <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                        <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
                 <Button Background="Transparent" BorderThickness="0"
@@ -39,8 +38,8 @@
                         VerticalContentAlignment="Center"
                         Click="OnItemsClick">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Items" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
+                        <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                        <TextBlock Text="Items" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
                 <Button Background="Transparent" BorderThickness="0"
@@ -49,8 +48,8 @@
                         VerticalContentAlignment="Center"
                         Click="OnLeningenClick">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
+                        <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                        <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
                 <Button Background="Transparent" BorderThickness="0"
@@ -59,14 +58,14 @@
                         VerticalContentAlignment="Center"
                         Click="OnProfielClick">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="Profiel" Foreground="White" HorizontalAlignment="Center" FontSize="11"/>
+                        <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                        <TextBlock Text="Profiel" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
             </UniformGrid>
         </Border>
-        
-        <ContentControl x:Name="PageContent"/>
+
+        <ContentControl x:Name="PageContent" />
 
     </DockPanel>
 
