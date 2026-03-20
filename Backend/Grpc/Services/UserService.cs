@@ -9,12 +9,12 @@ namespace Backend.Grpc.Services;
 
 public class UserService : Users.UsersBase
 {
-    private readonly UserManager _userManager;
+    private readonly UserManager _manager;
     private readonly UserValidator _validator;
 
     public UserService(UserManager manager)
     {
-        _userManager = manager;
+        _manager = manager;
         _validator = new UserValidator(manager);
     }
 
@@ -22,7 +22,7 @@ public class UserService : Users.UsersBase
     {
         _validator.ValidatePage(request);
 
-        List<User> users = await _userManager.Page(request.Page, request.PageSize);
+        List<User> users = await _manager.Page(request.Page, request.PageSize);
 
         UserPageResponse response = new();
 
@@ -41,7 +41,7 @@ public class UserService : Users.UsersBase
     public override async Task<UserGetResponse> Get(UserGetRequest request, ServerCallContext context)
     {
         _validator.ValidateGet(request);
-        User? user = await _userManager.Get(request.Id.ToByteArray());
+        User? user = await _manager.Get(request.Id.ToByteArray());
         if (user == null) throw new RpcException(new Status(StatusCode.NotFound, "Invalid User"));
         return new UserGetResponse
         {
@@ -61,7 +61,7 @@ public class UserService : Users.UsersBase
         _validator.ValidateCreate(request);
         return new UserCreateResponse
         {
-            Success = await _userManager.Create(new User
+            Success = await _manager.Create(new User
             {
                 Id = request.Id.ToByteArray(),
                 Email = request.Email,
@@ -83,7 +83,7 @@ public class UserService : Users.UsersBase
 
         return new UserModifyResponse
         {
-            Success = await _userManager.Modify(user)
+            Success = await _manager.Modify(user)
         };
     }
 
@@ -92,7 +92,7 @@ public class UserService : Users.UsersBase
         _validator.ValidateDelete(request);
         return new UserDeleteResponse
         {
-            Success = await _userManager.Delete(request.Id.ToByteArray())
+            Success = await _manager.Delete(request.Id.ToByteArray())
         };
     }
 }

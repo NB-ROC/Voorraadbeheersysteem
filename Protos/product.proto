@@ -1,5 +1,5 @@
 syntax = "proto3";
-
+import "google/protobuf/wrappers.proto";
 option csharp_namespace = "Shared";
 
 package user;
@@ -54,11 +54,10 @@ message ProductGetResponse {
 
 // Create
 message ProductCreateRequest {
-  int32 id = 1;
   string name = 2;
   string category = 3;
   string description = 4;
-  int32 amount = 5;
+  google.protobuf.Int32Value amount = 5;
   bytes image = 6;
 }
 
