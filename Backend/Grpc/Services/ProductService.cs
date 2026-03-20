@@ -1,8 +1,9 @@
 using Backend.Database.Managers;
 using Backend.Entities;
+using Backend.Grpc.Helpers;
 using Backend.Grpc.Validation;
 using Grpc.Core;
-using Shared;
+using Protos.Product;
 
 namespace Backend.Grpc.Services;
 
@@ -72,15 +73,37 @@ public class ProductService : Products.ProductsBase
         }
         
         string extension = _validator.ValidateCreate(request);
+        string imageName = await ImageHelper.SaveImage(request.Image, extension, "Products/");
+        
+        Product product = new()
+        {
+            Name = request.Name,
+            Category = request.Category,
+            Description = request.Description,
+            Amount = request.Amount!.Value,
+            Image = imageName
+        };
         return new ProductCreateResponse
         {
-            Success = await _manager.Create(new Product
-            {
-                Name = request.Name,
-                Category = request.Category,
-                Description = request.Description,
-                Amount = request.Amount!.Value,
-            })
+            Success = await _manager.Create(product)
+        };
+    }
+
+    public override async Task<ProductModifyResponse> Modify(IAsyncStreamReader<ProductModifyRequest> stream, ServerCallContext context)
+    {
+        var request = new ProductCreateRequest();
+        await foreach (var message in stream.ReadAllAsync())
+        {
+            if (message is { HasName: true, Name: not null }) request.Name = message.Name;
+            if (message is { HasCategory: true, Category: not null }) request.Category = message.Category;
+            if (message is { HasDescription: true, Description: not null }) request.Description = message.Description;
+            if (message.Amount != null) request.Amount = message.Amount;
+            if (message is { HasImage: true, Image: not null}) request.Image = message.Image;
+        }
+
+        return new ProductModifyResponse
+        {
+            Success = true
         };
     }
 }

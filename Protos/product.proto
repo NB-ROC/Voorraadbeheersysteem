@@ -1,8 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/wrappers.proto";
-option csharp_namespace = "Shared";
+option csharp_namespace = "Protos.Product";
 
-package user;
+package product;
 
 service Products {
   rpc Page (ProductPageRequest) returns (ProductPageResponse);
@@ -11,7 +11,7 @@ service Products {
 
   rpc Create (stream ProductCreateRequest) returns (ProductCreateResponse);
 
-  rpc Modify (ProductModifyRequest) returns (ProductModifyResponse);
+  rpc Modify (stream ProductModifyRequest) returns (ProductModifyResponse);
 
   rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
 

@@ -3,7 +3,7 @@ using Backend.Entities;
 using Backend.Grpc.Validation;
 using Google.Protobuf;
 using Grpc.Core;
-using Shared;
+using Protos.User;
 
 namespace Backend.Grpc.Services;
 

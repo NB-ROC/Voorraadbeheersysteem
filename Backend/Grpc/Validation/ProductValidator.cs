@@ -1,7 +1,7 @@
 using Backend.Database.Managers;
 using Backend.Entities;
 using Google.Protobuf;
-using Shared;
+using Protos.Product;
 
 namespace Backend.Grpc.Validation;
 

@@ -1,5 +1,5 @@
 using Google.Protobuf;
-using Shared;
+using Protos.User;
 using Testing.Grpc;
 
 namespace Testing;
