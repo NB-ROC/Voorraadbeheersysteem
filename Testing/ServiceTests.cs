@@ -4,7 +4,7 @@ using Testing.Grpc;
 
 namespace Testing;
 
-public class UserTests
+public class ServiceTests
 {
     [SetUp]
     public void Setup()
@@ -12,7 +12,7 @@ public class UserTests
     }
 
     [Test]
-    public void CreateUserTest()
+    public void UserTest()
     {
         byte[] userId = [12, 12, 12, 12, 12, 12, 12];
 
@@ -62,6 +62,6 @@ public class UserTests
         Assert.IsTrue(delete);
         Assert.IsEmpty(emptyAfterDelete);
 
-        Console.WriteLine(createdUser);
+        Console.WriteLine(createdUser.Email);
     }
 }

@@ -9,5 +9,5 @@ public static class Client
 
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(GrpcChannelIp);
 
-    public static Users.UsersClient Users = new(Channel);
+    public static readonly Users.UsersClient Users = new(Channel);
 }

@@ -23,6 +23,9 @@
 
     <ItemGroup>
         <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Server"/>
+        <Protobuf Update="..\Protos\product.proto">
+          <Link>Protos\product.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
     <ItemGroup>

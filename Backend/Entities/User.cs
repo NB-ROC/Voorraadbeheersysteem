@@ -17,7 +17,7 @@ public class User
 
     [MaxLength(NameLength)] public string Name { get; set; } = null!;
 
-    public ushort Number { get; set; }
+    public uint Number { get; set; }
 
     public bool Staff { get; set; }
 
