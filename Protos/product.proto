@@ -15,7 +15,7 @@ service Products {
 
   rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
 
-  rpc GetImage (ProductImageRequest) returns (stream ImageData);
+  rpc GetImage (ProductImageRequest) returns (stream ProductImageResponse);
 }
 
 // Meta object
@@ -26,11 +26,6 @@ message MetaProduct {
   string description = 4;
   int32 amount = 5;
   string image = 6;
-}
-
-message ImageData {
-  bytes raw = 1;
-  string extension = 2;
 }
 
 // Page
@@ -71,7 +66,7 @@ message ProductModifyRequest {
     optional string name = 2;
     optional string category = 3;
     optional string description = 4;
-    optional int32 amount = 5;
+    optional google.protobuf.Int32Value amount = 5;
     optional bytes image = 6;
 }
 
@@ -94,5 +89,6 @@ message ProductImageRequest {
 }
 
 message ProductImageResponse {
-  bool success = 1;
+  bytes raw = 1;
+  string extension = 2;
 }

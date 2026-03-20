@@ -49,7 +49,7 @@ public class ProductValidator : Validator
         if (request.HasName) ValidateName(request.Name);
         if (request.HasCategory) ValidateCategory(request.Category);
         if (request.HasDescription) ValidateDescription(request.Description);
-        if (request.HasAmount) ValidateAmount(request.Amount);
+        if (request.Amount != null) ValidateAmount(request.Amount);
         if (request.HasImage) extension = ValidateImage(request.Image);
 
         return (product!, extension);

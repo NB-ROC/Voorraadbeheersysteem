@@ -71,7 +71,7 @@ public class ProductService : Products.ProductsBase
             if (message.Image != null) request.Image = message.Image;
         }
         
-        _validator.ValidateCreate(request);
+        string extension = _validator.ValidateCreate(request);
         return new ProductCreateResponse
         {
             Success = await _manager.Create(new Product
