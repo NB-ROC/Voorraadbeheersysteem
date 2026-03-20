@@ -16,10 +16,10 @@ public class Product
     [MaxLength(CategoryLength)] public string Category { get; set; } = null!;
 
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
-    
+
     [MaxLength(ImageLength)] public string Image { get; set; } = null!;
 
-    public byte Amount { get; set; }
+    public int Amount { get; set; }
 
     public ICollection<LoanProduct> LoanProducts { get; set; } = new List<LoanProduct>();
 }

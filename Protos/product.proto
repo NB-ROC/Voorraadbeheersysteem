@@ -9,15 +9,13 @@ service Products {
 
   rpc Get (ProductGetRequest) returns (ProductGetResponse);
 
-  rpc Create (ProductCreateRequest) returns (ProductCreateResponse);
+  rpc Create (stream ProductCreateRequest) returns (ProductCreateResponse);
 
   rpc Modify (ProductModifyRequest) returns (ProductModifyResponse);
 
   rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
 
   rpc GetImage (ProductImageRequest) returns (stream ImageData);
-  
-  rpc UploadImage (stream ImageData) returns (ProductImageResponse);
 }
 
 // Meta object
@@ -31,7 +29,8 @@ message MetaProduct {
 }
 
 message ImageData {
-  bytes data = 1;
+  bytes raw = 1;
+  string extension = 2;
 }
 
 // Page
@@ -60,7 +59,7 @@ message ProductCreateRequest {
   string category = 3;
   string description = 4;
   int32 amount = 5;
-  string image = 6;
+  bytes image = 6;
 }
 
 message ProductCreateResponse {
@@ -74,7 +73,7 @@ message ProductModifyRequest {
     optional string category = 3;
     optional string description = 4;
     optional int32 amount = 5;
-    optional string image = 6;
+    optional bytes image = 6;
 }
 
 message ProductModifyResponse {
