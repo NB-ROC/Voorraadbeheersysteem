@@ -5,7 +5,6 @@
     <DockPanel Background="#f5f5f5">
         <TextBlock DockPanel.Dock="Top"
                    Text="Geleende items Overzicht"
-                   FontWeight="Bold"
                    Foreground="#aaaaaa"
                    FontSize="20"
                    Margin="15,15,15,10" />
@@ -25,7 +24,6 @@
                     Margin="0,0,8,0"
                     VerticalAlignment="Center">
                 <TextBlock Text="🔍  Zoek..."
-                           FontWeight="Bold"
                            Foreground="#aaaaaa"
                            FontSize="13" />
             </Border>
@@ -35,7 +33,6 @@
                     Height="35"
                     Background="#6a69ad"
                     Foreground="White"
-                    FontWeight="Bold"
                     BorderThickness="0"
                     CornerRadius="4"
                     Padding="15,0"
