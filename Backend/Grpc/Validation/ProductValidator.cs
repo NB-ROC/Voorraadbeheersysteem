@@ -39,10 +39,10 @@ public class ProductValidator : Validator
     /**
      * This is async due to the needed database logic here.
      */
-    public async Task<(Product product, string? extension)> ValidateModify(ProductModifyRequest request)
+    public async Task<(Product product, string extension)> ValidateModify(ProductModifyRequest request)
     {
         Product? product = await _productManager.Get(request.Id);
-        string? extension = null;
+        string extension = "";
         if (product == null) Throw("Invalid Product");
 
         ValidateId(request.Id);
@@ -55,9 +55,12 @@ public class ProductValidator : Validator
         return (product!, extension);
     }
 
-    public void ValidateDelete(ProductDeleteRequest request)
+    public async Task<string> ValidateDelete(ProductDeleteRequest request)
     {
         ValidateId(request.Id);
+        Product? product = await _productManager.Get(request.Id);
+        if (product == null) Throw("Invalid product");
+        return product!.Image;
     }
 
     private static void ValidateId(int id)

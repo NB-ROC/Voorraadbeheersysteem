@@ -9,13 +9,13 @@ service Products {
 
   rpc Get (ProductGetRequest) returns (ProductGetResponse);
 
-  rpc Create (stream ProductCreateRequest) returns (ProductCreateResponse);
+  rpc Create (ProductCreateRequest) returns (ProductCreateResponse);
 
-  rpc Modify (stream ProductModifyRequest) returns (ProductModifyResponse);
+  rpc Modify (ProductModifyRequest) returns (ProductModifyResponse);
 
   rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
 
-  rpc GetImage (ProductImageRequest) returns (stream ProductImageResponse);
+  rpc Image (ProductImageRequest) returns (stream ProductImageResponse);
 }
 
 // Meta object

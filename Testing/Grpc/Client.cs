@@ -1,6 +1,6 @@
 using Grpc.Net.Client;
-using Protos.User;
 using Protos.Product;
+using Protos.User;
 
 namespace Testing.Grpc;
 

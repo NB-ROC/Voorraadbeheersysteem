@@ -2,6 +2,7 @@ using Backend.Database.Managers;
 using Backend.Entities;
 using Backend.Grpc.Helpers;
 using Backend.Grpc.Validation;
+using Google.Protobuf;
 using Grpc.Core;
 using Protos.Product;
 
@@ -9,6 +10,8 @@ namespace Backend.Grpc.Services;
 
 public class ProductService : Products.ProductsBase
 {
+    private const string ImagePath = "Products/";
+
     private readonly ProductManager _manager;
     private readonly ProductValidator _validator;
 
@@ -25,15 +28,7 @@ public class ProductService : Products.ProductsBase
 
         ProductPageResponse response = new();
 
-        response.Products.AddRange(products.Select(product => new MetaProduct
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Category = product.Category,
-            Description = product.Description,
-            Amount = product.Amount,
-            Image = product.Image
-        }));
+        response.Products.AddRange(products.Select(MapMeta));
 
         return response;
     }
@@ -47,34 +42,20 @@ public class ProductService : Products.ProductsBase
 
         return new ProductGetResponse
         {
-            Product = new MetaProduct
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Category = product.Category,
-                Description = product.Description,
-                Amount = product.Amount,
-                Image = product.Image
-            }
+            Product = MapMeta(product)
         };
     }
 
-    public override async Task<ProductCreateResponse> Create(IAsyncStreamReader<ProductCreateRequest> stream, ServerCallContext context)
+    public override async Task<ProductCreateResponse> Create(ProductCreateRequest request, ServerCallContext context)
     {
-        
-        var request = new ProductCreateRequest();
-        await foreach (var message in stream.ReadAllAsync())
-        {
-            if (message.Name != null) request.Name = message.Name;
-            if (message.Category != null) request.Category = message.Category;
-            if (message.Description != null) request.Description = message.Description;
-            if (message.Amount != null) request.Amount = message.Amount;
-            if (message.Image != null) request.Image = message.Image;
-        }
-        
         string extension = _validator.ValidateCreate(request);
-        string imageName = await ImageHelper.SaveImage(request.Image, extension, "Products/");
-        
+
+        string imageName = await StorageHelper.SaveFile(
+            request.Image,
+            extension,
+            ImagePath
+        );
+
         Product product = new()
         {
             Name = request.Name,
@@ -83,27 +64,71 @@ public class ProductService : Products.ProductsBase
             Amount = request.Amount!.Value,
             Image = imageName
         };
+
         return new ProductCreateResponse
         {
             Success = await _manager.Create(product)
         };
     }
 
-    public override async Task<ProductModifyResponse> Modify(IAsyncStreamReader<ProductModifyRequest> stream, ServerCallContext context)
+    public override async Task<ProductModifyResponse> Modify(ProductModifyRequest request, ServerCallContext context)
     {
-        var request = new ProductCreateRequest();
-        await foreach (var message in stream.ReadAllAsync())
-        {
-            if (message is { HasName: true, Name: not null }) request.Name = message.Name;
-            if (message is { HasCategory: true, Category: not null }) request.Category = message.Category;
-            if (message is { HasDescription: true, Description: not null }) request.Description = message.Description;
-            if (message.Amount != null) request.Amount = message.Amount;
-            if (message is { HasImage: true, Image: not null}) request.Image = message.Image;
-        }
+        (Product product, string extension) = await _validator.ValidateModify(request);
+
+        if (request.HasName) product.Name = request.Name;
+
+        if (request.HasCategory) product.Category = request.Category;
+
+        if (request.HasDescription) product.Description = request.Description;
+
+        if (request.Amount != null) product.Amount = request.Amount.Value;
+
+        if (request.HasImage)
+            product.Image = await StorageHelper.ModifyFile(
+                Path.Combine(ImagePath, product.Image),
+                request.Image,
+                extension,
+                ImagePath
+            );
 
         return new ProductModifyResponse
         {
-            Success = true
+            Success = await _manager.Modify(product)
+        };
+    }
+
+    public override async Task<ProductDeleteResponse> Delete(ProductDeleteRequest request, ServerCallContext context)
+    {
+        string image = await _validator.ValidateDelete(request);
+        StorageHelper.DeleteFile(Path.Combine(ImagePath, image));
+        return new ProductDeleteResponse
+        {
+            Success = await _manager.Delete(request.Id)
+        };
+    }
+
+    public override async Task Image(ProductImageRequest request,
+        IServerStreamWriter<ProductImageResponse> responseStream, ServerCallContext context)
+    {
+        ByteString file = await StorageHelper.GetFile(Path.Combine(ImagePath, request.Name));
+
+        await responseStream.WriteAsync(new ProductImageResponse
+        {
+            Raw = file,
+            Extension = Path.GetExtension(request.Name).TrimStart('.')
+        });
+    }
+
+    private static MetaProduct MapMeta(Product product)
+    {
+        return new MetaProduct
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Category = product.Category,
+            Description = product.Description,
+            Amount = product.Amount,
+            Image = product.Image
         };
     }
 }

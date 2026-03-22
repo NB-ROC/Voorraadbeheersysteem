@@ -17,9 +17,10 @@ public class ImageTests
     {
         byte[] image = await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Assets/borger.jpg"));
         ByteString bytes = ByteString.CopyFrom(image);
-        
-        string filename = await ImageHelper.SaveImage(bytes, "jpg", "Public");
-        byte[] newImage = await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Storage/Public/" + filename));
+
+        string filename = await StorageHelper.SaveFile(bytes, "jpg", "Public");
+        byte[] newImage =
+            await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Storage/Public/" + filename));
 
         Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory(), "Storage/Public/" + filename));
         Assert.AreEqual(image, newImage);

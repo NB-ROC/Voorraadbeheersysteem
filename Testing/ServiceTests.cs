@@ -44,10 +44,10 @@ public class ServiceTests
 
         bool modify = Client.Users.Modify(new UserModifyRequest
         {
-            Id =  ByteString.CopyFrom(userId),
+            Id = ByteString.CopyFrom(userId),
             Name = "Cheese Master"
         }).Success;
-        
+
         MetaUser modifiedUser = Client.Users.Get(new UserGetRequest
         {
             Id = ByteString.CopyFrom(userId)

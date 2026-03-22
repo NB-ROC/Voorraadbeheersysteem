@@ -29,7 +29,7 @@
     <ItemGroup>
         <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client"/>
     </ItemGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="../Backend/Backend.csproj"/>
     </ItemGroup>
