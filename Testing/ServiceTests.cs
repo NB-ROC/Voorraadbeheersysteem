@@ -42,6 +42,17 @@ public class ServiceTests
             Id = ByteString.CopyFrom(userId)
         }).User;
 
+        bool modify = Client.Users.Modify(new UserModifyRequest
+        {
+            Id =  ByteString.CopyFrom(userId),
+            Name = "Cheese Master"
+        }).Success;
+        
+        MetaUser modifiedUser = Client.Users.Get(new UserGetRequest
+        {
+            Id = ByteString.CopyFrom(userId)
+        }).User;
+
         bool delete = Client.Users.Delete(new UserDeleteRequest
         {
             Id = ByteString.CopyFrom(userId)
@@ -59,9 +70,12 @@ public class ServiceTests
         Assert.IsTrue(create);
         Assert.IsNotEmpty(size1);
         Assert.AreEqual(createdUser.Id.ToByteArray(), userId);
+        Assert.IsTrue(modify);
+        Assert.AreNotEqual(createdUser, modifiedUser);
         Assert.IsTrue(delete);
         Assert.IsEmpty(emptyAfterDelete);
 
-        Console.WriteLine(createdUser.Email);
+        Console.WriteLine(createdUser);
+        Console.WriteLine(modifiedUser);
     }
 }
