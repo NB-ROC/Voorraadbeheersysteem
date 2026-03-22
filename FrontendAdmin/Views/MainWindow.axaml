@@ -39,7 +39,7 @@
                         Click="OnItemsClick">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Items" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                        <TextBlock Text="Geleende items" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
                 <Button Background="Transparent" BorderThickness="0"

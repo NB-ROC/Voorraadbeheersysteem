@@ -2,13 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FrontendAdmin.Views.ItemsView">
 
-    <DockPanel Background="White">
+    <DockPanel Background="#f5f5f5">
         <TextBlock DockPanel.Dock="Top"
-                   Text="Items Overzicht"
+                   Text="Geleende items Overzicht"
+                   FontWeight="Bold"
                    Foreground="#aaaaaa"
                    FontSize="20"
                    Margin="15,15,15,10" />
-
+        
         <Grid DockPanel.Dock="Top" Margin="15,0,15,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -16,6 +17,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0"
+                    Background="White"
                     BorderBrush="#cccccc"
                     BorderThickness="1"
                     CornerRadius="4"
@@ -23,6 +25,7 @@
                     Margin="0,0,8,0"
                     VerticalAlignment="Center">
                 <TextBlock Text="🔍  Zoek..."
+                           FontWeight="Bold"
                            Foreground="#aaaaaa"
                            FontSize="13" />
             </Border>
@@ -32,6 +35,7 @@
                     Height="35"
                     Background="#6a69ad"
                     Foreground="White"
+                    FontWeight="Bold"
                     BorderThickness="0"
                     CornerRadius="4"
                     Padding="15,0"
@@ -39,45 +43,145 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center" />
         </Grid>
+        
+        <Grid DockPanel.Dock="Top" Margin="15,0,15,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        Spacing="8">
 
-        <ScrollViewer DockPanel.Dock="Top">
-            <StackPanel>
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                <Button Content="Alle items"
+                        Background="#6a69ad"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        BorderThickness="0"
+                        CornerRadius="20"
+                        Padding="16,6"
+                        FontSize="12" />
 
-                        <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
-                                BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
-                        </Border>
+                <Button Content="Op tijd"
+                        Background="#e6f9f0"
+                        Foreground="#27ae60"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        CornerRadius="20"
+                        Padding="16,6"
+                        FontSize="12" />
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,0,0">
-                            <TextBlock Text="Afbeelding" Foreground="#aaaaaa" FontSize="12" VerticalAlignment="Center" />
-                            <TextBlock Text="Item Naam" Foreground="#aaaaaa" FontWeight="Bold" FontSize="14"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
+                <Button Content="Bijna te laat"
+                        Background="#fff8e1"
+                        Foreground="#f39c12"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        CornerRadius="20"
+                        Padding="16,6"
+                        FontSize="12" />
 
-                        <Button Grid.Column="2"
-                                Content="Reserveer"
-                                Background="#6a69ad"
-                                Click="OnReserveerClick"
-                                Foreground="White"
-                                BorderThickness="0"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                FontSize="12"
-                                VerticalAlignment="Center" />
-                    </Grid>
-                </Border>
+                <Button Content="Te laat"
+                        Background="#fdecea"
+                        Foreground="#e74c3c"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        CornerRadius="20"
+                        Padding="16,6"
+                        FontSize="12" />
 
             </StackPanel>
+            
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        Spacing="8"
+                        VerticalAlignment="Center">
+
+                <ComboBox x:Name="GebruikerDropdown"
+                          Width="180"
+                          Height="32"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Alle gebruikers" />
+                    <ComboBoxItem Content="Jan de vries" />
+                </ComboBox>
+
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer DockPanel.Dock="Top">
+            <WrapPanel Margin="15,0,15,15" ItemWidth="312">
+
+                <Border Margin="0,0,12,12"
+                        Width="300"
+                        Background="White"
+                        CornerRadius="8"
+                        BoxShadow="0 2 8 0 #22000000"
+                        Padding="0,0,0,12">
+                    <StackPanel>
+                        <Border CornerRadius="8,8,0,0"
+                                ClipToBounds="True"
+                                Height="200">
+                            <Image Source="/Assets/download.jpg"
+                                   Stretch="UniformToFill" />
+                        </Border>
+                        
+                        <StackPanel Margin="12,10,12,10" Spacing="6">
+                            <TextBlock Text="Mcdonalds"
+                                       FontWeight="Bold"
+                                       Foreground="#333333"
+                                       FontSize="18"
+                                       TextWrapping="Wrap" />
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="👤" FontSize="13" Foreground="#aaaaaa" />
+                                <TextBlock Text="Jan de vries"
+                                           FontSize="15"
+                                           Foreground="#aaaaaa"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="📅" FontSize="15" Foreground="#aaaaaa" />
+                                <TextBlock Text="Uitgeleend op: 20-03-2025"
+                                           FontSize="15"
+                                           Foreground="#aaaaaa" />
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="↩️" FontSize="15" Foreground="#aaaaaa" />
+                                <TextBlock Text="Terug op: 25-03-2025"
+                                           FontSize="15"
+                                           Foreground="#aaaaaa" />
+                            </StackPanel>
+                            
+                            <Border Background="#fdecea"
+                                    CornerRadius="4"
+                                    Padding="8,4"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,4,0,0">
+                                <TextBlock Text="Te laat"
+                                           FontSize="12"
+                                           Foreground="#e74c3c"
+                                           FontWeight="Bold" />
+                            </Border>
+
+                        </StackPanel>
+                        
+                        <Button Content="Verwijder"
+                                Margin="12,0,12,0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Background="#6a69ad"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                BorderThickness="0"
+                                CornerRadius="4"
+                                Padding="0,10"
+                                FontSize="14" />
+                    </StackPanel>
+                </Border>
+
+            </WrapPanel>
         </ScrollViewer>
 
     </DockPanel>
