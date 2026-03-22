@@ -27,8 +27,8 @@ public class ServiceTests
             Id = ByteString.CopyFrom(userId),
             Email = "1234567@student.roc-nijmegen.nl",
             Name = "Regu Larjoe",
-            Number = 1234567,
-            Staff = false
+            Number = 123456,
+            Staff = true
         }).Success;
 
         List<MetaUser> size1 = Client.Users.Page(new UserPageRequest
