@@ -9,7 +9,7 @@ public class ImageTests
     public void Setup()
     {
         Directory.CreateDirectory("Storage");
-        Directory.CreateDirectory("Storage/Public");
+        Directory.CreateDirectory("Storage/Products");
     }
 
     [Test]

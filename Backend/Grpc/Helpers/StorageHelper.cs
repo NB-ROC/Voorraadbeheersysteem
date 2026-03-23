@@ -19,7 +19,7 @@ public static class StorageHelper
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         const int nameLength = Product.ImageLength - 4; // dot and extension
-
+        
         Random random = new();
         string fileName;
         string fullPath;
@@ -33,6 +33,7 @@ public static class StorageHelper
             fullPath = Path.Combine("Storage/", path, fileName);
         } while (File.Exists(fullPath));
 
+        Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
         await File.WriteAllBytesAsync(fullPath, data.ToByteArray());
 
         return fileName;

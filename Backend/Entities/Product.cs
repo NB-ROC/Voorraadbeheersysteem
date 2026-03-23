@@ -6,7 +6,7 @@ public class Product
 {
     public const int NameLength = 64;
     public const int CategoryLength = 45;
-    public const int DescriptionLength = 45;
+    public const int DescriptionLength = 128;
     public const int ImageLength = 16;
 
     public int Id { get; set; }

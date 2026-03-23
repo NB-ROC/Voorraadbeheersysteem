@@ -110,14 +110,14 @@ public class ProductValidator : Validator
         if (image[0] == 0xFF &&
             image[1] == 0xD8 &&
             image[2] == 0xFF)
-            return "gif";
+            return "jpg";
 
         // GIF
         if (image[0] == 0x47 &&
             image[1] == 0x49 &&
             image[2] == 0x46 &&
             image[3] == 0x38)
-            return "jpg";
+            return "gif";
 
         // PNG
         if (image.Length >= 8 &&

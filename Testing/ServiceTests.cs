@@ -1,4 +1,6 @@
 using Google.Protobuf;
+using Grpc.Core;
+using Protos.Product;
 using Protos.User;
 using Testing.Grpc;
 
@@ -77,5 +79,94 @@ public class ServiceTests
 
         Console.WriteLine(createdUser);
         Console.WriteLine(modifiedUser);
+    }
+    
+    [Test]
+    public async Task ProductTest()
+    {
+        List<MetaProduct> empty = Client.Products.Page(new ProductPageRequest
+        {
+            Page = 1,
+            PageSize = 10
+        }).Products.ToList();
+
+        byte[] localImageBytes = await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Assets/borger.jpg"));
+        ProductCreateRequest createRequest = new()
+        {
+            Name = "Arduino Uno",
+            Description = "Dit is een heel mooi ding met allerlei dingetjes",
+            Category = "Microcontrollers",
+            Amount = 12,
+            Image = ByteString.CopyFrom(localImageBytes),
+        };
+
+        bool create = Client.Products.Create(createRequest).Success;
+
+        List<MetaProduct> size1 = Client.Products.Page(new ProductPageRequest
+        {
+            Page = 1,
+            PageSize = 10
+        }).Products.ToList();
+
+        MetaProduct createdProduct = Client.Products.Get(new ProductGetRequest()
+        {
+            Id = size1[0].Id
+        }).Product;
+
+        ProductModifyRequest modifyRequest = new()
+        {
+            Id = createdProduct.Id,
+            Name = "Arduino Dos"
+        };
+        
+        bool modify = Client.Products.Modify(modifyRequest).Success;
+
+        MetaProduct modifiedProduct = Client.Products.Get(new ProductGetRequest()
+        {
+            Id = createdProduct.Id
+        }).Product;
+        
+        
+        // --- image call
+        using var call = Client.Products.Image(new ProductImageRequest
+        {
+            Name = modifiedProduct.Image
+        });
+
+        using MemoryStream imageStream = new();
+
+        await foreach (var response in call.ResponseStream.ReadAllAsync())
+        {
+            byte[] chunk = response.Raw.ToByteArray();
+            await imageStream.WriteAsync(chunk, 0, chunk.Length);
+        }
+
+        byte[] imageBytes = imageStream.ToArray();
+        await File.WriteAllBytesAsync(modifiedProduct.Image, imageBytes);
+        // --- image call
+
+        
+        bool delete = Client.Products.Delete(new ProductDeleteRequest()
+        {
+            Id = modifiedProduct.Id
+        }).Success;
+        
+        List<MetaProduct> emptyAfterDelete = Client.Products.Page(new ProductPageRequest
+        {
+            Page = 1,
+            PageSize = 10
+        }).Products.ToList();
+        
+        Assert.IsEmpty(empty);
+        Assert.IsTrue(create);
+        Assert.IsNotEmpty(size1);
+        Assert.IsTrue(modify);
+        Assert.AreEqual(localImageBytes, imageBytes);
+        Assert.AreNotEqual(createdProduct, modifiedProduct);
+        Assert.IsTrue(delete);
+        Assert.IsEmpty(emptyAfterDelete);
+
+        Console.WriteLine(createdProduct);
+        Console.WriteLine(modifiedProduct);
     }
 }
