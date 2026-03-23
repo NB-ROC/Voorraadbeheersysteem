@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 #region DB
 
+// TODO: Make it so it dynamically creates these at runtime to avoid errors
+Directory.CreateDirectory("Storage");
+Directory.CreateDirectory("Storage/Products");
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string env = builder.Environment.EnvironmentName;
 
@@ -17,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<UserManager>();
+builder.Services.AddScoped<ProductManager>();
 
 #endregion
 
@@ -27,6 +32,7 @@ WebApplication app = builder.Build();
 app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
 
 app.MapGrpcService<UserService>();
+app.MapGrpcService<ProductService>();
 
 app.Run();
 

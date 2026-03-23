@@ -30,4 +30,12 @@
         <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="../Backend/Backend.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None CopyToOutputDirectory="Always" Include="Assets/**/*"/>
+    </ItemGroup>
+
 </Project>

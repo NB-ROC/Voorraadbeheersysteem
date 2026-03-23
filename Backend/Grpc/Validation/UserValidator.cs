@@ -2,7 +2,7 @@ using System.Net.Mail;
 using Backend.Database.Managers;
 using Backend.Entities;
 using Google.Protobuf;
-using Shared;
+using Protos.User;
 
 namespace Backend.Grpc.Validation;
 
