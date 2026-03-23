@@ -15,4 +15,10 @@ public partial class ItemsView : UserControl
         MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
         mainWindow?.NavigateTo("Reservering");
     }
+
+    private void OnAddProductClick(object? sender, RoutedEventArgs e)
+    {
+        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        mainWindow?.NavigateTo("Product");
+    }
 }

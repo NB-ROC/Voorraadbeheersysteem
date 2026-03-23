@@ -26,6 +26,30 @@
                            Foreground="#aaaaaa"
                            FontSize="13" />
             </Border>
+            
+            <Button Grid.Column="2"
+ 
+                    Content="Product Toevoegen"
+ 
+                    Height="35"
+ 
+                    Background="#6a69ad"
+ 
+                    Foreground="White"
+ 
+                    BorderThickness="0"
+ 
+                    CornerRadius="4"
+ 
+                    Padding="15,0"
+ 
+                    VerticalAlignment="Center"
+ 
+                    HorizontalContentAlignment="Center"
+ 
+                    VerticalContentAlignment="Center"
+ 
+                    Click="OnAddProductClick"/>
 
             <Button Grid.Column="1"
                     Content="Filters"

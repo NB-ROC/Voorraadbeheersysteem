@@ -21,6 +21,7 @@ public partial class MainWindow : Window
             "Leningen" => new LeningenView(),
             "Profiel" => new ProfielView(),
             "Reservering" => new ReserveringView(),
+            "Product" => new ProductView(),
             _ => new DashboardView()
         };
     }
