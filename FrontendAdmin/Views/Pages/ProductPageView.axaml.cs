@@ -11,8 +11,15 @@ public partial class ProductPageView : UserControl
         InitializeComponent();
     }
 
-    private void OnEditClick(object sender, RoutedEventArgs e) => throw new NotImplementedException();
-    private void OnDeleteClick(object sender, RoutedEventArgs e) => throw new NotImplementedException();
+    private void OnEditClick(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnDeleteClick(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
 
     private void OnAddProductClick(object? sender, RoutedEventArgs e)
     {

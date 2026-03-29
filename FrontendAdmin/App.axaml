@@ -15,24 +15,24 @@
         <DataTemplate DataType="{x:Type viewModels:MainWindowViewModel}">
             <views:MainWindow />
         </DataTemplate>
-        
-        
+
+
         <DataTemplate DataType="{x:Type dashboard:DashboardPageViewModel}">
             <pages:DashboardPageView />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type loan:LoanPageViewModel}">
             <pages:LoanPageView />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type product:ProductPageViewModel}">
             <pages:ProductPageView />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type profile:ProfilePageViewModel}">
             <pages:ProfilePageView />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type reservation:ReservationPageViewModel}">
             <pages:ReservationPageView />
         </DataTemplate>

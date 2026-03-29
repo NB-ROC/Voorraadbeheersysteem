@@ -1,6 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Pages.ProductPageView">
+             xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
+             x:Class="FrontendAdmin.Views.Pages.ProductPageView"
+             x:DataType="product:ProductPageViewModel">
 
     <Grid Background="#F6F7FB" RowDefinitions="Auto,Auto,*">
 
@@ -9,10 +11,10 @@
             <TextBlock Text="Producten Overzicht"
                        FontSize="28"
                        FontWeight="Bold"
-                       Foreground="#1F2937"/>
+                       Foreground="#1F2937" />
             <TextBlock Text="Bekijk en beheer alle beschikbare producten"
                        FontSize="13"
-                       Foreground="#6B7280"/>
+                       Foreground="#6B7280" />
         </StackPanel>
 
         <!-- Toolbar -->
@@ -62,79 +64,83 @@
                         BorderThickness="0"
                         CornerRadius="8"
                         HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Click="OnAddProductClick"/>
+                        VerticalContentAlignment="Center"/>
             </Grid>
         </Border>
 
         <!-- Items lijst -->
         <ScrollViewer Grid.Row="2" Margin="20,0,20,20">
-            <StackPanel Spacing="12">
+            <ListBox ItemsSource="{Binding Products}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type product:ProductViewModel}">
+                        <StackPanel Spacing="12">
 
-                <Border Background="White"
-                        BorderBrush="#E5E7EB"
-                        BorderThickness="1"
-                        CornerRadius="12"
-                        Padding="14">
-                    <Grid ColumnDefinitions="80,*,Auto"
-                          ColumnSpacing="14">
+                            <Border Background="White"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="14">
+                                <Grid ColumnDefinitions="80,*,Auto"
+                                      ColumnSpacing="14">
 
-                        <!-- Thumbnail -->
-                        <Border Grid.Column="0"
-                                Width="72"
-                                Height="72"
-                                Background="#F3F4F6"
-                                BorderBrush="#D1D5DB"
-                                BorderThickness="1"
-                                CornerRadius="10">
-                            <TextBlock Text="?"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="22"
-                                       Foreground="#9CA3AF"/>
-                        </Border>
+                                    <!-- Thumbnail -->
+                                    <Border Grid.Column="0"
+                                            Width="72"
+                                            Height="72"
+                                            Background="#F3F4F6"
+                                            BorderBrush="#D1D5DB"
+                                            BorderThickness="1"
+                                            CornerRadius="10">
+                                        <TextBlock Text="?"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="22"
+                                                   Foreground="#9CA3AF" />
+                                    </Border>
 
-                        <!-- Info -->
-                        <StackPanel Grid.Column="1"
-                                    VerticalAlignment="Center"
-                                    Spacing="4">
-                            <TextBlock Text="Categorie / Type"
-                                       Foreground="#9CA3AF"
-                                       FontSize="12"/>
-                            <TextBlock Text="Item Naam"
-                                       Foreground="#111827"
-                                       FontWeight="Bold"
-                                       FontSize="16"/>
-                            <TextBlock Text="Korte beschrijving van het product of extra metadata"
-                                       Foreground="#6B7280"
-                                       FontSize="13"
-                                       TextWrapping="Wrap"/>
+                                    <!-- Info -->
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Spacing="4">
+                                        <TextBlock Text="{Binding Category}"
+                                                   Foreground="#9CA3AF"
+                                                   FontSize="12" />
+                                        <TextBlock Text="{Binding Name}"
+                                                   Foreground="#111827"
+                                                   FontWeight="Bold"
+                                                   FontSize="16" />
+                                        <TextBlock Text="{Binding Description}"
+                                                   Foreground="#6B7280"
+                                                   FontSize="13"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+
+                                    <!-- Actie -->
+                                    <DockPanel HorizontalSpacing="12" Grid.Column="2"
+                                               VerticalAlignment="Center">
+                                        <Button Content="Bewerk"
+                                                Background="Orange"
+                                                Foreground="White"
+                                                Padding="12 8"
+                                                CornerRadius="8"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"/>
+                                        <Button Content="Verwijder"
+                                                Background="Red"
+                                                Foreground="White"
+                                                Padding="12 8"
+                                                CornerRadius="8"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                />
+                                    </DockPanel>
+                                </Grid>
+                            </Border>
+
                         </StackPanel>
-
-                        <!-- Actie -->
-                        <DockPanel HorizontalSpacing="12" Grid.Column="2"
-                                    VerticalAlignment="Center">
-                            <Button Content="Bewerk"
-                                    Background="Orange"
-                                    Foreground="White"
-                                    Padding="12 8"
-                                    CornerRadius="8"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    Click="OnEditClick"/>
-                            <Button Content="Verwijder"
-                                    Background="Red"
-                                    Foreground="White"
-                                    Padding="12 8"
-                                    CornerRadius="8"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    Click="OnDeleteClick"/>
-                        </DockPanel>
-                    </Grid>
-                </Border>
-
-            </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </ScrollViewer>
 
     </Grid>

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FrontendAdmin.Models;
 
 public class ProductModel
 {
-    
     public const int NameLength = 64;
     public const int CategoryLength = 45;
     public const int DescriptionLength = 128;

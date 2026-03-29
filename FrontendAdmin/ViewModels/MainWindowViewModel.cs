@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using Avalonia.Controls.Templates;
 using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
 using FrontendAdmin.ViewModels.Product;
@@ -11,18 +10,12 @@ namespace FrontendAdmin.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {
-    private object _currentPage;
-    public object CurrentPage
-    {
-        get => _currentPage;
-        set => this.RaiseAndSetIfChanged(ref _currentPage, value);
-    }
-
     private readonly DashboardPageViewModel _dashboard;
-    private readonly ProductPageViewModel _products;
     private readonly LoanPageViewModel _loans;
+    private readonly ProductPageViewModel _products;
     private readonly ProfilePageViewModel _profile;
     private readonly ReservationPageViewModel _reservering;
+    private object _currentPage;
 
     public MainWindowViewModel(
         DashboardPageViewModel dashboard,
@@ -47,11 +40,20 @@ public class MainWindowViewModel : ReactiveObject
         CurrentPage = _dashboard; // default
     }
 
+    public object CurrentPage
+    {
+        get => _currentPage;
+        set => this.RaiseAndSetIfChanged(ref _currentPage, value);
+    }
+
     public ICommand NavigateToDashboard { get; }
     public ICommand NavigateToProducts { get; }
     public ICommand NavigateToLoans { get; }
     public ICommand NavigateToProfile { get; }
     public ICommand NavigateToReservering { get; }
 
-    private void NavigateTo(object page) => CurrentPage = page;
+    private void NavigateTo(object page)
+    {
+        CurrentPage = page;
+    }
 }

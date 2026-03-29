@@ -8,60 +8,60 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.12" />
-        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.12" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12" />
+        <PackageReference Include="Avalonia" Version="11.3.12"/>
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.12"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.12"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.12">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.34.0" />
-        <PackageReference Include="Grpc.Net.Client" Version="2.76.0" />
+        <PackageReference Include="Google.Protobuf" Version="3.34.0"/>
+        <PackageReference Include="Grpc.Net.Client" Version="2.76.0"/>
         <PackageReference Include="Grpc.Tools" Version="2.78.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
-        <PackageReference Include="ReactiveUI.Avalonia" Version="11.4.12" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5"/>
+        <PackageReference Include="ReactiveUI.Avalonia" Version="11.4.12"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client" />
+        <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Pages\DashboardPageView.axaml.cs">
-        <DependentUpon>DashboardView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Pages\ProductPageView.axaml.cs">
-        <DependentUpon>ItemsView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Pages\LoanPageView.axaml.cs">
-        <DependentUpon>LoanViewPage.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Pages\ProfilePageView.axaml.cs">
-        <DependentUpon>ProfilePageView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Forms\ProductFormView.axaml.cs">
-        <DependentUpon>ProductView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Pages\ReservationPageView.axaml.cs">
-        <DependentUpon>ReserveringView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+        <Compile Update="Views\Pages\DashboardPageView.axaml.cs">
+            <DependentUpon>DashboardView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\ProductPageView.axaml.cs">
+            <DependentUpon>ItemsView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\LoanPageView.axaml.cs">
+            <DependentUpon>LoanViewPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\ProfilePageView.axaml.cs">
+            <DependentUpon>ProfilePageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Forms\ProductFormView.axaml.cs">
+            <DependentUpon>ProductView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\ReservationPageView.axaml.cs">
+            <DependentUpon>ReserveringView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
 </Project>

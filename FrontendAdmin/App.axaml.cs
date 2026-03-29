@@ -6,11 +6,11 @@ using Avalonia.Markup.Xaml;
 using FrontendAdmin.ViewModels;
 using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
-using Microsoft.Extensions.DependencyInjection;
 using FrontendAdmin.ViewModels.Product;
 using FrontendAdmin.ViewModels.Profile;
 using FrontendAdmin.ViewModels.Reservation;
 using FrontendAdmin.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin;
 
@@ -25,8 +25,8 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var services = new ServiceCollection();
-    
+            ServiceCollection services = new();
+
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<ProductPageViewModel>();
             services.AddSingleton<DashboardPageViewModel>();
@@ -34,12 +34,12 @@ public class App : Application
             services.AddSingleton<ReservationPageViewModel>();
             services.AddSingleton<ProfilePageViewModel>();
 
-            
+
             DisableAvaloniaDataAnnotationValidation();
 
-            var serviceProvider = services.BuildServiceProvider();
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            var mainWindowViewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
+            MainWindowViewModel mainWindowViewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
 
             desktop.MainWindow = new MainWindow
             {

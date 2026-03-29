@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using FrontendAdmin.Models;
+﻿using FrontendAdmin.Models;
+using ReactiveUI;
 
-namespace FrontendAdmin.ViewModels;
+namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductViewModel : INotifyPropertyChanged
+public class ProductViewModel : ReactiveObject
 {
     private readonly ProductModel _model;
 
@@ -20,11 +19,9 @@ public class ProductViewModel : INotifyPropertyChanged
         get => _model.Name;
         set
         {
-            if (_model.Name != value)
-            {
-                _model.Name = value;
-                OnPropertyChanged();
-            }
+            if (_model.Name == value) return;
+            _model.Name = value;
+            this.RaisePropertyChanged();
         }
     }
 
@@ -33,11 +30,9 @@ public class ProductViewModel : INotifyPropertyChanged
         get => _model.Category;
         set
         {
-            if (_model.Category != value)
-            {
-                _model.Category = value;
-                OnPropertyChanged();
-            }
+            if (_model.Category == value) return;
+            _model.Category = value;
+            this.RaisePropertyChanged();
         }
     }
 
@@ -46,11 +41,9 @@ public class ProductViewModel : INotifyPropertyChanged
         get => _model.Description;
         set
         {
-            if (_model.Description != value)
-            {
-                _model.Description = value;
-                OnPropertyChanged();
-            }
+            if (_model.Description == value) return;
+            _model.Description = value;
+            this.RaisePropertyChanged();
         }
     }
 
@@ -59,11 +52,9 @@ public class ProductViewModel : INotifyPropertyChanged
         get => _model.Image;
         set
         {
-            if (_model.Image != value)
-            {
-                _model.Image = value;
-                OnPropertyChanged();
-            }
+            if (_model.Image == value) return;
+            _model.Image = value;
+            this.RaisePropertyChanged();
         }
     }
 
@@ -72,31 +63,9 @@ public class ProductViewModel : INotifyPropertyChanged
         get => _model.Amount;
         set
         {
-            if (_model.Amount != value)
-            {
-                _model.Amount = value;
-                OnPropertyChanged();
-            }
+            if (_model.Amount == value) return;
+            _model.Amount = value;
+            this.RaisePropertyChanged();
         }
-    }
-
-    // Example of UI-only property (very common)
-    private bool _isSelected;
-    public bool IsSelected
-    {
-        get => _isSelected;
-        set
-        {
-            _isSelected = value;
-            OnPropertyChanged();
-        }
-    }
-
-    // Notify UI
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string? name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
