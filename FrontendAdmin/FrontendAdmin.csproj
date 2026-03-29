@@ -37,20 +37,24 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Pages\DashboardPageView.axaml.cs">
+      <Compile Update="Views\Pages\DashboardPage.axaml.cs">
         <DependentUpon>DashboardView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Pages\ProductPageView.axaml.cs">
+      <Compile Update="Views\Pages\ProductPage.axaml.cs">
         <DependentUpon>ItemsView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Pages\LoanViewPage.axaml.cs">
+      <Compile Update="Views\Pages\LoanPage.axaml.cs">
         <DependentUpon>LoanViewPage.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Pages\ProfilePageView.axaml.cs">
+      <Compile Update="Views\Pages\ProfilePage.axaml.cs">
         <DependentUpon>ProfilePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Forms\ProductForm.axaml.cs">
+        <DependentUpon>ProductView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>

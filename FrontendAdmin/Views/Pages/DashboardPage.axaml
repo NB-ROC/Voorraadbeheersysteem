@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Pages.DashboardPageView">
+             x:Class="FrontendAdmin.Views.Pages.DashboardPage">
 
     <DockPanel Background="White">
         <Border Height="250" DockPanel.Dock="Top" Padding="15">

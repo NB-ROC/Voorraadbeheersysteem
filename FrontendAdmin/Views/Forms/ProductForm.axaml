@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:FrontendAdmin.ViewModels"
-    x:Class="FrontendAdmin.Views.ProductView"
+    x:Class="FrontendAdmin.Views.Forms.ProductForm"
     x:DataType="vm:ProductViewModel"
     mc:Ignorable="d">
 

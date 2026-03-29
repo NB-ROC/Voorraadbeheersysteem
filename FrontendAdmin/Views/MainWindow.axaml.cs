@@ -17,13 +17,13 @@ public partial class MainWindow : Window
         ContentControl? content = this.FindControl<ContentControl>("PageContent");
         content!.Content = page switch
         {
-            "Dashboard" => new DashboardPageView(),
-            "Items" => new ProductPageView(),
-            "Leningen" => new LoanViewPage(),
-            "Profiel" => new ProfilePageView(),
+            "Dashboard" => new DashboardPage(),
+            "Items" => new Pages.ProductPage(),
+            "Leningen" => new Pages.LoanPage(),
+            "Profiel" => new Pages.ProfilePage(),
             "Reservering" => new ReserveringView(),
-            "Product" => new ProductView(),
-            _ => new DashboardPageView()
+            "Product" => new Forms.ProductForm(),
+            _ => new DashboardPage()
         };
     }
 

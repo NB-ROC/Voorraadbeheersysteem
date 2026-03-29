@@ -1,13 +1,12 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
 using FrontendAdmin.ViewModels;
 
-namespace FrontendAdmin.Views;
+namespace FrontendAdmin.Views.Forms;
 
-public partial class ProductView : UserControl
+public partial class ProductForm : UserControl
 {
-    public ProductView()
+    public ProductForm()
     {
         InitializeComponent();
 

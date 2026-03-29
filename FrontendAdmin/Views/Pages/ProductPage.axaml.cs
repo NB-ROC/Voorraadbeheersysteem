@@ -3,22 +3,22 @@ using Avalonia.Interactivity;
 
 namespace FrontendAdmin.Views.Pages;
 
-public partial class DashboardPageView : UserControl
+public partial class ProductPage : UserControl
 {
-    public DashboardPageView()
+    public ProductPage()
     {
         InitializeComponent();
     }
 
-    private void OnNieuwItemClick(object? sender, RoutedEventArgs e)
+    private void OnReserveerClick(object? sender, RoutedEventArgs e)
     {
         MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
-        mainWindow?.NavigateTo("Items");
+        mainWindow?.NavigateTo("Reservering");
     }
 
-    private void OnLeningClick(object? sender, RoutedEventArgs e)
+    private void OnAddProductClick(object? sender, RoutedEventArgs e)
     {
         MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
-        mainWindow?.NavigateTo("Leningen");
+        mainWindow?.NavigateTo("Product");
     }
 }
