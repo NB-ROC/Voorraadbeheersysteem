@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:FrontendAdmin.ViewModels"
+        xmlns:service="using:FrontendAdmin.Services"
         x:Class="FrontendAdmin.Views.MainWindow"
         Width="800"
         Height="450"
@@ -28,7 +29,8 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding NavigateToDashboard}">
+                        Command="{Binding Navigation.NavigateCommand}"
+                        CommandParameter="{x:Static service:Page.Dashboard}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -38,7 +40,8 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding NavigateToProducts}">
+                        Command="{Binding Navigation.NavigateCommand}"
+                        CommandParameter="{x:Static service:Page.Products}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Producten" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -48,7 +51,8 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding NavigateToLoans}">
+                        Command="{Binding Navigation.NavigateCommand}"
+                        CommandParameter="{x:Static service:Page.Loans}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -58,7 +62,8 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding NavigateToProfile}">
+                        Command="{Binding Navigation.NavigateCommand}"
+                        CommandParameter="{x:Static service:Page.Profile}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Profiel" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -67,7 +72,7 @@
             </UniformGrid>
         </Border>
 
-        <ContentControl Content="{Binding CurrentPage}" />
+        <ContentControl Content="{Binding Navigation.CurrentPage}" />
     </DockPanel>
 
 </Window>

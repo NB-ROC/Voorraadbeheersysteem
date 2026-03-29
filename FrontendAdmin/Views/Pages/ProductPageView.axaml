@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
              x:Class="FrontendAdmin.Views.Pages.ProductPageView"
-             x:DataType="product:ProductPageViewModel">
+             x:DataType="product:ProductPageViewModel"
+             xmlns:service="using:FrontendAdmin.Services">
 
     <Grid Background="#F6F7FB" RowDefinitions="Auto,Auto,*">
 
@@ -64,7 +65,9 @@
                         BorderThickness="0"
                         CornerRadius="8"
                         HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"/>
+                        VerticalContentAlignment="Center"
+                        Command="{Binding Navigation.NavigateCommand}"
+                        CommandParameter="{x:Static service:Page.ProductForm}"/>
             </Grid>
         </Border>
 

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
 using FrontendAdmin.Models;
+using FrontendAdmin.Services;
 using Protos.Product;
 using ReactiveUI;
 using Testing.Grpc;
@@ -10,8 +11,11 @@ namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductPageViewModel : ReactiveObject
 {
-    public ProductPageViewModel()
+    public INavigationService Navigation { get; }
+    
+    public ProductPageViewModel(INavigationService navigation)
     {
+        Navigation = navigation;
         LoadProductsCommand = ReactiveCommand.CreateFromTask(LoadProducts);
         LoadProductsCommand.Execute();
     }

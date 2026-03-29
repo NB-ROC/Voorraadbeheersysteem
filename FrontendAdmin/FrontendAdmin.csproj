@@ -54,10 +54,6 @@
             <DependentUpon>ProfilePageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Forms\ProductFormView.axaml.cs">
-            <DependentUpon>ProductView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Views\Pages\ReservationPageView.axaml.cs">
             <DependentUpon>ReserveringView.axaml</DependentUpon>
             <SubType>Code</SubType>
