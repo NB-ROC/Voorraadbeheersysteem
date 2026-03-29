@@ -2,108 +2,132 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FrontendAdmin.Views.ItemsView">
 
-    <DockPanel Background="White">
-        <TextBlock DockPanel.Dock="Top"
-                   Text="Items Overzicht"
-                   Foreground="#aaaaaa"
-                   FontSize="20"
-                   Margin="15,15,15,10" />
+    <Grid Background="#F6F7FB" RowDefinitions="Auto,Auto,*">
 
-        <Grid DockPanel.Dock="Top" Margin="15,0,15,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="20,20,20,12" Spacing="4">
+            <TextBlock Text="Items Overzicht"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#1F2937"/>
+            <TextBlock Text="Bekijk en beheer alle beschikbare items"
+                       FontSize="13"
+                       Foreground="#6B7280"/>
+        </StackPanel>
 
-            <Border Grid.Column="0"
-                    BorderBrush="#cccccc"
-                    BorderThickness="1"
-                    CornerRadius="4"
-                    Padding="8,6"
-                    Margin="0,0,8,0"
-                    VerticalAlignment="Center">
-                <TextBlock Text="🔍  Zoek..."
-                           Foreground="#aaaaaa"
-                           FontSize="13" />
-            </Border>
-            
-            <Button Grid.Column="2"
- 
-                    Content="Product Toevoegen"
- 
-                    Height="35"
- 
-                    Background="#6a69ad"
- 
-                    Foreground="White"
- 
-                    BorderThickness="0"
- 
-                    CornerRadius="4"
- 
-                    Padding="15,0"
- 
-                    VerticalAlignment="Center"
- 
-                    HorizontalContentAlignment="Center"
- 
-                    VerticalContentAlignment="Center"
- 
-                    Click="OnAddProductClick"/>
+        <!-- Toolbar -->
+        <Border Grid.Row="1"
+                Margin="20,0,20,16"
+                Background="White"
+                CornerRadius="12"
+                Padding="14"
+                BorderBrush="#E5E7EB"
+                BorderThickness="1">
+            <Grid ColumnDefinitions="*,Auto,Auto"
+                  ColumnSpacing="10">
 
-            <Button Grid.Column="1"
-                    Content="Filters"
-                    Height="35"
-                    Background="#6a69ad"
-                    Foreground="White"
-                    BorderThickness="0"
-                    CornerRadius="4"
-                    Padding="15,0"
-                    VerticalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center" />
-        </Grid>
+                <!-- Zoekbalk -->
+                <Border Grid.Column="0"
+                        Background="#F9FAFB"
+                        BorderBrush="#D1D5DB"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="12,8"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="🔍 Zoek producten of items..."
+                               Foreground="#9CA3AF"
+                               FontSize="13" />
+                </Border>
 
-        <ScrollViewer DockPanel.Dock="Top">
-            <StackPanel>
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                <!-- Filter knop -->
+                <Button Grid.Column="1"
+                        Content="Filters"
+                        Height="38"
+                        MinWidth="100"
+                        Background="#F3F4F6"
+                        Foreground="#111827"
+                        BorderBrush="#D1D5DB"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center" />
 
+                <!-- Product toevoegen -->
+                <Button Grid.Column="2"
+                        Content="Product toevoegen"
+                        Height="38"
+                        MinWidth="150"
+                        Background="#4F46E5"
+                        Foreground="White"
+                        BorderThickness="0"
+                        CornerRadius="8"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Click="OnAddProductClick"/>
+            </Grid>
+        </Border>
+
+        <!-- Items lijst -->
+        <ScrollViewer Grid.Row="2" Margin="20,0,20,20">
+            <StackPanel Spacing="12">
+
+                <Border Background="White"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="14">
+                    <Grid ColumnDefinitions="80,*,Auto"
+                          ColumnSpacing="14">
+
+                        <!-- Thumbnail -->
                         <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
+                                Width="72"
+                                Height="72"
+                                Background="#F3F4F6"
+                                BorderBrush="#D1D5DB"
                                 BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
+                                CornerRadius="10">
+                            <TextBlock Text="?"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="22"
+                                       Foreground="#9CA3AF"/>
                         </Border>
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,0,0">
-                            <TextBlock Text="Afbeelding" Foreground="#aaaaaa" FontSize="12" VerticalAlignment="Center" />
-                            <TextBlock Text="Item Naam" Foreground="#aaaaaa" FontWeight="Bold" FontSize="14"
-                                       VerticalAlignment="Center" />
+                        <!-- Info -->
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Text="Categorie / Type"
+                                       Foreground="#9CA3AF"
+                                       FontSize="12"/>
+                            <TextBlock Text="Item Naam"
+                                       Foreground="#111827"
+                                       FontWeight="Bold"
+                                       FontSize="16"/>
+                            <TextBlock Text="Korte beschrijving van het item of extra metadata"
+                                       Foreground="#6B7280"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"/>
                         </StackPanel>
 
-                        <Button Grid.Column="2"
-                                Content="Reserveer"
-                                Background="#6a69ad"
-                                Click="OnReserveerClick"
-                                Foreground="White"
-                                BorderThickness="0"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                FontSize="12"
-                                VerticalAlignment="Center" />
+                        <!-- Actie -->
+                        <StackPanel Grid.Column="2"
+                                    VerticalAlignment="Center">
+                            <Button Content="Reserveer"
+                                    Background="#4F46E5"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    CornerRadius="8"
+                                    Padding="14,8"
+                                    MinWidth="100"
+                                    Click="OnReserveerClick"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
 
             </StackPanel>
         </ScrollViewer>
 
-    </DockPanel>
-
+    </Grid>
 </UserControl>

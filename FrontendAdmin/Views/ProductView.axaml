@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,122 +8,241 @@
     x:DataType="vm:ProductViewModel"
     mc:Ignorable="d">
 
-    <Grid Margin="20" RowDefinitions="Auto,Auto,*,Auto">
-        <TextBlock Grid.Row="0"
-                   Text="Productbeheer"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="0,0,0,15"/>
+    <Grid Background="#F6F7FB">
+        <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="24">
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    Spacing="10"
-                    Margin="0,0,0,15">
-            <Button Content="Nieuw product"
-                    Command="{Binding NewCommand}"
-                    Width="120"/>
+            <!-- Header -->
+            <StackPanel Grid.Row="0"
+                        Margin="0,0,0,20"
+                        Spacing="4">
+                <TextBlock Text="Productbeheer"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#1F2937"/>
+                <TextBlock Text="Beheer producten, afbeeldingen en voorraad"
+                           FontSize="13"
+                           Foreground="#6B7280"/>
+            </StackPanel>
 
-            <Button Content="Opslaan"
-                    Command="{Binding SaveCommand}"
-                    Width="100"/>
-
-            <Button Content="Verwijderen"
-                    Command="{Binding DeleteCommand}"
-                    Width="100"/>
-
-            <Button Content="Kies afbeelding"
-                    Command="{Binding PickImageCommand}"
-                    Width="130"/>
-
-            <!-- <Button Content="Download afbeelding" -->
-            <!--         Command="{Binding DownloadImageCommand}" -->
-            <!--         Width="150"/> -->
-
-            <Button Content="Vorige"
-                    Command="{Binding PrevPageCommand}"
-                    Width="100"/>
-
-            <Button Content="Volgende"
-                    Command="{Binding NextPageCommand}"
-                    Width="100"/>
-        </StackPanel>
-
-        <Grid Grid.Row="2" ColumnDefinitions="2*,3*" ColumnSpacing="20">
-            <Border Grid.Column="0"
-                    Padding="10"
+            <!-- Toolbar -->
+            <Border Grid.Row="1"
+                    Background="White"
+                    CornerRadius="12"
+                    Padding="14"
+                    Margin="0,0,0,20"
+                    BorderBrush="#E5E7EB"
                     BorderThickness="1">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="Producten"
-                               FontWeight="Bold"
-                               FontSize="18"/>
+                <WrapPanel>
+                    <Button Content="Nieuw product"
+                            Command="{Binding NewCommand}"
+                            MinWidth="130"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#4F46E5"
+                            Foreground="White"
+                            BorderThickness="0"/>
 
-                    <DataGrid ItemsSource="{Binding Products}"
-                              SelectedItem="{Binding SelectedProduct}"
-                              AutoGenerateColumns="False"
-                              Height="400">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID"
-                                                Binding="{Binding Id}"
-                                                Width="60"/>
-                            <DataGridTextColumn Header="Naam"
-                                                Binding="{Binding Name}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Categorie"
-                                                Binding="{Binding Category}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Aantal"
-                                                Binding="{Binding Amount}"
-                                                Width="90"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                    <Button Content="Post"
+                            Command="{Binding PostCommand}"
+                            MinWidth="100"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#0EA5E9"
+                            Foreground="White"
+                            BorderThickness="0"/>
+
+                    <Button Content="Opslaan"
+                            Command="{Binding SaveCommand}"
+                            MinWidth="100"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#10B981"
+                            Foreground="White"
+                            BorderThickness="0"/>
+
+                    <Button Content="Verwijderen"
+                            Command="{Binding DeleteCommand}"
+                            MinWidth="110"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#EF4444"
+                            Foreground="White"
+                            BorderThickness="0"/>
+
+                    <Button Content="Kies afbeelding"
+                            Command="{Binding PickImageCommand}"
+                            MinWidth="130"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#F3F4F6"
+                            Foreground="#111827"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"/>
+
+                    <Button Content="Vorige"
+                            Command="{Binding PrevPageCommand}"
+                            MinWidth="90"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#F3F4F6"
+                            Foreground="#111827"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"/>
+
+                    <Button Content="Volgende"
+                            Command="{Binding NextPageCommand}"
+                            MinWidth="100"
+                            Height="38"
+                            Margin="0,0,10,10"
+                            Background="#F3F4F6"
+                            Foreground="#111827"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"/>
+                </WrapPanel>
             </Border>
 
-            <Border Grid.Column="1"
+            <!-- Main content -->
+            <Grid Grid.Row="2"
+                  ColumnDefinitions="2.2*,2.8*"
+                  ColumnSpacing="20">
+
+                <!-- Product list -->
+                <Border Grid.Column="0"
+                        Background="White"
+                        CornerRadius="12"
+                        Padding="16"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Producten"
+                                   FontWeight="Bold"
+                                   FontSize="18"
+                                   Foreground="#111827"/>
+
+                        <DataGrid ItemsSource="{Binding Products}"
+                                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                                  AutoGenerateColumns="False"
+                                  Height="440"
+                                  GridLinesVisibility="Horizontal"
+                                  BorderThickness="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding Id}"
+                                                    Width="70"/>
+                                <DataGridTextColumn Header="Naam"
+                                                    Binding="{Binding Name}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Categorie"
+                                                    Binding="{Binding Category}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Aantal"
+                                                    Binding="{Binding Amount}"
+                                                    Width="90"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Form -->
+                <Border Grid.Column="1"
+                        Background="White"
+                        CornerRadius="12"
+                        Padding="16"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="14">
+
+                            <TextBlock Text="Product toevoegen / bewerken"
+                                       FontWeight="Bold"
+                                       FontSize="18"
+                                       Foreground="#111827"/>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Naam"
+                                           FontWeight="SemiBold"
+                                           Foreground="#374151"/>
+                                <TextBox Text="{Binding Name, Mode=TwoWay}"
+                                         Watermark="Voer productnaam in"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Categorie"
+                                           FontWeight="SemiBold"
+                                           Foreground="#374151"/>
+                                <TextBox Text="{Binding Category, Mode=TwoWay}"
+                                         Watermark="Voer categorie in"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Beschrijving"
+                                           FontWeight="SemiBold"
+                                           Foreground="#374151"/>
+                                <TextBox Text="{Binding Description, Mode=TwoWay}"
+                                         Watermark="Voer beschrijving in"
+                                         AcceptsReturn="True"
+                                         Height="100"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Aantal"
+                                           FontWeight="SemiBold"
+                                           Foreground="#374151"/>
+                                <TextBox Text="{Binding Amount, Mode=TwoWay}"
+                                         Watermark="Voer aantal in"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Gekozen lokale afbeelding"
+                                           FontWeight="SemiBold"
+                                           Foreground="#374151"/>
+                                <TextBox Text="{Binding ImageFileName}"
+                                         IsReadOnly="True"
+                                         Background="#F9FAFB"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Huidige opgeslagen afbeelding"
+                                           FontWeight="SemiBold"
+                                           Foreground="#374151"/>
+                                <TextBox Text="{Binding ExistingImageName}"
+                                         IsReadOnly="True"
+                                         Background="#F9FAFB"/>
+                            </StackPanel>
+
+                            <Border Background="#F9FAFB"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="12"
+                                    Margin="0,6,0,0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Status"
+                                               FontWeight="SemiBold"
+                                               Foreground="#374151"/>
+                                    <TextBlock Text="{Binding StatusMessage}"
+                                               TextWrapping="Wrap"
+                                               Foreground="#6B7280"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+
+            <!-- Footer -->
+            <Border Grid.Row="3"
+                    Background="White"
+                    CornerRadius="10"
                     Padding="10"
+                    Margin="0,16,0,0"
+                    BorderBrush="#E5E7EB"
                     BorderThickness="1">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="Product toevoegen / bewerken"
-                               FontWeight="Bold"
-                               FontSize="18"/>
-
-                    <TextBlock Text="Naam"/>
-                    <TextBox Text="{Binding Name}"
-                             Watermark="Naam"/>
-
-                    <TextBlock Text="Categorie"/>
-                    <TextBox Text="{Binding Category}"
-                             Watermark="Categorie"/>
-
-                    <TextBlock Text="Beschrijving"/>
-                    <TextBox Text="{Binding Description}"
-                             Watermark="Beschrijving"
-                             AcceptsReturn="True"
-                             Height="80"
-                             TextWrapping="Wrap"/>
-
-                    <TextBlock Text="Aantal"/>
-                    <TextBox Text="{Binding Amount}"
-                             Watermark="Aantal"/>
-
-                    <TextBlock Text="Gekozen lokale afbeelding"/>
-                    <TextBox Text="{Binding ImageFileName}"
-                             IsReadOnly="True"/>
-
-                    <TextBlock Text="Huidige opgeslagen afbeelding"/>
-                    <TextBox Text="{Binding ExistingImageName}"
-                             IsReadOnly="True"/>
-
-                    <TextBlock Text="Status"/>
-                    <TextBlock Text="{Binding StatusMessage}"
-                               TextWrapping="Wrap"/>
-                </StackPanel>
+                <TextBlock Text="{Binding PageInfo}"
+                           HorizontalAlignment="Center"
+                           Foreground="#6B7280"/>
             </Border>
         </Grid>
-
-        <TextBlock Grid.Row="3"
-                   Text="{Binding PageInfo}"
-                   HorizontalAlignment="Center"
-                   Margin="0,15,0,0"/>
     </Grid>
 </UserControl>

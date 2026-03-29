@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Grpc.Core;
 
 namespace FrontendAdmin.ViewModels;
 
@@ -56,10 +57,10 @@ public partial class ProductViewModel : ObservableObject
     {
         _window = window;
 
-        var channel = GrpcChannel.ForAddress("https://localhost:5001");
+        var channel = GrpcChannel.ForAddress("http://127.0.0.1:8080");
         _client = new Products.ProductsClient(channel);
 
-        _ = LoadProducts();
+        _ = LoadProductsAsync();
     }
 
     partial void OnSelectedProductChanged(ProductItemViewModel? value)
@@ -67,21 +68,22 @@ public partial class ProductViewModel : ObservableObject
         if (value == null)
         {
             ClearForm();
-            OnPropertyChanged(nameof(PageInfo));
             return;
         }
 
-        Name = value.Name;
-        Category = value.Category;
-        Description = value.Description;
+        Name = value.Name ?? string.Empty;
+        Category = value.Category ?? string.Empty;
+        Description = value.Description ?? string.Empty;
         Amount = value.Amount.ToString();
-        ExistingImageName = value.Image;
+        ExistingImageName = value.Image ?? string.Empty;
         ImageFileName = string.Empty;
         _selectedImageBytes = null;
+
+        StatusMessage = $"Product geselecteerd: {Name}";
     }
 
     [RelayCommand]
-    private async Task LoadProducts()
+    private async Task LoadProductsAsync()
     {
         try
         {
@@ -119,12 +121,11 @@ public partial class ProductViewModel : ObservableObject
     private void New()
     {
         SelectedProduct = null;
-        ClearForm();
         StatusMessage = "Nieuw product invoeren.";
     }
 
     [RelayCommand]
-    private async Task PickImage()
+    private async Task PickImageAsync()
     {
         try
         {
@@ -161,85 +162,137 @@ public partial class ProductViewModel : ObservableObject
         }
     }
 
+    private bool ValidateInput(out int parsedAmount)
+    {
+        parsedAmount = 0;
+
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            StatusMessage = "Naam is verplicht.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Category))
+        {
+            StatusMessage = "Categorie is verplicht.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            StatusMessage = "Beschrijving is verplicht.";
+            return false;
+        }
+
+        if (!int.TryParse(Amount, out parsedAmount))
+        {
+            StatusMessage = "Aantal moet een geldig getal zijn.";
+            return false;
+        }
+
+        if (parsedAmount < 0)
+        {
+            StatusMessage = "Aantal mag niet negatief zijn.";
+            return false;
+        }
+
+        return true;
+    }
+
     [RelayCommand]
-    private async Task Save()
+    private async Task PostAsync()
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(Name))
+            if (SelectedProduct != null)
             {
-                StatusMessage = "Naam is verplicht.";
+                StatusMessage = "Gebruik 'Opslaan' om een bestaand product te wijzigen, of klik op 'Nieuw product'.";
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(Category))
+            if (!ValidateInput(out var parsedAmount))
+                return;
+
+            if (_selectedImageBytes == null)
             {
-                StatusMessage = "Categorie is verplicht.";
+                StatusMessage = "Kies een afbeelding voor een nieuw product.";
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(Description))
+            var createRequest = new ProductCreateRequest
             {
-                StatusMessage = "Beschrijving is verplicht.";
-                return;
-            }
+                Name = Name,
+                Category = Category,
+                Description = Description,
+                Amount = parsedAmount,
+                Image = ByteString.CopyFrom(_selectedImageBytes)
+            };
 
-            if (!int.TryParse(Amount, out var parsedAmount))
+            var createResponse = await _client.CreateAsync(createRequest);
+
+            StatusMessage = createResponse.Success
+                ? "Product succesvol toegevoegd."
+                : "Product toevoegen mislukt.";
+
+            if (createResponse.Success)
             {
-                StatusMessage = "Aantal moet een geldig getal zijn.";
-                return;
+                await LoadProductsAsync();
+                SelectedProduct = null;
+                ClearForm();
             }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Fout bij posten: {ex.Message}";
+        }
+    }
 
+    [RelayCommand]
+    private async Task SaveAsync()
+    {
+        try
+        {
             if (SelectedProduct == null)
             {
-                if (_selectedImageBytes == null)
-                {
-                    StatusMessage = "Kies een afbeelding voor een nieuw product.";
-                    return;
-                }
-
-                var createRequest = new ProductCreateRequest
-                {
-                    Name = Name,
-                    Category = Category,
-                    Description = Description,
-                    Amount = parsedAmount,
-                    Image = ByteString.CopyFrom(_selectedImageBytes)
-                };
-
-                var createResponse = await _client.CreateAsync(createRequest);
-
-                StatusMessage = createResponse.Success
-                    ? "Product succesvol toegevoegd."
-                    : "Product toevoegen mislukt.";
+                StatusMessage = "Selecteer eerst een bestaand product of gebruik 'Post' voor een nieuw product.";
+                return;
             }
-            else
-            {
-                var modifyRequest = new ProductModifyRequest
-                {
-                    Id = SelectedProduct.Id
-                };
 
+            if (!ValidateInput(out var parsedAmount))
+                return;
+
+            var modifyRequest = new ProductModifyRequest
+            {
+                Id = SelectedProduct.Id
+            };
+
+            if (Name != SelectedProduct.Name)
                 modifyRequest.Name = Name;
+
+            if (Category != SelectedProduct.Category)
                 modifyRequest.Category = Category;
+
+            if (Description != SelectedProduct.Description)
                 modifyRequest.Description = Description;
+
+            if (parsedAmount != SelectedProduct.Amount)
                 modifyRequest.Amount = parsedAmount;
 
-                if (_selectedImageBytes != null)
-                {
-                    modifyRequest.Image = ByteString.CopyFrom(_selectedImageBytes);
-                }
+            if (_selectedImageBytes != null)
+                modifyRequest.Image = ByteString.CopyFrom(_selectedImageBytes);
 
-                var modifyResponse = await _client.ModifyAsync(modifyRequest);
+            var modifyResponse = await _client.ModifyAsync(modifyRequest);
 
-                StatusMessage = modifyResponse.Success
-                    ? "Product succesvol aangepast."
-                    : "Product aanpassen mislukt.";
+            StatusMessage = modifyResponse.Success
+                ? "Product succesvol aangepast."
+                : "Product aanpassen mislukt.";
+
+            if (modifyResponse.Success)
+            {
+                await LoadProductsAsync();
+                SelectedProduct = null;
+                ClearForm();
             }
-
-            await LoadProducts();
-            ClearForm();
-            SelectedProduct = null;
         }
         catch (Exception ex)
         {
@@ -248,7 +301,7 @@ public partial class ProductViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Delete()
+    private async Task DeleteAsync()
     {
         try
         {
@@ -267,31 +320,33 @@ public partial class ProductViewModel : ObservableObject
                 ? "Product verwijderd."
                 : "Verwijderen mislukt.";
 
-            await LoadProducts();
-            ClearForm();
-            SelectedProduct = null;
+            if (response.Success)
+            {
+                await LoadProductsAsync();
+                OnPropertyChanged(nameof(Products));
+            }
         }
-        catch (Exception ex)
+        catch (RpcException ex)
         {
-            StatusMessage = $"Fout bij verwijderen: {ex.Message}";
+            StatusMessage = $"gRPC fout: {ex.Status.Detail}";
         }
     }
 
     [RelayCommand]
-    private async Task PrevPage()
+    private async Task PrevPageAsync()
     {
         if (_page <= 1)
             return;
 
         _page--;
-        await LoadProducts();
+        await LoadProductsAsync();
     }
 
     [RelayCommand]
-    private async Task NextPage()
+    private async Task NextPageAsync()
     {
         _page++;
-        await LoadProducts();
+        await LoadProductsAsync();
     }
 
     private void ClearForm()

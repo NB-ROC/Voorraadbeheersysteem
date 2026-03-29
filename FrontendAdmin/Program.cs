@@ -11,6 +11,8 @@ internal sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
