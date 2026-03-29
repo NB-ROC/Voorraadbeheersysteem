@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace FrontendAdmin.Views;
+namespace FrontendAdmin.Views.Pages;
 
-public partial class DashboardView : UserControl
+public partial class DashboardPageView : UserControl
 {
-    public DashboardView()
+    public DashboardPageView()
     {
         InitializeComponent();
     }

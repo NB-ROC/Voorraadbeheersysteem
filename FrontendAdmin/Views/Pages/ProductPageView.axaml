@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.ItemsView">
+             x:Class="FrontendAdmin.Views.ProductPageView">
 
     <Grid Background="#F6F7FB" RowDefinitions="Auto,Auto,*">
 

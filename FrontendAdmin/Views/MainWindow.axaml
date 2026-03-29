@@ -64,9 +64,8 @@
                 </Button>
             </UniformGrid>
         </Border>
-
+        
         <ContentControl x:Name="PageContent" />
-
     </DockPanel>
 
 </Window>

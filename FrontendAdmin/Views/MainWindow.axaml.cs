@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using FrontendAdmin.Views.Pages;
 
 namespace FrontendAdmin.Views;
 
@@ -16,13 +17,13 @@ public partial class MainWindow : Window
         ContentControl? content = this.FindControl<ContentControl>("PageContent");
         content!.Content = page switch
         {
-            "Dashboard" => new DashboardView(),
-            "Items" => new ItemsView(),
-            "Leningen" => new LeningenView(),
-            "Profiel" => new ProfielView(),
+            "Dashboard" => new DashboardPageView(),
+            "Items" => new ProductPageView(),
+            "Leningen" => new LoanViewPage(),
+            "Profiel" => new ProfilePageView(),
             "Reservering" => new ReserveringView(),
             "Product" => new ProductView(),
-            _ => new DashboardView()
+            _ => new DashboardPageView()
         };
     }
 

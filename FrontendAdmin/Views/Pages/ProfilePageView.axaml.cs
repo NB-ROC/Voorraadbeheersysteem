@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace FrontendAdmin.Views;
 
-public partial class LeningenView : UserControl
+public partial class ProfilePageView : UserControl
 {
-    public LeningenView()
+    public ProfilePageView()
     {
         InitializeComponent();
     }

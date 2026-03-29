@@ -3,9 +3,9 @@ using Avalonia.Interactivity;
 
 namespace FrontendAdmin.Views;
 
-public partial class ItemsView : UserControl
+public partial class ProductPageView : UserControl
 {
-    public ItemsView()
+    public ProductPageView()
     {
         InitializeComponent();
     }
