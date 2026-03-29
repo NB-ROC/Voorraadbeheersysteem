@@ -1,0 +1,247 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:FrontendAdmin.ViewModels"
+    x:DataType="vm:ProductViewModel"
+    mc:Ignorable="d">
+
+    <!-- <Grid Background="#F6F7FB"> -->
+    <!--     <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="24"> -->
+    <!-- -->
+    <!--         ~1~ Header @1@ -->
+    <!--         <StackPanel Grid.Row="0" -->
+    <!--                     Margin="0,0,0,20" -->
+    <!--                     Spacing="4"> -->
+    <!--             <TextBlock Text="Productbeheer" -->
+    <!--                        FontSize="28" -->
+    <!--                        FontWeight="Bold" -->
+    <!--                        Foreground="#1F2937"/> -->
+    <!--             <TextBlock Text="Beheer producten, afbeeldingen en voorraad" -->
+    <!--                        FontSize="13" -->
+    <!--                        Foreground="#6B7280"/> -->
+    <!--         </StackPanel> -->
+    <!-- -->
+    <!--         ~1~ Toolbar @1@ -->
+    <!--         <Border Grid.Row="1" -->
+    <!--                 Background="White" -->
+    <!--                 CornerRadius="12" -->
+    <!--                 Padding="14" -->
+    <!--                 Margin="0,0,0,20" -->
+    <!--                 BorderBrush="#E5E7EB" -->
+    <!--                 BorderThickness="1"> -->
+    <!--             <WrapPanel> -->
+    <!--                 <Button Content="Nieuw product" -->
+    <!--                         Command="{Binding NewCommand}" -->
+    <!--                         MinWidth="130" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#4F46E5" -->
+    <!--                         Foreground="White" -->
+    <!--                         BorderThickness="0"/> -->
+    <!-- -->
+    <!--                 <Button Content="Post" -->
+    <!--                         Command="{Binding PostCommand}" -->
+    <!--                         MinWidth="100" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#0EA5E9" -->
+    <!--                         Foreground="White" -->
+    <!--                         BorderThickness="0"/> -->
+    <!-- -->
+    <!--                 <Button Content="Opslaan" -->
+    <!--                         Command="{Binding SaveCommand}" -->
+    <!--                         MinWidth="100" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#10B981" -->
+    <!--                         Foreground="White" -->
+    <!--                         BorderThickness="0"/> -->
+    <!-- -->
+    <!--                 <Button Content="Verwijderen" -->
+    <!--                         Command="{Binding DeleteCommand}" -->
+    <!--                         MinWidth="110" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#EF4444" -->
+    <!--                         Foreground="White" -->
+    <!--                         BorderThickness="0"/> -->
+    <!-- -->
+    <!--                 <Button Content="Kies afbeelding" -->
+    <!--                         Command="{Binding PickImageCommand}" -->
+    <!--                         MinWidth="130" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#F3F4F6" -->
+    <!--                         Foreground="#111827" -->
+    <!--                         BorderBrush="#D1D5DB" -->
+    <!--                         BorderThickness="1"/> -->
+    <!-- -->
+    <!--                 <Button Content="Vorige" -->
+    <!--                         Command="{Binding PrevPageCommand}" -->
+    <!--                         MinWidth="90" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#F3F4F6" -->
+    <!--                         Foreground="#111827" -->
+    <!--                         BorderBrush="#D1D5DB" -->
+    <!--                         BorderThickness="1"/> -->
+    <!-- -->
+    <!--                 <Button Content="Volgende" -->
+    <!--                         Command="{Binding NextPageCommand}" -->
+    <!--                         MinWidth="100" -->
+    <!--                         Height="38" -->
+    <!--                         Margin="0,0,10,10" -->
+    <!--                         Background="#F3F4F6" -->
+    <!--                         Foreground="#111827" -->
+    <!--                         BorderBrush="#D1D5DB" -->
+    <!--                         BorderThickness="1"/> -->
+    <!--             </WrapPanel> -->
+    <!--         </Border> -->
+    <!-- -->
+    <!--         ~1~ Main content @1@ -->
+    <!--         <Grid Grid.Row="2" -->
+    <!--               ColumnDefinitions="2.2*,2.8*" -->
+    <!--               ColumnSpacing="20"> -->
+    <!-- -->
+    <!--             ~1~ Product list @1@ -->
+    <!--             <Border Grid.Column="0" -->
+    <!--                     Background="White" -->
+    <!--                     CornerRadius="12" -->
+    <!--                     Padding="16" -->
+    <!--                     BorderBrush="#E5E7EB" -->
+    <!--                     BorderThickness="1"> -->
+    <!--                 <StackPanel Spacing="12"> -->
+    <!--                     <TextBlock Text="Producten" -->
+    <!--                                FontWeight="Bold" -->
+    <!--                                FontSize="18" -->
+    <!--                                Foreground="#111827"/> -->
+    <!-- -->
+    <!--                     <DataGrid ItemsSource="{Binding Products}" -->
+    <!--                               SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" -->
+    <!--                               AutoGenerateColumns="False" -->
+    <!--                               Height="440" -->
+    <!--                               GridLinesVisibility="Horizontal" -->
+    <!--                               BorderThickness="0"> -->
+    <!--                         <DataGrid.Columns> -->
+    <!--                             <DataGridTextColumn Header="ID" -->
+    <!--                                                 Binding="{Binding Id}" -->
+    <!--                                                 Width="70"/> -->
+    <!--                             <DataGridTextColumn Header="Naam" -->
+    <!--                                                 Binding="{Binding Name}" -->
+    <!--                                                 Width="*"/> -->
+    <!--                             <DataGridTextColumn Header="Categorie" -->
+    <!--                                                 Binding="{Binding Category}" -->
+    <!--                                                 Width="*"/> -->
+    <!--                             <DataGridTextColumn Header="Aantal" -->
+    <!--                                                 Binding="{Binding Amount}" -->
+    <!--                                                 Width="90"/> -->
+    <!--                         </DataGrid.Columns> -->
+    <!--                     </DataGrid> -->
+    <!--                 </StackPanel> -->
+    <!--             </Border> -->
+    <!-- -->
+    <!--             ~1~ Form @1@ -->
+    <!--             <Border Grid.Column="1" -->
+    <!--                     Background="White" -->
+    <!--                     CornerRadius="12" -->
+    <!--                     Padding="16" -->
+    <!--                     BorderBrush="#E5E7EB" -->
+    <!--                     BorderThickness="1"> -->
+    <!--                 <ScrollViewer VerticalScrollBarVisibility="Auto"> -->
+    <!--                     <StackPanel Spacing="14"> -->
+    <!-- -->
+    <!--                         <TextBlock Text="Product toevoegen / bewerken" -->
+    <!--                                    FontWeight="Bold" -->
+    <!--                                    FontSize="18" -->
+    <!--                                    Foreground="#111827"/> -->
+    <!-- -->
+    <!--                         <StackPanel Spacing="6"> -->
+    <!--                             <TextBlock Text="Naam" -->
+    <!--                                        FontWeight="SemiBold" -->
+    <!--                                        Foreground="#374151"/> -->
+    <!--                             <TextBox Text="{Binding Name, Mode=TwoWay}" -->
+    <!--                                      Watermark="Voer productnaam in"/> -->
+    <!--                         </StackPanel> -->
+    <!-- -->
+    <!--                         <StackPanel Spacing="6"> -->
+    <!--                             <TextBlock Text="Categorie" -->
+    <!--                                        FontWeight="SemiBold" -->
+    <!--                                        Foreground="#374151"/> -->
+    <!--                             <TextBox Text="{Binding Category, Mode=TwoWay}" -->
+    <!--                                      Watermark="Voer categorie in"/> -->
+    <!--                         </StackPanel> -->
+    <!-- -->
+    <!--                         <StackPanel Spacing="6"> -->
+    <!--                             <TextBlock Text="Beschrijving" -->
+    <!--                                        FontWeight="SemiBold" -->
+    <!--                                        Foreground="#374151"/> -->
+    <!--                             <TextBox Text="{Binding Description, Mode=TwoWay}" -->
+    <!--                                      Watermark="Voer beschrijving in" -->
+    <!--                                      AcceptsReturn="True" -->
+    <!--                                      Height="100" -->
+    <!--                                      TextWrapping="Wrap"/> -->
+    <!--                         </StackPanel> -->
+    <!-- -->
+    <!--                         <StackPanel Spacing="6"> -->
+    <!--                             <TextBlock Text="Aantal" -->
+    <!--                                        FontWeight="SemiBold" -->
+    <!--                                        Foreground="#374151"/> -->
+    <!--                             <TextBox Text="{Binding Amount, Mode=TwoWay}" -->
+    <!--                                      Watermark="Voer aantal in"/> -->
+    <!--                         </StackPanel> -->
+    <!-- -->
+    <!--                         <StackPanel Spacing="6"> -->
+    <!--                             <TextBlock Text="Gekozen lokale afbeelding" -->
+    <!--                                        FontWeight="SemiBold" -->
+    <!--                                        Foreground="#374151"/> -->
+    <!--                             <TextBox Text="{Binding ImageFileName}" -->
+    <!--                                      IsReadOnly="True" -->
+    <!--                                      Background="#F9FAFB"/> -->
+    <!--                         </StackPanel> -->
+    <!-- -->
+    <!--                         <StackPanel Spacing="6"> -->
+    <!--                             <TextBlock Text="Huidige opgeslagen afbeelding" -->
+    <!--                                        FontWeight="SemiBold" -->
+    <!--                                        Foreground="#374151"/> -->
+    <!--                             <TextBox Text="{Binding ExistingImageName}" -->
+    <!--                                      IsReadOnly="True" -->
+    <!--                                      Background="#F9FAFB"/> -->
+    <!--                         </StackPanel> -->
+    <!-- -->
+    <!--                         <Border Background="#F9FAFB" -->
+    <!--                                 BorderBrush="#E5E7EB" -->
+    <!--                                 BorderThickness="1" -->
+    <!--                                 CornerRadius="8" -->
+    <!--                                 Padding="12" -->
+    <!--                                 Margin="0,6,0,0"> -->
+    <!--                             <StackPanel Spacing="6"> -->
+    <!--                                 <TextBlock Text="Status" -->
+    <!--                                            FontWeight="SemiBold" -->
+    <!--                                            Foreground="#374151"/> -->
+    <!--                                 <TextBlock Text="{Binding StatusMessage}" -->
+    <!--                                            TextWrapping="Wrap" -->
+    <!--                                            Foreground="#6B7280"/> -->
+    <!--                             </StackPanel> -->
+    <!--                         </Border> -->
+    <!--                     </StackPanel> -->
+    <!--                 </ScrollViewer> -->
+    <!--             </Border> -->
+    <!--         </Grid> -->
+    <!-- -->
+    <!--         ~1~ Footer @1@ -->
+    <!--         <Border Grid.Row="3" -->
+    <!--                 Background="White" -->
+    <!--                 CornerRadius="10" -->
+    <!--                 Padding="10" -->
+    <!--                 Margin="0,16,0,0" -->
+    <!--                 BorderBrush="#E5E7EB" -->
+    <!--                 BorderThickness="1"> -->
+    <!--             <TextBlock Text="{Binding PageInfo}" -->
+    <!--                        HorizontalAlignment="Center" -->
+    <!--                        Foreground="#6B7280"/> -->
+    <!--         </Border> -->
+    <!--     </Grid> -->
+    <!-- </Grid> -->
+</UserControl>

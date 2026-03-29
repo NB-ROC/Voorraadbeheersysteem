@@ -1,16 +1,16 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Pages.ProductPage">
+             x:Class="FrontendAdmin.Views.Pages.ProductPageView">
 
     <Grid Background="#F6F7FB" RowDefinitions="Auto,Auto,*">
 
         <!-- Header -->
         <StackPanel Grid.Row="0" Margin="20,20,20,12" Spacing="4">
-            <TextBlock Text="Items Overzicht"
+            <TextBlock Text="Producten Overzicht"
                        FontSize="28"
                        FontWeight="Bold"
                        Foreground="#1F2937"/>
-            <TextBlock Text="Bekijk en beheer alle beschikbare items"
+            <TextBlock Text="Bekijk en beheer alle beschikbare producten"
                        FontSize="13"
                        Foreground="#6B7280"/>
         </StackPanel>
@@ -34,7 +34,7 @@
                         CornerRadius="8"
                         Padding="12,8"
                         VerticalAlignment="Center">
-                    <TextBlock Text="🔍 Zoek producten of items..."
+                    <TextBlock Text="🔍 Zoek producten..."
                                Foreground="#9CA3AF"
                                FontSize="13" />
                 </Border>
@@ -105,24 +105,32 @@
                                        Foreground="#111827"
                                        FontWeight="Bold"
                                        FontSize="16"/>
-                            <TextBlock Text="Korte beschrijving van het item of extra metadata"
+                            <TextBlock Text="Korte beschrijving van het product of extra metadata"
                                        Foreground="#6B7280"
                                        FontSize="13"
                                        TextWrapping="Wrap"/>
                         </StackPanel>
 
                         <!-- Actie -->
-                        <StackPanel Grid.Column="2"
+                        <DockPanel HorizontalSpacing="12" Grid.Column="2"
                                     VerticalAlignment="Center">
-                            <Button Content="Reserveer"
-                                    Background="#4F46E5"
+                            <Button Content="Bewerk"
+                                    Background="Orange"
                                     Foreground="White"
-                                    BorderThickness="0"
+                                    Padding="12 8"
                                     CornerRadius="8"
-                                    Padding="14,8"
-                                    MinWidth="100"
-                                    Click="OnReserveerClick"/>
-                        </StackPanel>
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Click="OnEditClick"/>
+                            <Button Content="Verwijder"
+                                    Background="Red"
+                                    Foreground="White"
+                                    Padding="12 8"
+                                    CornerRadius="8"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Click="OnDeleteClick"/>
+                        </DockPanel>
                     </Grid>
                 </Border>
 

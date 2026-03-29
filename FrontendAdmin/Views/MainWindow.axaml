@@ -1,13 +1,15 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:FrontendAdmin.ViewModels"
         x:Class="FrontendAdmin.Views.MainWindow"
         Width="800"
         Height="450"
         Background="#F5F5F7"
-        Title="FrontendAdmin">
+        Title="FrontendAdmin"
+        x:DataType="vm:MainWindowViewModel">
 
     <DockPanel>
-        <!-- Header bovenaan -->
+        <!-- Header -->
         <Border Background="#6a69ad" Height="60" DockPanel.Dock="Top">
             <Grid>
                 <TextBlock Text="Welkom [Naam gebruiker]"
@@ -26,7 +28,7 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Click="OnDashboardClick">
+                        Command="{Binding NavigateToDashboard}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -36,17 +38,17 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Click="OnItemsClick">
+                        Command="{Binding NavigateToProducts}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Items" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                        <TextBlock Text="Producten" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
                 <Button Background="Transparent" BorderThickness="0"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Click="OnLeningenClick">
+                        Command="{Binding NavigateToLoans}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -56,7 +58,7 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Click="OnProfielClick">
+                        Command="{Binding NavigateToProfile}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                         <TextBlock Text="Profiel" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
@@ -65,7 +67,7 @@
             </UniformGrid>
         </Border>
         
-        <ContentControl x:Name="PageContent" />
+        <ContentControl Content="{Binding CurrentPage}" />
     </DockPanel>
 
 </Window>
