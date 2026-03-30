@@ -67,10 +67,10 @@
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         Command="{Binding Navigation.NavigateCommand}"
-                        CommandParameter="{x:Static service:Page.Profile}">
+                        CommandParameter="{x:Static service:Page.Users}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                         <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Profiel" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                        <TextBlock Text="Gebruikers" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                     </StackPanel>
                 </Button>
 

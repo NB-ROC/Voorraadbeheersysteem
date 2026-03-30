@@ -74,7 +74,7 @@ public class UserService : Users.UsersBase
             user.Name = request.Name;
 
         if (request.HasNumber)
-            user.Number = (ushort)request.Number;
+            user.Number = request.Number;
 
         if (request.HasStaff)
             user.Staff = request.Staff;

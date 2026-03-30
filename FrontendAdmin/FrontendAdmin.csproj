@@ -50,7 +50,7 @@
             <DependentUpon>LoanViewPage.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Pages\ProfilePageView.axaml.cs">
+        <Compile Update="Views\Pages\UserPageView.axaml.cs">
             <DependentUpon>ProfilePageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
