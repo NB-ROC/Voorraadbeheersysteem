@@ -1,8 +1,51 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:models="clr-namespace:FrontendAdmin.Models"
+             xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
+             x:DataType="{x:Type product:ProductFormViewModel}"
              x:Class="FrontendAdmin.Views.Forms.ProductFormView">
-    Welcome to Avalonia!
+
+    <Grid ColumnDefinitions="*,*" RowDefinitions="*">
+        <!-- Left column unchanged -->
+        <StackPanel Grid.Column="0" Margin="20">
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Naam:" />
+                <TextBox MaxLength="{x:Static models:ProductModel.NameLength}"
+                         Text="{Binding Name}" Margin="0,0,0,10" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Categorie:" />
+                <TextBox MaxLength="{x:Static models:ProductModel.CategoryLength}"
+                         Text="{Binding Category}" Margin="0,0,0,10" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Beschrijving:" />
+                <TextBox MinLines="3" TextWrapping="Wrap"
+                         MaxLength="{x:Static models:ProductModel.DescriptionLength}"
+                         Text="{Binding Description}" Margin="0,0,0,10" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Aantal:" />
+                <TextBox Text="{Binding Amount}" Margin="0,0,0,10" />
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center">
+                <Button Content="Opsturen" Command="{Binding SaveCommand}" />
+                <TextBox Foreground="Red" Text="{Binding Error}" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Margin="20" Spacing="10">
+            <StackPanel HorizontalAlignment="Center">
+                <Button Foreground="Black" Content="Selecteer afbeelding"
+                        Command="{Binding OpenImageFileAsync}" Margin="0 0 0 10" />
+            </StackPanel>
+
+            <Border Height="400" Width="400" BorderThickness="1" BorderBrush="Black">
+                <Image Height="400" Width="400"
+                       Source="{Binding PreviewImage}"
+                       Stretch="Uniform" />
+            </Border>
+        </StackPanel>
+    </Grid>
 </UserControl>

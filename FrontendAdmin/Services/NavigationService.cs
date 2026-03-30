@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Avalonia.Controls;
 using ReactiveUI;
 
 namespace FrontendAdmin.Services;
@@ -12,14 +13,15 @@ public enum Page
     Loans,
     Profile,
     Reservation,
-    ProductForm,
+    ProductForm
 }
 
 public interface INavigationService
 {
     object CurrentPage { get; }
-    void NavigateTo(Page page);
     public ICommand NavigateCommand { get; }
+    void NavigateTo(ReactiveObject page);
+    void NavigateTo(Page page);
 }
 
 public class NavigationService : ReactiveObject, INavigationService
@@ -39,6 +41,15 @@ public class NavigationService : ReactiveObject, INavigationService
         private set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public void NavigateTo(Page page) => CurrentPage = _pages[page]();
+    public void NavigateTo(ReactiveObject page)
+    {
+        CurrentPage = page;
+    }
+
+    public void NavigateTo(Page page)
+    {
+        CurrentPage = _pages[page]();
+    }
+
     public ICommand NavigateCommand { get; }
 }

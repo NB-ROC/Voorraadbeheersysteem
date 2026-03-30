@@ -1,24 +1,26 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Protos.Product;
 using ReactiveUI;
-using Testing.Grpc;
 
 namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductPageViewModel : ReactiveObject
 {
-    public INavigationService Navigation { get; }
-    
     public ProductPageViewModel(INavigationService navigation)
     {
         Navigation = navigation;
         LoadProductsCommand = ReactiveCommand.CreateFromTask(LoadProducts);
         LoadProductsCommand.Execute();
     }
+
+    public INavigationService Navigation { get; }
+
 
     public ObservableCollection<ProductViewModel> Products { get; } = [];
 
@@ -42,6 +44,6 @@ public class ProductPageViewModel : ReactiveObject
                 Description = product.Description,
                 Amount = product.Amount,
                 Image = product.Image
-            }));
+            }, Navigation, this));
     }
 }

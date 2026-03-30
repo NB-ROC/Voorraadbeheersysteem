@@ -2,7 +2,7 @@ using Grpc.Net.Client;
 using Protos.Product;
 using Protos.User;
 
-namespace Testing.Grpc;
+namespace FrontendAdmin.Grpc;
 
 public static class Client
 {
@@ -10,6 +10,6 @@ public static class Client
 
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(GrpcChannelIp);
 
-    public static readonly Users.UsersClient Users = new(Channel);
     public static readonly Products.ProductsClient Products = new(Channel);
+    public static readonly Users.UsersClient Users = new(Channel);
 }

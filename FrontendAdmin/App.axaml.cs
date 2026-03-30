@@ -35,22 +35,24 @@ public class App : Application
             services.AddSingleton<LoanPageViewModel>();
             services.AddSingleton<ProfilePageViewModel>();
             services.AddSingleton<ReservationPageViewModel>();
-            services.AddSingleton<ProductFormViewModel>();
 
             services.AddSingleton<INavigationService>(sp => new NavigationService(
                 new Dictionary<Page, Func<object>>
                 {
-                    [Page.Dashboard]     = () => sp.GetRequiredService<DashboardPageViewModel>(),
-                    [Page.Products]      = () => sp.GetRequiredService<ProductPageViewModel>(),
-                    [Page.Loans]         = () => sp.GetRequiredService<LoanPageViewModel>(),
-                    [Page.Profile]       = () => sp.GetRequiredService<ProfilePageViewModel>(),
-                    [Page.Reservation]   = () => sp.GetRequiredService<ReservationPageViewModel>(),
-                    [Page.ProductForm]   = () => sp.GetRequiredService<ProductFormViewModel>(),
+                    [Page.Dashboard] = () => sp.GetRequiredService<DashboardPageViewModel>(),
+                    [Page.Products] = () => sp.GetRequiredService<ProductPageViewModel>(),
+                    [Page.Loans] = () => sp.GetRequiredService<LoanPageViewModel>(),
+                    [Page.Profile] = () => sp.GetRequiredService<ProfilePageViewModel>(),
+                    [Page.Reservation] = () => sp.GetRequiredService<ReservationPageViewModel>(),
+                    [Page.ProductForm] = () => new ProductFormViewModel(
+                        sp.GetRequiredService<INavigationService>(),
+                        sp.GetRequiredService<ProductPageViewModel>()
+                    )
                 }
             ));
-            
+
             services.AddSingleton<MainWindowViewModel>();
-            
+
 
             DisableAvaloniaDataAnnotationValidation();
 

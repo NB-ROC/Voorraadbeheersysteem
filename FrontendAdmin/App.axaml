@@ -10,7 +10,7 @@
              xmlns:profile="clr-namespace:FrontendAdmin.ViewModels.Profile"
              xmlns:reservation="clr-namespace:FrontendAdmin.ViewModels.Reservation"
              xmlns:forms="clr-namespace:FrontendAdmin.Views.Forms"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
 
     <Application.DataTemplates>
         <DataTemplate DataType="{x:Type viewModels:MainWindowViewModel}">
@@ -37,13 +37,13 @@
         <DataTemplate DataType="{x:Type reservation:ReservationPageViewModel}">
             <pages:ReservationPageView />
         </DataTemplate>
-        
-        
+
+
         <!-- Forms -->
         <DataTemplate DataType="{x:Type product:ProductFormViewModel}">
-            <forms:ProductFormView/>
+            <forms:ProductFormView />
         </DataTemplate>
-        
+
     </Application.DataTemplates>
 
     <Application.Styles>

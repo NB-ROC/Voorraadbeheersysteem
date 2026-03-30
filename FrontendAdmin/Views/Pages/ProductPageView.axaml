@@ -67,7 +67,7 @@
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         Command="{Binding Navigation.NavigateCommand}"
-                        CommandParameter="{x:Static service:Page.ProductForm}"/>
+                        CommandParameter="{x:Static service:Page.ProductForm}" />
             </Grid>
         </Border>
 
@@ -94,11 +94,27 @@
                                             BorderBrush="#D1D5DB"
                                             BorderThickness="1"
                                             CornerRadius="10">
-                                        <TextBlock Text="?"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="22"
-                                                   Foreground="#9CA3AF" />
+                                        <Panel>
+                                            <!-- Loading -->
+                                            <TextBlock Text="⏳"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="22"
+                                                       Foreground="#9CA3AF"
+                                                       IsVisible="{Binding IsImageLoading}" />
+
+                                            <!-- Loaded -->
+                                            <Image Source="{Binding Thumbnail}"
+                                                   Stretch="UniformToFill"
+                                                   IsVisible="{Binding !IsImageLoading}" />
+
+                                            <!-- Failed -->
+                                            <TextBlock Text="⚠️"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="22"
+                                                       IsVisible="{Binding ImageFailed}" />
+                                        </Panel>
                                     </Border>
 
                                     <!-- Info -->
@@ -127,7 +143,9 @@
                                                 Padding="12 8"
                                                 CornerRadius="8"
                                                 VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"/>
+                                                HorizontalAlignment="Center"
+                                                Command="{Binding EditCommand}"
+                                                CommandParameter="{Binding}" />
                                         <Button Content="Verwijder"
                                                 Background="Red"
                                                 Foreground="White"
@@ -135,7 +153,7 @@
                                                 CornerRadius="8"
                                                 VerticalAlignment="Center"
                                                 HorizontalAlignment="Center"
-                                                />
+                                                Command="{Binding DeleteCommand}" />
                                     </DockPanel>
                                 </Grid>
                             </Border>
