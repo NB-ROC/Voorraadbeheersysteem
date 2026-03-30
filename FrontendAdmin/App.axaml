@@ -7,7 +7,7 @@
              xmlns:viewModels="clr-namespace:FrontendAdmin.ViewModels"
              xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.Loan"
              xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
-             xmlns:profile="clr-namespace:FrontendAdmin.ViewModels.Profile"
+             xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
              xmlns:reservation="clr-namespace:FrontendAdmin.ViewModels.Reservation"
              xmlns:forms="clr-namespace:FrontendAdmin.Views.Forms"
              RequestedThemeVariant="Light">
@@ -30,18 +30,20 @@
             <pages:ProductPageView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type profile:ProfilePageViewModel}">
-            <pages:ProfilePageView />
+        <DataTemplate DataType="{x:Type user:UserPageViewModel}">
+            <pages:UserPageView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type reservation:ReservationPageViewModel}">
             <pages:ReservationPageView />
         </DataTemplate>
-
-
+        
         <!-- Forms -->
         <DataTemplate DataType="{x:Type product:ProductFormViewModel}">
             <forms:ProductFormView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type user:UserFormViewModel}">
+            <forms:UserFormView />
         </DataTemplate>
 
     </Application.DataTemplates>

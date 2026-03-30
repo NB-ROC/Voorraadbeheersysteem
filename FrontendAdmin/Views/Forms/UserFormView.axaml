@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:FrontendAdmin.Models"
+             xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
+             x:DataType="{x:Type user:UserFormViewModel}"
+             x:Class="FrontendAdmin.Views.Forms.UserFormView">
+
+    <StackPanel Margin="20">
+        <StackPanel>
+            <TextBlock Foreground="Black" Text="Naam:" />
+            <TextBox MaxLength="{x:Static models:UserModel.NameLength}"
+                     Text="{Binding Name}" Margin="0,0,0,10" />
+        </StackPanel>
+
+        <StackPanel>
+            <TextBlock Foreground="Black" Text="Email:" />
+            <TextBox MaxLength="{x:Static models:UserModel.EmailLength}"
+                     Text="{Binding Email}" Margin="0,0,0,10" />
+        </StackPanel>
+
+        <StackPanel>
+            <TextBlock Foreground="Black" Text="Student/Personeelsnummer:" />
+            <NumericUpDown Minimum="0"
+                           FormatString="0"
+                           Value="{Binding Number}"
+                           Margin="0,0,0,10" />
+        </StackPanel>
+
+        <StackPanel>
+            <CheckBox Content="Is personeel?"
+                      IsChecked="{Binding Staff}"
+                      Margin="0,0,0,10" />
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Center">
+            <TextBlock Foreground="Red"
+                       Text="{Binding Error}"
+                       IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       Margin="0,0,0,6" />
+            <Button Content="Opsturen" Command="{Binding SaveCommand}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

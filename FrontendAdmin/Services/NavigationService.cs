@@ -11,9 +11,10 @@ public enum Page
     Dashboard,
     Products,
     Loans,
-    Profile,
+    Users,
     Reservation,
-    ProductForm
+    ProductForm,
+    UserForm
 }
 
 public interface INavigationService

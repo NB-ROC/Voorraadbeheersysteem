@@ -10,8 +10,8 @@ using FrontendAdmin.ViewModels;
 using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
 using FrontendAdmin.ViewModels.Product;
-using FrontendAdmin.ViewModels.Profile;
 using FrontendAdmin.ViewModels.Reservation;
+using FrontendAdmin.ViewModels.User;
 using FrontendAdmin.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,7 +33,7 @@ public class App : Application
             services.AddSingleton<DashboardPageViewModel>();
             services.AddSingleton<ProductPageViewModel>();
             services.AddSingleton<LoanPageViewModel>();
-            services.AddSingleton<ProfilePageViewModel>();
+            services.AddSingleton<UserPageViewModel>();
             services.AddSingleton<ReservationPageViewModel>();
 
             services.AddSingleton<INavigationService>(sp => new NavigationService(
@@ -42,11 +42,15 @@ public class App : Application
                     [Page.Dashboard] = () => sp.GetRequiredService<DashboardPageViewModel>(),
                     [Page.Products] = () => sp.GetRequiredService<ProductPageViewModel>(),
                     [Page.Loans] = () => sp.GetRequiredService<LoanPageViewModel>(),
-                    [Page.Profile] = () => sp.GetRequiredService<ProfilePageViewModel>(),
+                    [Page.Users] = () => sp.GetRequiredService<UserPageViewModel>(),
                     [Page.Reservation] = () => sp.GetRequiredService<ReservationPageViewModel>(),
                     [Page.ProductForm] = () => new ProductFormViewModel(
                         sp.GetRequiredService<INavigationService>(),
                         sp.GetRequiredService<ProductPageViewModel>()
+                    ),
+                    [Page.UserForm] = () => new UserFormViewModel(
+                        sp.GetRequiredService<INavigationService>(),
+                        sp.GetRequiredService<UserPageViewModel>()
                     )
                 }
             ));
