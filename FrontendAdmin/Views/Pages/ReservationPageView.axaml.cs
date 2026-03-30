@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace FrontendAdmin.Views;
+namespace FrontendAdmin.Views.Pages;
 
-public partial class ReserveringView : UserControl
+public partial class ReservationPageView : UserControl
 {
-    public ReserveringView()
+    public ReservationPageView()
     {
         InitializeComponent();
     }
@@ -13,7 +13,6 @@ public partial class ReserveringView : UserControl
     private void OnAnnuleerClick(object? sender, RoutedEventArgs e)
     {
         MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
-        mainWindow?.NavigateTo("Items");
     }
 
     private void OnBevestigClick(object? sender, RoutedEventArgs e)

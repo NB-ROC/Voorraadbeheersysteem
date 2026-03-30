@@ -1,12 +1,49 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FrontendAdmin.App"
-             xmlns:local="using:FrontendAdmin"
-             RequestedThemeVariant="Default">
-    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             xmlns:dashboard="clr-namespace:FrontendAdmin.ViewModels.Dashboard"
+             xmlns:pages="clr-namespace:FrontendAdmin.Views.Pages"
+             xmlns:views="clr-namespace:FrontendAdmin.Views"
+             xmlns:viewModels="clr-namespace:FrontendAdmin.ViewModels"
+             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.Loan"
+             xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
+             xmlns:profile="clr-namespace:FrontendAdmin.ViewModels.Profile"
+             xmlns:reservation="clr-namespace:FrontendAdmin.ViewModels.Reservation"
+             xmlns:forms="clr-namespace:FrontendAdmin.Views.Forms"
+             RequestedThemeVariant="Light">
 
     <Application.DataTemplates>
-        <local:ViewLocator />
+        <DataTemplate DataType="{x:Type viewModels:MainWindowViewModel}">
+            <views:MainWindow />
+        </DataTemplate>
+
+        <!-- Pages -->
+        <DataTemplate DataType="{x:Type dashboard:DashboardPageViewModel}">
+            <pages:DashboardPageView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type loan:LoanPageViewModel}">
+            <pages:LoanPageView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type product:ProductPageViewModel}">
+            <pages:ProductPageView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type profile:ProfilePageViewModel}">
+            <pages:ProfilePageView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type reservation:ReservationPageViewModel}">
+            <pages:ReservationPageView />
+        </DataTemplate>
+
+
+        <!-- Forms -->
+        <DataTemplate DataType="{x:Type product:ProductFormViewModel}">
+            <forms:ProductFormView />
+        </DataTemplate>
+
     </Application.DataTemplates>
 
     <Application.Styles>

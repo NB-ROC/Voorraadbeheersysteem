@@ -1,24 +1,22 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace FrontendAdmin.Views;
+namespace FrontendAdmin.Views.Pages;
 
-public partial class DashboardView : UserControl
+public partial class DashboardPageView : UserControl
 {
-    public DashboardView()
+    public DashboardPageView()
     {
         InitializeComponent();
     }
 
-    private void OnNieuwItemClick(object? sender, RoutedEventArgs e)
+    private void OnNieuwProductClick(object? sender, RoutedEventArgs e)
     {
         MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
-        mainWindow?.NavigateTo("Items");
     }
 
     private void OnLeningClick(object? sender, RoutedEventArgs e)
     {
         MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
-        mainWindow?.NavigateTo("Leningen");
     }
 }

@@ -1,6 +1,14 @@
-﻿namespace FrontendAdmin.ViewModels;
+﻿using FrontendAdmin.Services;
+using ReactiveUI;
 
-public class MainWindowViewModel : ViewModelBase
+namespace FrontendAdmin.ViewModels;
+
+public class MainWindowViewModel : ReactiveObject
 {
-    public string Greeting { get; } = "Management admin panel";
+    public MainWindowViewModel(INavigationService navigation)
+    {
+        Navigation = navigation;
+    }
+
+    public INavigationService Navigation { get; }
 }
