@@ -15,6 +15,11 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Loan> Loans => Set<Loan>();
     public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<DefectReport> DefectReport => Set<DefectReport>();
+    public DbSet<Penalty> Penalty => Set<Penalty>();
+    public DbSet<ProductHistory> ProductHistory => Set<ProductHistory>();
+    public DbSet<Role> Role => Set<Role>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
