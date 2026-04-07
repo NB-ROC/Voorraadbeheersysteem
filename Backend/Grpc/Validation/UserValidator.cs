@@ -1,109 +1,56 @@
 using System.Net.Mail;
 using Backend.Database.Managers;
 using Backend.Entities;
-using Google.Protobuf;
 using Protos.User;
 
 namespace Backend.Grpc.Validation;
 
-/**
- * This class is for validating every type of user request object. This throws RpcException for every wrongdoing.
- */
 public class UserValidator : Validator
 {
-    private readonly UserManager _userManager;
+    private readonly UserManager _manager;
 
-    public UserValidator(UserManager userManager)
+    public UserValidator(UserManager manager)
     {
-        _userManager = userManager;
+        _manager = manager;
     }
 
     public void ValidatePage(UserPageRequest request)
     {
-        if (request.Page < 1)
-            Throw("Invalid page");
-        if (request.PageSize is < 1 or > 100)
-            Throw("Invalid page size");
-    }
-
-    public void ValidateGet(UserGetRequest request)
-    {
-        ValidateId(request.Id);
+        if (request.Page < 1) Throw("Invalid page");
+        if (request.PageSize is < 1 or > 100) Throw("Invalid page size");
     }
 
     public void ValidateCreate(UserCreateRequest request)
     {
-        ValidateId(request.Id);
-        ValidateName(request.Name);
+        ValidateName(request.FirstName);
+        ValidateName(request.LastName);
         ValidateEmail(request.Email);
-        ValidateNumber(request.Number, request.Staff);
+
+        if (request.RoleId <= 0)
+            Throw("Invalid role");
     }
 
-    /**
-     * This is async due to the needed database logic here.
-     */
     public async Task<User> ValidateModify(UserModifyRequest request)
     {
-        User? user = await _userManager.Get(request.Id.ToByteArray());
-        if (user == null) Throw("Invalid User");
+        User? user = await _manager.Get(request.Id.ToByteArray());
+        if (user == null) Throw("Invalid user");
 
-        ValidateId(request.Id);
+        if (request.HasFirstName) ValidateName(request.FirstName);
+        if (request.HasLastName) ValidateName(request.LastName);
         if (request.HasEmail) ValidateEmail(request.Email);
-        if (request.HasName) ValidateName(request.Name);
-        if (request.HasNumber) ValidateNumber(request.Number, request.HasStaff ? request.Staff : user!.Staff);
 
-        return user!;
+        return user;
     }
 
-    public void ValidateDelete(UserDeleteRequest request)
+    private static void ValidateEmail(string email)
     {
-        ValidateId(request.Id);
+        try { _ = new MailAddress(email); }
+        catch { Throw("Invalid email"); }
     }
 
-    private static int GetNumberLength(uint? num)
+    private static void ValidateName(string name)
     {
-        return num switch
-        {
-            null => -1,
-            0 => 1,
-            _ => (int)Math.Floor(Math.Log10((double)num)) + 1
-        };
-    }
-
-    private static void ValidateId(ByteString? id)
-    {
-        if (id == null || id.Length != User.IdLength)
-            Throw("Invalid id");
-    }
-
-    private static void ValidateEmail(string? email)
-    {
-        if (string.IsNullOrWhiteSpace(email)) Throw("Invalid email");
-        try
-        {
-            _ = new MailAddress(email!);
-        }
-        catch
-        {
-            Throw("Invalid email");
-        }
-    }
-
-    private static void ValidateName(string? name)
-    {
-        if (string.IsNullOrWhiteSpace(name) || name.Length > User.NameLength)
+        if (string.IsNullOrWhiteSpace(name) || name.Length > 50)
             Throw("Invalid name");
-    }
-
-    private static void ValidateNumber(uint? number, bool isStaff)
-    {
-        int length = GetNumberLength(number);
-
-        int expectedLength = isStaff
-            ? User.StaffNumberLength
-            : User.StudentNumberLength;
-
-        if (length != expectedLength)
-            Throw("Invalid number");
     }
 }

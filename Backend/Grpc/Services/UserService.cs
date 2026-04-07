@@ -33,6 +33,7 @@ public class UserService : Users.UsersBase
     public override async Task<UserGetResponse> Get(UserGetRequest request, ServerCallContext context)
     {
         User? user = await _manager.Get(request.Id.ToByteArray());
+
         if (user == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Invalid user"));
 
@@ -49,17 +50,17 @@ public class UserService : Users.UsersBase
         User user = new()
         {
             Id = request.Id.ToByteArray(),
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             Email = request.Email,
-            Name = request.Name,
-            Number = request.Number,
-            Staff = request.Staff
+            RoleId = request.RoleId,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
-
-        bool success = await _manager.Create(user);
 
         return new UserCreateResponse
         {
-            Success = success
+            Success = await _manager.Create(user)
         };
     }
 
@@ -67,33 +68,24 @@ public class UserService : Users.UsersBase
     {
         User user = await _validator.ValidateModify(request);
 
-        if (request.HasEmail)
-            user.Email = request.Email;
+        if (request.HasFirstName) user.FirstName = request.FirstName;
+        if (request.HasLastName) user.LastName = request.LastName;
+        if (request.HasEmail) user.Email = request.Email;
+        if (request.HasRoleId) user.RoleId = request.RoleId;
 
-        if (request.HasName)
-            user.Name = request.Name;
-
-        if (request.HasNumber)
-            user.Number = request.Number;
-
-        if (request.HasStaff)
-            user.Staff = request.Staff;
-
-        bool success = await _manager.Modify(user);
+        user.UpdatedAt = DateTime.UtcNow;
 
         return new UserModifyResponse
         {
-            Success = success
+            Success = await _manager.Modify(user)
         };
     }
 
     public override async Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
     {
-        bool success = await _manager.Delete(request.Id.ToByteArray());
-
         return new UserDeleteResponse
         {
-            Success = success
+            Success = await _manager.Delete(request.Id.ToByteArray())
         };
     }
 
@@ -102,10 +94,10 @@ public class UserService : Users.UsersBase
         return new MetaUser
         {
             Id = ByteString.CopyFrom(user.Id),
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             Email = user.Email,
-            Name = user.Name,
-            Number = user.Number,
-            Staff = user.Staff
+            RoleId = user.RoleId
         };
     }
 }
