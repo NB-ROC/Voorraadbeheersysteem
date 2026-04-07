@@ -12,15 +12,16 @@ using FrontendAdmin.Grpc;
 using FrontendAdmin.Services;
 using Google.Protobuf;
 using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductFormViewModel : ReactiveObject
+public class ProductFormViewModel : ViewModelBase
 {
-    public ProductFormViewModel(INavigationService navigationService, ProductPageViewModel page,
-        ProductViewModel? existing = null)
+    public ProductFormViewModel(ServiceProvider services, ProductPageViewModel page,
+        ProductViewModel? existing = null) : base(services)
     {
         this.WhenAnyValue(
             x => x.Name,

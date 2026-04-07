@@ -5,10 +5,9 @@ namespace FrontendAdmin.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {
-    public MainWindowViewModel(INavigationService navigation)
+    public ViewModelBase? CurrentPage
     {
-        Navigation = navigation;
-    }
-
-    public INavigationService Navigation { get; }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = null;
 }

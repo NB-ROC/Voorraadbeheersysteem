@@ -7,14 +7,15 @@ using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Google.Protobuf;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
-public class UserFormViewModel : ReactiveObject
+public class UserFormViewModel : ViewModelBase
 {
-    public UserFormViewModel(INavigationService navigationService, UserPageViewModel page, UserViewModel? existing = null)
+    public UserFormViewModel(ServiceProvider services, UserPageViewModel page, UserViewModel? existing = null) : base(services)
     {
         Id = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
         this.WhenAnyValue(

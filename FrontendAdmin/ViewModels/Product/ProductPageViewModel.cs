@@ -5,22 +5,20 @@ using System.Windows.Input;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductPageViewModel : ReactiveObject
+public class ProductPageViewModel : ViewModelBase
 {
-    public ProductPageViewModel(INavigationService navigation)
+    public ProductPageViewModel(ServiceProvider services) : base(services)
     {
-        Navigation = navigation;
         LoadProductsCommand = ReactiveCommand.CreateFromTask(LoadProducts);
         LoadProductsCommand.Execute();
     }
-
-    public INavigationService Navigation { get; }
-
+    
 
     public ObservableCollection<ProductViewModel> Products { get; } = [];
 

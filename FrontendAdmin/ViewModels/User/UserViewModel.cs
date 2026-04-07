@@ -1,12 +1,9 @@
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Media.Imaging;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Google.Protobuf;
-using Grpc.Core;
 using Protos.User;
 using ReactiveUI;
 
@@ -17,7 +14,7 @@ public class UserViewModel : ReactiveObject
     private readonly UserModel _model;
     private readonly UserPageViewModel _parentPage;
 
-    public UserViewModel(UserModel model, INavigationService navigation, UserPageViewModel parent)
+    public UserViewModel(UserModel model, NavigationService navigation, UserPageViewModel parent)
     {
         _model = model;
         _parentPage = parent;

@@ -23,6 +23,6 @@ public partial class ProductPageView : UserControl
 
     private void OnAddProductClick(object? sender, RoutedEventArgs e)
     {
-        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindowView? mainWindow = TopLevel.GetTopLevel(this) as MainWindowView;
     }
 }

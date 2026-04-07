@@ -16,7 +16,7 @@ public class ProductViewModel : ReactiveObject
     private readonly ProductModel _model;
     private readonly ProductPageViewModel _parentPage;
 
-    public ProductViewModel(ProductModel model, INavigationService navigation, ProductPageViewModel parent)
+    public ProductViewModel(ProductModel model, NavigationService navigation, ProductPageViewModel parent)
     {
         _model = model;
         _parentPage = parent;

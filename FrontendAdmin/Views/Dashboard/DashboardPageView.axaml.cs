@@ -12,11 +12,11 @@ public partial class DashboardPageView : UserControl
 
     private void OnNieuwProductClick(object? sender, RoutedEventArgs e)
     {
-        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindowView? mainWindow = TopLevel.GetTopLevel(this) as MainWindowView;
     }
 
     private void OnLeningClick(object? sender, RoutedEventArgs e)
     {
-        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindowView? mainWindow = TopLevel.GetTopLevel(this) as MainWindowView;
     }
 }

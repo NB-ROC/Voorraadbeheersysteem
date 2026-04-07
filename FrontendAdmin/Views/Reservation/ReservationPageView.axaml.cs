@@ -12,7 +12,7 @@ public partial class ReservationPageView : UserControl
 
     private void OnAnnuleerClick(object? sender, RoutedEventArgs e)
     {
-        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindowView? mainWindow = TopLevel.GetTopLevel(this) as MainWindowView;
     }
 
     private void OnBevestigClick(object? sender, RoutedEventArgs e)

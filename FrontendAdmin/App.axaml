@@ -1,51 +1,11 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FrontendAdmin.App"
-             xmlns:dashboard="clr-namespace:FrontendAdmin.ViewModels.Dashboard"
-             xmlns:pages="clr-namespace:FrontendAdmin.Views.Pages"
-             xmlns:views="clr-namespace:FrontendAdmin.Views"
-             xmlns:viewModels="clr-namespace:FrontendAdmin.ViewModels"
-             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.Loan"
-             xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
-             xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
-             xmlns:reservation="clr-namespace:FrontendAdmin.ViewModels.Reservation"
-             xmlns:forms="clr-namespace:FrontendAdmin.Views.Forms"
+             xmlns:local="clr-namespace:FrontendAdmin"
              RequestedThemeVariant="Light">
 
     <Application.DataTemplates>
-        <DataTemplate DataType="{x:Type viewModels:MainWindowViewModel}">
-            <views:MainWindow />
-        </DataTemplate>
-
-        <!-- Pages -->
-        <DataTemplate DataType="{x:Type dashboard:DashboardPageViewModel}">
-            <pages:DashboardPageView />
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type loan:LoanPageViewModel}">
-            <pages:LoanPageView />
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type product:ProductPageViewModel}">
-            <pages:ProductPageView />
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type user:UserPageViewModel}">
-            <pages:UserPageView />
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type reservation:ReservationPageViewModel}">
-            <pages:ReservationPageView />
-        </DataTemplate>
-        
-        <!-- Forms -->
-        <DataTemplate DataType="{x:Type product:ProductFormViewModel}">
-            <forms:ProductFormView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type user:UserFormViewModel}">
-            <forms:UserFormView />
-        </DataTemplate>
-
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>

@@ -4,21 +4,19 @@ using System.Threading.Tasks;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
-public class UserPageViewModel : ReactiveObject
+public class UserPageViewModel : ViewModelBase
 {
-    public UserPageViewModel(INavigationService navigation)
+    public UserPageViewModel(ServiceProvider services) : base(services)
     {
-        Navigation = navigation;
         LoadUsersCommand = ReactiveCommand.CreateFromTask(LoadUsersAsync);
         LoadUsersCommand.Execute();
     }
-
-    public INavigationService Navigation { get; }
 
 
     public ObservableCollection<UserViewModel> Users { get; } = [];
@@ -42,6 +40,6 @@ public class UserPageViewModel : ReactiveObject
                 Email = user.Email,
                 Number = user.Number,
                 Staff = user.Staff,
-            }, Navigation, this));
+            }, Services., this));
     }
 }

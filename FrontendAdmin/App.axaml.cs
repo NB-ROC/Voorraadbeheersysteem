@@ -30,41 +30,18 @@ public class App : Application
         {
             ServiceCollection services = new();
 
-            services.AddSingleton<DashboardPageViewModel>();
-            services.AddSingleton<ProductPageViewModel>();
-            services.AddSingleton<LoanPageViewModel>();
-            services.AddSingleton<UserPageViewModel>();
-            services.AddSingleton<ReservationPageViewModel>();
-
-            services.AddSingleton<INavigationService>(sp => new NavigationService(
-                new Dictionary<Page, Func<object>>
-                {
-                    [Page.Dashboard] = () => sp.GetRequiredService<DashboardPageViewModel>(),
-                    [Page.Products] = () => sp.GetRequiredService<ProductPageViewModel>(),
-                    [Page.Loans] = () => sp.GetRequiredService<LoanPageViewModel>(),
-                    [Page.Users] = () => sp.GetRequiredService<UserPageViewModel>(),
-                    [Page.Reservation] = () => sp.GetRequiredService<ReservationPageViewModel>(),
-                    [Page.ProductForm] = () => new ProductFormViewModel(
-                        sp.GetRequiredService<INavigationService>(),
-                        sp.GetRequiredService<ProductPageViewModel>()
-                    ),
-                    [Page.UserForm] = () => new UserFormViewModel(
-                        sp.GetRequiredService<INavigationService>(),
-                        sp.GetRequiredService<UserPageViewModel>()
-                    )
-                }
-            ));
-
-            services.AddSingleton<MainWindowViewModel>();
+            MainWindowViewModel mainWindowViewModel = new();
+            NavigationService navigationService = new(mainWindowViewModel);
+            
+            services.AddSingleton(navigationService);
 
 
             DisableAvaloniaDataAnnotationValidation();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            MainWindowViewModel mainWindowViewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
 
-            desktop.MainWindow = new MainWindow
+            desktop.MainWindow = new MainWindowView
             {
                 DataContext = mainWindowViewModel
             };
