@@ -3,7 +3,7 @@
              xmlns:models="clr-namespace:FrontendAdmin.Models"
              xmlns:product="clr-namespace:FrontendAdmin.ViewModels.Product"
              x:DataType="{x:Type product:ProductFormViewModel}"
-             x:Class="FrontendAdmin.Views.Forms.ProductFormView">
+             x:Class="FrontendAdmin.Views.Product.ProductFormView">
 
     <Grid ColumnDefinitions="*,*" RowDefinitions="*">
         <!-- Left column unchanged -->

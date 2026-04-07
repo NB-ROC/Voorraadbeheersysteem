@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
-             x:Class="FrontendAdmin.Views.Pages.UserPageView"
+             x:Class="FrontendAdmin.Views.User.UserPageView"
              x:DataType="user:UserPageViewModel"
              xmlns:service="using:FrontendAdmin.Services">
 

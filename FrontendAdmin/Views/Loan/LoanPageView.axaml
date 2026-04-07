@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Pages.LoanPageView">
+             x:Class="FrontendAdmin.Views.Loan.LoanPageView">
 
     <DockPanel Background="White">
         <!-- Title -->

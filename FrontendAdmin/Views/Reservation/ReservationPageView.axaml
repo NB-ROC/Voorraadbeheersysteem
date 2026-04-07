@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Pages.ReservationPageView">
+             x:Class="FrontendAdmin.Views.Reservation.ReservationPageView">
 
     <DockPanel Background="White">
 

@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace FrontendAdmin.Views.Pages;
+namespace FrontendAdmin.Views.Reservation;
 
 public partial class ReservationPageView : UserControl
 {

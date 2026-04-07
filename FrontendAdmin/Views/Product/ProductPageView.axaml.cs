@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace FrontendAdmin.Views.Pages;
+namespace FrontendAdmin.Views.Product;
 
 public partial class ProductPageView : UserControl
 {
