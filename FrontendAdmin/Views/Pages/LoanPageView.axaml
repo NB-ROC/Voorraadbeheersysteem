@@ -1,54 +1,65 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:FrontendAdmin.Views.Pages"
              x:Class="FrontendAdmin.Views.Pages.LoanPageView">
 
-    <DockPanel Background="White">
-        <!-- Title -->
+    <DockPanel Background="White" Margin="10">
+        <!-- titel -->
         <TextBlock DockPanel.Dock="Top"
                    Text="Mijn Leningen"
-                   Foreground="#aaaaaa"
                    FontSize="20"
-                   Margin="15,15,15,10" />
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
 
-        <!-- Products list -->
-        <ScrollViewer DockPanel.Dock="Top">
-            <StackPanel>
+        <!-- zoekbalk -->
+        <TextBox x:Name="SearchBox"
+                 Watermark="Zoeken op product of datum..."
+                 DockPanel.Dock="Top"
+                 Margin="0,0,0,10"
+                 KeyUp="SearchBox_KeyUp"/>
 
-                <!-- Lening 1 - Op tijd -->
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+        <!-- filters -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+            <Button Content="Actief" Click="FilterButton_Click" Background="#2e7d32" Foreground="White"/>
+            <Button Content="Te laat" Click="FilterButton_Click" Background="#d32f2f" Foreground="White"/>
+            <Button Content="Geweest" Click="FilterButton_Click" Background="#0277bd" Foreground="White"/>
+            <Button Content="Reset" Click="ResetButton_Click" Background="#777777" Foreground="White"/>
+        </StackPanel>
 
-                        <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
-                                BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
+        <!-- Leningen -->
+        <ScrollViewer>
+            <ItemsControl x:Name="LeningLijst">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="pages:LeningItem">
+                        <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="10">
+                            <Grid ColumnDefinitions="80,*,100,Auto" RowDefinitions="Auto">
+                                <!-- afbeelding -->
+                                <Image Source="{Binding Image}" Width="70" Height="70" Grid.Column="0"/>
+                                <!-- lener/uitleendatum tekst -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                    <TextBlock Text="{Binding ProductNaam}" FontWeight="Bold" FontSize="14"/>
+                                    <TextBlock FontSize="12" Foreground="#555">
+                                        <Run Text="Lener:"/>
+                                        <Run Text="{Binding LenerNummer}"/>
+                                    </TextBlock>
+                                    <TextBlock FontSize="12" Foreground="#555">
+                                        <Run Text="Uitleendatum:"/>
+                                        <Run Text="{Binding UitleendDatum}"/>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <!-- terug datum tekst -->
+                                <TextBlock Text="{Binding TerugDatum}" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Foreground="#555"/>
+
+                                <!-- Status tekst -->
+                                <Border Background="{Binding StatusKleur}" CornerRadius="4" Padding="5" Grid.Column="3" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Status}" Foreground="White" FontWeight="Bold"/>
+                                </Border>
+                            </Grid>
                         </Border>
-
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                            <TextBlock Text="Mcdonalds" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa"/>
-                            <TextBlock Text="👤 Uitgeleend door: 123123412" FontSize="12" Foreground="#aaaaaa"/>
-                            <TextBlock Text="📅 Uitgeleend op: 10-03-2026" Foreground="#aaaaaa" FontSize="12"/>
-                            <TextBlock Text="⏰ Terug voor: 25-03-2026" Foreground="#aaaaaa" FontSize="12"/>
-                        </StackPanel>
-
-                        <Border Grid.Column="2"
-                                Background="#e6f4ea"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                VerticalAlignment="Center">
-                            <TextBlock Text="Actief" Foreground="#2e7d32" FontSize="12" FontWeight="Bold" />
-                        </Border>
-                    </Grid>
-                </Border>
-            </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </DockPanel>
-
 </UserControl>
