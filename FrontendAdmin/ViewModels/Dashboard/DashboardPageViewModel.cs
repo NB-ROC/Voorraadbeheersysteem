@@ -1,7 +1,10 @@
-using ReactiveUI;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin.ViewModels.Dashboard;
 
-public class DashboardPageViewModel : ReactiveObject
+public class DashboardPageViewModel : PageViewModelBase
 {
+    public DashboardPageViewModel(ServiceProvider services) : base(services)
+    {
+    }
 }

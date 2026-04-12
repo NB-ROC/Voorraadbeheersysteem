@@ -1,37 +1,36 @@
-using System.IO;
+using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Avalonia.Media.Imaging;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Google.Protobuf;
-using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
-public class UserViewModel : ReactiveObject
+public class UserViewModel : ViewModelBase
 {
     private readonly UserModel _model;
-    private readonly UserPageViewModel _parentPage;
 
-    public UserViewModel(UserModel model, INavigationService navigation, UserPageViewModel parent)
+    public UserViewModel(ServiceProvider services, UserModel model) : base(services)
     {
         _model = model;
-        _parentPage = parent;
 
-        EditCommand = ReactiveCommand.Create<UserViewModel>(user =>
+        EditCommand = ReactiveCommand.Create(() =>
         {
-            var formVm = new UserFormViewModel(navigation, parent, user);
-            navigation.NavigateTo(formVm);
+            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services, this));
         });
-        DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await DeleteAsync();
+            Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
+        });
     }
 
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ReactiveCommand<Unit, Unit> EditCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
     public byte[] Id => _model.Id;
 
@@ -82,6 +81,5 @@ public class UserViewModel : ReactiveObject
     private async Task DeleteAsync()
     {
         bool success = (await Client.Users.DeleteAsync(new UserDeleteRequest { Id = ByteString.CopyFrom(Id) })).Success;
-        if (success) _parentPage.Users.Remove(this);
     }
 }

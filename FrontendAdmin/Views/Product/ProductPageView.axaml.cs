@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace FrontendAdmin.Views.Pages;
+namespace FrontendAdmin.Views.Product;
 
 public partial class ProductPageView : UserControl
 {
@@ -23,6 +23,6 @@ public partial class ProductPageView : UserControl
 
     private void OnAddProductClick(object? sender, RoutedEventArgs e)
     {
-        MainWindow? mainWindow = TopLevel.GetTopLevel(this) as MainWindow;
+        MainWindowView? mainWindow = TopLevel.GetTopLevel(this) as MainWindowView;
     }
 }

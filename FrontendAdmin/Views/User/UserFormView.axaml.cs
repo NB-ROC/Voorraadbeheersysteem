@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace FrontendAdmin.Views.Forms;
+namespace FrontendAdmin.Views.User;
 
 public partial class UserFormView : UserControl
 {

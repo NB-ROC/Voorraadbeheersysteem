@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -8,10 +6,6 @@ using Avalonia.Markup.Xaml;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels;
 using FrontendAdmin.ViewModels.Dashboard;
-using FrontendAdmin.ViewModels.Loan;
-using FrontendAdmin.ViewModels.Product;
-using FrontendAdmin.ViewModels.Reservation;
-using FrontendAdmin.ViewModels.User;
 using FrontendAdmin.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,43 +22,22 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            ServiceCollection services = new();
+            ServiceCollection serviceCollection = new();
 
-            services.AddSingleton<DashboardPageViewModel>();
-            services.AddSingleton<ProductPageViewModel>();
-            services.AddSingleton<LoanPageViewModel>();
-            services.AddSingleton<UserPageViewModel>();
-            services.AddSingleton<ReservationPageViewModel>();
+            MainWindowViewModel mainWindowViewModel = new();
+            NavigationService navigationService = new(mainWindowViewModel);
 
-            services.AddSingleton<INavigationService>(sp => new NavigationService(
-                new Dictionary<Page, Func<object>>
-                {
-                    [Page.Dashboard] = () => sp.GetRequiredService<DashboardPageViewModel>(),
-                    [Page.Products] = () => sp.GetRequiredService<ProductPageViewModel>(),
-                    [Page.Loans] = () => sp.GetRequiredService<LoanPageViewModel>(),
-                    [Page.Users] = () => sp.GetRequiredService<UserPageViewModel>(),
-                    [Page.Reservation] = () => sp.GetRequiredService<ReservationPageViewModel>(),
-                    [Page.ProductForm] = () => new ProductFormViewModel(
-                        sp.GetRequiredService<INavigationService>(),
-                        sp.GetRequiredService<ProductPageViewModel>()
-                    ),
-                    [Page.UserForm] = () => new UserFormViewModel(
-                        sp.GetRequiredService<INavigationService>(),
-                        sp.GetRequiredService<UserPageViewModel>()
-                    )
-                }
-            ));
-
-            services.AddSingleton<MainWindowViewModel>();
+            serviceCollection.AddSingleton(navigationService);
 
 
             DisableAvaloniaDataAnnotationValidation();
 
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            ServiceProvider services = serviceCollection.BuildServiceProvider();
 
-            MainWindowViewModel mainWindowViewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
 
-            desktop.MainWindow = new MainWindow
+            mainWindowViewModel.CurrentPage = new DashboardPageViewModel(services);
+
+            desktop.MainWindow = new MainWindowView
             {
                 DataContext = mainWindowViewModel
             };

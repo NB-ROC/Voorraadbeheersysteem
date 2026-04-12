@@ -37,27 +37,4 @@
         <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="Views\Pages\DashboardPageView.axaml.cs">
-            <DependentUpon>DashboardView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Pages\ProductPageView.axaml.cs">
-            <DependentUpon>ItemsView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Pages\LoanPageView.axaml.cs">
-            <DependentUpon>LoanViewPage.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Pages\UserPageView.axaml.cs">
-            <DependentUpon>ProfilePageView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Pages\ReservationPageView.axaml.cs">
-            <DependentUpon>ReserveringView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-    </ItemGroup>
-
 </Project>

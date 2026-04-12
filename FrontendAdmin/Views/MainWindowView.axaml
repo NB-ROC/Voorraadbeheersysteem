@@ -1,0 +1,14 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:FrontendAdmin.ViewModels"
+        x:Class="FrontendAdmin.Views.MainWindowView"
+        Width="1280"
+        Height="720"
+        Background="#F5F5F7"
+        Title="FrontendAdmin"
+        x:DataType="vm:MainWindowViewModel">
+
+    <ScrollViewer>
+        <ContentControl Content="{Binding CurrentPage}" />
+    </ScrollViewer>
+</Window>

@@ -1,56 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Avalonia.Controls;
+using FrontendAdmin.ViewModels;
 using ReactiveUI;
 
 namespace FrontendAdmin.Services;
 
-public enum Page
+public class NavigationService : ReactiveObject
 {
-    Dashboard,
-    Products,
-    Loans,
-    Users,
-    Reservation,
-    ProductForm,
-    UserForm
-}
+    private readonly MainWindowViewModel _mainWindow;
 
-public interface INavigationService
-{
-    object CurrentPage { get; }
-    public ICommand NavigateCommand { get; }
-    void NavigateTo(ReactiveObject page);
-    void NavigateTo(Page page);
-}
-
-public class NavigationService : ReactiveObject, INavigationService
-{
-    private readonly Dictionary<Page, Func<object>> _pages;
-
-    public NavigationService(Dictionary<Page, Func<object>> pages)
+    public NavigationService(MainWindowViewModel mainWindow)
     {
-        _pages = pages;
-        NavigateCommand = ReactiveCommand.Create<Page>(NavigateTo);
-        CurrentPage = _pages[Page.Dashboard]();
+        _mainWindow = mainWindow;
     }
 
-    public object CurrentPage
+    public void NavigateTo(ViewModelBase vm)
     {
-        get;
-        private set => this.RaiseAndSetIfChanged(ref field, value);
+        _mainWindow.CurrentPage = vm;
     }
-
-    public void NavigateTo(ReactiveObject page)
-    {
-        CurrentPage = page;
-    }
-
-    public void NavigateTo(Page page)
-    {
-        CurrentPage = _pages[page]();
-    }
-
-    public ICommand NavigateCommand { get; }
 }

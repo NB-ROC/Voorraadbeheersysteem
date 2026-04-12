@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:components="clr-namespace:FrontendAdmin.ViewModels.Components"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FrontendAdmin.Views.Components.FooterView"
+             x:DataType="{x:Type components:FooterViewModel}">
+    <Border Background="#3b3b5c">
+        <UniformGrid Rows="1" Columns="4">
+            <Button Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding NavigateDashboard}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                </StackPanel>
+            </Button>
+            <Button Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding NavigateProducts}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Producten" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                </StackPanel>
+            </Button>
+            <Button Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding NavigateLoans}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                </StackPanel>
+            </Button>
+            <Button Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding NavigateUsers}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Gebruikers" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                </StackPanel>
+            </Button>
+
+        </UniformGrid>
+    </Border>
+</UserControl>

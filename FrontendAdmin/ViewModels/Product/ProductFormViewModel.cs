@@ -14,15 +14,15 @@ using FrontendAdmin.Grpc;
 using FrontendAdmin.Services;
 using Google.Protobuf;
 using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductFormViewModel : ReactiveObject
+public class ProductFormViewModel : ViewModelBase
 {
-    public ProductFormViewModel(INavigationService navigationService, ProductPageViewModel page,
-        ProductViewModel? existing = null)
+    public ProductFormViewModel(ServiceProvider services, ProductViewModel? existing = null) : base(services)
     {
         this.WhenAnyValue(
             x => x.Name,
@@ -38,7 +38,6 @@ public class ProductFormViewModel : ReactiveObject
         SaveCommand =
             ReactiveCommand.CreateFromTask(SaveProductAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
 
-        // If editing existing product, prefill values
         if (existing != null) LoadExistingProduct(existing);
 
         return;
@@ -66,11 +65,7 @@ public class ProductFormViewModel : ReactiveObject
                     Image = ByteString.CopyFrom(ImageBytes!)
                 })).Success;
 
-            if (success)
-            {
-                page.LoadProductsCommand.Execute();
-                navigationService.NavigateTo(Page.Products);
-            }
+            if (success) Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
         }
 
     }

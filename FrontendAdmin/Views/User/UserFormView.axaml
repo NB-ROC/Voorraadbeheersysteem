@@ -3,7 +3,7 @@
              xmlns:models="clr-namespace:FrontendAdmin.Models"
              xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
              x:DataType="{x:Type user:UserFormViewModel}"
-             x:Class="FrontendAdmin.Views.Forms.UserFormView">
+             x:Class="FrontendAdmin.Views.User.UserFormView">
 
     <StackPanel Margin="20">
         <StackPanel>

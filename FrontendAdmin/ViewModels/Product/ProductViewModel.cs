@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Media.Imaging;
@@ -6,33 +7,35 @@ using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductViewModel : ReactiveObject
+public class ProductViewModel : ViewModelBase
 {
     private readonly ProductModel _model;
-    private readonly ProductPageViewModel _parentPage;
 
-    public ProductViewModel(ProductModel model, INavigationService navigation, ProductPageViewModel parent)
+    public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
         _model = model;
-        _parentPage = parent;
 
-        EditCommand = ReactiveCommand.Create<ProductViewModel>(product =>
+        EditCommand = ReactiveCommand.Create(() =>
         {
-            var formVm = new ProductFormViewModel(navigation, parent, product);
-            navigation.NavigateTo(formVm);
+            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services, this));
         });
-        DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await DeleteAsync();
+            Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
+        });
 
         _ = LoadImageAsync();
     }
 
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ReactiveCommand<Unit, Unit> EditCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
     public int Id => _model.Id;
 
@@ -112,7 +115,6 @@ public class ProductViewModel : ReactiveObject
     private async Task DeleteAsync()
     {
         bool success = (await Client.Products.DeleteAsync(new ProductDeleteRequest { Id = Id })).Success;
-        if (success) _parentPage.Products.Remove(this);
     }
 
     private async Task LoadImageAsync()
