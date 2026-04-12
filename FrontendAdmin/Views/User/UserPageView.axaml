@@ -115,8 +115,7 @@
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Center"
-                                                    Command="{Binding EditCommand}"
-                                                    CommandParameter="{Binding}" />
+                                                    Command="{Binding EditCommand}" />
                                             <Button Content="Verwijder"
                                                     Background="Red"
                                                     Foreground="White"

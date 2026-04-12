@@ -34,7 +34,6 @@ public class ProductFormViewModel : ViewModelBase
         SaveCommand =
             ReactiveCommand.CreateFromTask(SaveProductAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
 
-        // If editing existing product, prefill values
         if (existing != null) LoadExistingProduct(existing);
 
         return;

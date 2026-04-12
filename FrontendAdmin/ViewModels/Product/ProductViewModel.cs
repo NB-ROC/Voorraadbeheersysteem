@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Media.Imaging;
@@ -20,17 +21,21 @@ public class ProductViewModel : ViewModelBase
     {
         _model = model;
 
-        EditCommand = ReactiveCommand.Create<ProductViewModel>(product =>
+        EditCommand = ReactiveCommand.Create(() =>
         {
-            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services));
+            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services, this));
         });
-        DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await DeleteAsync();
+            Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
+        });
 
         _ = LoadImageAsync();
     }
 
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ReactiveCommand<Unit, Unit> EditCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
     public int Id => _model.Id;
 

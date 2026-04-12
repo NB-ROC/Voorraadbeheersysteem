@@ -1,5 +1,5 @@
+using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
@@ -18,16 +18,19 @@ public class UserViewModel : ViewModelBase
     {
         _model = model;
 
-        EditCommand = ReactiveCommand.Create<UserViewModel>(user =>
+        EditCommand = ReactiveCommand.Create(() =>
         {
-            UserFormViewModel formVm;
-            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services, user));
+            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services, this));
         });
-        DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await DeleteAsync();
+            Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
+        });
     }
 
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ReactiveCommand<Unit, Unit> EditCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
     public byte[] Id => _model.Id;
 

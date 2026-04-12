@@ -15,7 +15,7 @@ public class UserManager
     public async Task<List<User>> Page(int page, int pageSize)
     {
         return await _context.Users
-            .OrderBy(user => Convert.ToHexString(user.Id))
+            .OrderBy(user => user.Number)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
