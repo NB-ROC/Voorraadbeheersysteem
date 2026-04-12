@@ -1,67 +1,78 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Dashboard.DashboardPageView">
+             xmlns:dashboard="clr-namespace:FrontendAdmin.ViewModels.Dashboard"
+             x:Class="FrontendAdmin.Views.Dashboard.DashboardPageView"
+             x:DataType="{x:Type  dashboard:DashboardPageViewModel}">
 
-    <DockPanel Background="White">
-        <Border Height="250" DockPanel.Dock="Top" Padding="15">
-            <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
-                <Border Background="#6a69ad" Margin="0,0,8,0">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
-                                   FontWeight="Bold" />
-                        <TextBlock Text="Actieve Leningen" Foreground="White" HorizontalAlignment="Center"
-                                   FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
-                    </StackPanel>
-                </Border>
-                <Border Background="#6a69ad" Margin="0,0,8,0">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
-                                   FontWeight="Bold" />
-                        <TextBlock Text="Bijna te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22" />
-                    </StackPanel>
-                </Border>
-                <Border Background="#6a69ad" Margin="0,0,8,0">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
-                                   FontWeight="Bold" />
-                        <TextBlock Text="Te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22" />
-                    </StackPanel>
-                </Border>
-                <Border Background="#6a69ad">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
-                                   FontWeight="Bold" />
-                        <TextBlock Text="Beschikbare Products" Foreground="White" HorizontalAlignment="Center"
-                                   FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
-                    </StackPanel>
-                </Border>
-            </UniformGrid>
-        </Border>
+    <Grid RowDefinitions="60,*,60">
 
-        <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="15,5,15,0">
-            <Button HorizontalAlignment="Stretch"
-                    Height="60"
-                    Background="#6a69ad"
-                    CornerRadius="4"
-                    Click="OnNieuwProductClick">
-                <TextBlock Text="＋  Nieuw product reserveren"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="White"
-                           FontSize="14" />
-            </Button>
-            <Button HorizontalAlignment="Stretch"
-                    Height="60"
-                    Background="#6a69ad"
-                    CornerRadius="4"
-                    Click="OnLeningClick">
-                <TextBlock Text="≡  Mijn leningen bekijken"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="White"
-                           FontSize="14" />
-            </Button>
-        </StackPanel>
-        <Grid />
-    </DockPanel>
+        <ContentControl Content="{Binding Header}" />
+
+        <DockPanel Background="White" Grid.Row="1">
+            <Border Height="250" DockPanel.Dock="Top" Padding="15">
+                <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
+                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
+                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                       FontWeight="Bold" />
+                            <TextBlock Text="Actieve Leningen" Foreground="White" HorizontalAlignment="Center"
+                                       FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
+                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                       FontWeight="Bold" />
+                            <TextBlock Text="Bijna te laat" Foreground="White" HorizontalAlignment="Center"
+                                       FontSize="22" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
+                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                       FontWeight="Bold" />
+                            <TextBlock Text="Te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#6a69ad">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
+                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                                       FontWeight="Bold" />
+                            <TextBlock Text="Beschikbare Products" Foreground="White" HorizontalAlignment="Center"
+                                       FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+            </Border>
+
+            <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="15,5,15,0">
+                <Button HorizontalAlignment="Stretch"
+                        Height="60"
+                        Background="#6a69ad"
+                        CornerRadius="4"
+                        Click="OnNieuwProductClick">
+                    <TextBlock Text="＋  Nieuw product reserveren"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Foreground="White"
+                               FontSize="14" />
+                </Button>
+                <Button HorizontalAlignment="Stretch"
+                        Height="60"
+                        Background="#6a69ad"
+                        CornerRadius="4"
+                        Click="OnLeningClick">
+                    <TextBlock Text="≡  Mijn leningen bekijken"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Foreground="White"
+                               FontSize="14" />
+                </Button>
+            </StackPanel>
+            <Grid />
+        </DockPanel>
+
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+    </Grid>
+
 </UserControl>

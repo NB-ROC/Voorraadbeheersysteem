@@ -56,10 +56,7 @@ public class UserFormViewModel : ViewModelBase
                     Staff = Staff
                 })).Success;
 
-            if (success)
-            {
-                Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
-            }
+            if (success) Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
         }
     }
 

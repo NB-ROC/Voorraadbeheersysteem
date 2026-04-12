@@ -3,24 +3,30 @@ using System.Reactive;
 using System.Threading.Tasks;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
+using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
-public class UserPageViewModel : ViewModelBase
+public class UserPageViewModel : PageViewModelBase
 {
     public UserPageViewModel(ServiceProvider services) : base(services)
     {
-        LoadUsersCommand = ReactiveCommand.CreateFromTask(LoadUsersAsync);
-        LoadUsersCommand.Execute();
+        NavigateUserForm = ReactiveCommand.Create(() =>
+        {
+            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services));
+        });
+
+        _ = LoadUsersAsync();
     }
 
 
     public ObservableCollection<UserViewModel> Users { get; } = [];
 
-    public ReactiveCommand<Unit, Unit> LoadUsersCommand { get; }
+    public ReactiveCommand<Unit, Unit> NavigateUserForm { get; }
+
 
     public async Task LoadUsersAsync()
     {

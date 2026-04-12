@@ -14,7 +14,7 @@ public class UserViewModel : ViewModelBase
 {
     private readonly UserModel _model;
 
-    public UserViewModel(ServiceProvider services, UserModel model) :  base(services)
+    public UserViewModel(ServiceProvider services, UserModel model) : base(services)
     {
         _model = model;
 

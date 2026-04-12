@@ -1,71 +1,77 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Reservation.ReservationPageView">
+             xmlns:reservation="clr-namespace:FrontendAdmin.ViewModels.Reservation"
+             x:Class="FrontendAdmin.Views.Reservation.ReservationPageView"
+             x:DataType="{x:Type reservation:ReservationPageViewModel}">
 
-    <DockPanel Background="White">
+    <Grid RowDefinitions="60,*,60">
 
-        <!-- Bottom buttons -->
-        <Grid DockPanel.Dock="Bottom" Margin="15,10,15,15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <ContentControl Content="{Binding Header}" />
 
-            <Button Grid.Column="0"
-                    Content="Annuleer"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Height="40"
-                    Background="#6a69ad"
-                    Foreground="White"
-                    CornerRadius="4"
-                    HorizontalContentAlignment="Center"
-                    Click="OnAnnuleerClick" />
+        <DockPanel Grid.Row="1" Background="White">
 
-            <Button Grid.Column="2"
-                    Content="Bevestig"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    HorizontalAlignment="Stretch"
-                    Height="40"
-                    Background="#6a69ad"
-                    Foreground="White"
-                    CornerRadius="4"
-                    HorizontalContentAlignment="Center"
-                    Click="OnBevestigClick" />
-        </Grid>
+            <!-- Bottom buttons -->
+            <Grid DockPanel.Dock="Bottom" Margin="15,10,15,15" ColumnDefinitions="*,10,*">
 
-        <!-- Main content -->
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="15" Margin="30">
+                <Button Grid.Column="0"
+                        Content="Annuleer"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Height="40"
+                        Background="#6a69ad"
+                        Foreground="White"
+                        CornerRadius="4"
+                        HorizontalContentAlignment="Center"
+                        Click="OnAnnuleerClick" />
 
-            <!-- Image placeholder -->
-            <Border Width="180" Height="150"
-                    BorderBrush="#cccccc"
-                    BorderThickness="1"
-                    Background="#eeeeee"
-                    HorizontalAlignment="Center">
-                <TextBlock Text="🖼" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" />
-            </Border>
+                <Button Grid.Column="2"
+                        Content="Bevestig"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        Height="40"
+                        Background="#6a69ad"
+                        Foreground="White"
+                        CornerRadius="4"
+                        HorizontalContentAlignment="Center"
+                        Click="OnBevestigClick" />
+            </Grid>
 
-            <!-- Item name -->
-            <TextBlock Text="Item Naam"
-                       Foreground="#aaaaaa"
-                       FontSize="18"
-                       HorizontalAlignment="Center" />
+            <!-- Main content -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="15" Margin="30">
 
-            <!-- Divider -->
-            <Border Height="1" Background="#aaaaaa" HorizontalAlignment="Stretch" />
+                <!-- Image placeholder -->
+                <Border Width="180" Height="150"
+                        BorderBrush="#cccccc"
+                        BorderThickness="1"
+                        Background="#eeeeee"
+                        HorizontalAlignment="Center">
+                    <TextBlock Text="🖼" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" />
+                </Border>
 
-            <!-- Date -->
-            <TextBlock Text="Datum: 12-15 Juni"
-                       Foreground="#aaaaaa"
-                       FontSize="14"
-                       HorizontalAlignment="Center" />
+                <!-- Item name -->
+                <TextBlock Text="Item Naam"
+                           Foreground="#aaaaaa"
+                           FontSize="18"
+                           HorizontalAlignment="Center" />
 
-        </StackPanel>
+                <!-- Divider -->
+                <Border Height="1" Background="#aaaaaa" HorizontalAlignment="Stretch" />
 
-    </DockPanel>
+                <!-- Date -->
+                <TextBlock Text="Datum: 12-15 Juni"
+                           Foreground="#aaaaaa"
+                           FontSize="14"
+                           HorizontalAlignment="Center" />
+
+            </StackPanel>
+
+        </DockPanel>
+
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+
+    </Grid>
+
 
 </UserControl>

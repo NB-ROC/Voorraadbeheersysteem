@@ -5,7 +5,7 @@ namespace FrontendAdmin.ViewModels;
 
 public abstract class ViewModelBase : ReactiveObject
 {
-    protected ServiceProvider Services;
+    protected readonly ServiceProvider Services;
 
     protected ViewModelBase(ServiceProvider services)
     {

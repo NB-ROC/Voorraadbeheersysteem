@@ -1,156 +1,171 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Loan.LoanPageView">
+             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.Loan"
+             x:Class="FrontendAdmin.Views.Loan.LoanPageView"
+             x:DataType="{x:Type loan:LoanPageViewModel}">
 
-    <DockPanel Background="White">
-        <!-- Title -->
-        <TextBlock DockPanel.Dock="Top"
-                   Text="Mijn Leningen"
-                   Foreground="#aaaaaa"
-                   FontSize="20"
-                   Margin="15,15,15,10" />
+    <Grid RowDefinitions="60,*,60">
 
-        <!-- Products list -->
-        <ScrollViewer DockPanel.Dock="Top">
-            <StackPanel>
+        <ContentControl Content="{Binding Header}" />
 
-                <!-- Lening 1 - Op tijd -->
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="1" Background="White">
+            <!-- Title -->
+            <TextBlock DockPanel.Dock="Top"
+                       Text="Mijn Leningen"
+                       Foreground="#aaaaaa"
+                       FontSize="20"
+                       Margin="15,15,15,10" />
 
-                        <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
-                                BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
-                        </Border>
+            <!-- Products list -->
+            <ScrollViewer DockPanel.Dock="Top">
+                <StackPanel>
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                            <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                            <TextBlock Text="Uitgeleend op: 01-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            <TextBlock Text="Terug voor: 20-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                        </StackPanel>
+                    <!-- Lening 1 - Op tijd -->
+                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="2"
-                                Background="#e6f4ea"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                VerticalAlignment="Center">
-                            <TextBlock Text="Op tijd" Foreground="#2e7d32" FontSize="12" FontWeight="Bold" />
-                        </Border>
-                    </Grid>
-                </Border>
+                            <Border Grid.Column="0"
+                                    Width="60" Height="60"
+                                    BorderBrush="#cccccc"
+                                    BorderThickness="1"
+                                    Background="#eeeeee">
+                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           FontSize="20" />
+                            </Border>
 
-                <!-- Lening 2 - Bijna te laat -->
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
+                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
+                                <TextBlock Text="Uitgeleend op: 01-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                                <TextBlock Text="Terug voor: 20-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                            </StackPanel>
 
-                        <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
-                                BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
-                        </Border>
+                            <Border Grid.Column="2"
+                                    Background="#e6f4ea"
+                                    CornerRadius="4"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="Op tijd" Foreground="#2e7d32" FontSize="12" FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </Border>
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                            <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                            <TextBlock Text="Uitgeleend op: 05-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            <TextBlock Text="Terug voor: 17-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                        </StackPanel>
+                    <!-- Lening 2 - Bijna te laat -->
+                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="2"
-                                Background="#fff8e1"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                VerticalAlignment="Center">
-                            <TextBlock Text="Bijna te laat" Foreground="#f57f17" FontSize="12" FontWeight="Bold" />
-                        </Border>
-                    </Grid>
-                </Border>
+                            <Border Grid.Column="0"
+                                    Width="60" Height="60"
+                                    BorderBrush="#cccccc"
+                                    BorderThickness="1"
+                                    Background="#eeeeee">
+                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           FontSize="20" />
+                            </Border>
 
-                <!-- Lening 3 - Te laat -->
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
+                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
+                                <TextBlock Text="Uitgeleend op: 05-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                                <TextBlock Text="Terug voor: 17-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                            </StackPanel>
 
-                        <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
-                                BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
-                        </Border>
+                            <Border Grid.Column="2"
+                                    Background="#fff8e1"
+                                    CornerRadius="4"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="Bijna te laat" Foreground="#f57f17" FontSize="12" FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </Border>
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                            <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                            <TextBlock Text="Uitgeleend op: 20-02-2026" Foreground="#aaaaaa" FontSize="12" />
-                            <TextBlock Text="Terug voor: 05-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                        </StackPanel>
+                    <!-- Lening 3 - Te laat -->
+                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="2"
-                                Background="#ffebee"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                VerticalAlignment="Center">
-                            <TextBlock Text="Te laat" Foreground="#c62828" FontSize="12" FontWeight="Bold" />
-                        </Border>
-                    </Grid>
-                </Border>
+                            <Border Grid.Column="0"
+                                    Width="60" Height="60"
+                                    BorderBrush="#cccccc"
+                                    BorderThickness="1"
+                                    Background="#eeeeee">
+                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           FontSize="20" />
+                            </Border>
 
-                <!-- Lening 4 - Terugbrengen -->
-                <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
+                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
+                                <TextBlock Text="Uitgeleend op: 20-02-2026" Foreground="#aaaaaa" FontSize="12" />
+                                <TextBlock Text="Terug voor: 05-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                            </StackPanel>
 
-                        <Border Grid.Column="0"
-                                Width="60" Height="60"
-                                BorderBrush="#cccccc"
-                                BorderThickness="1"
-                                Background="#eeeeee">
-                            <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
-                        </Border>
+                            <Border Grid.Column="2"
+                                    Background="#ffebee"
+                                    CornerRadius="4"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="Te laat" Foreground="#c62828" FontSize="12" FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </Border>
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                            <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                            <TextBlock Text="Uitgeleend op: 10-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            <TextBlock Text="Terug voor: 25-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                        </StackPanel>
+                    <!-- Lening 4 - Terugbrengen -->
+                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="2"
-                                Content="Terugbrengen"
-                                Background="#6a69ad"
-                                Foreground="White"
-                                BorderThickness="0"
-                                CornerRadius="4"
-                                Padding="10,4"
-                                FontSize="12"
-                                VerticalAlignment="Center" />
-                    </Grid>
-                </Border>
+                            <Border Grid.Column="0"
+                                    Width="60" Height="60"
+                                    BorderBrush="#cccccc"
+                                    BorderThickness="1"
+                                    Background="#eeeeee">
+                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           FontSize="20" />
+                            </Border>
 
-            </StackPanel>
-        </ScrollViewer>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
+                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
+                                <TextBlock Text="Uitgeleend op: 10-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                                <TextBlock Text="Terug voor: 25-03-2026" Foreground="#aaaaaa" FontSize="12" />
+                            </StackPanel>
 
-    </DockPanel>
+                            <Button Grid.Column="2"
+                                    Content="Terugbrengen"
+                                    Background="#6a69ad"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    CornerRadius="4"
+                                    Padding="10,4"
+                                    FontSize="12"
+                                    VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </DockPanel>
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+
+
+    </Grid>
+
 
 </UserControl>
