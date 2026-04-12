@@ -33,7 +33,7 @@ public partial class LoanPageView : UserControl
             new LeningItem 
             { 
                 ProductNaam = "Boek", 
-                LenerNummer = "234567", 
+                LenerNummer = "6767676", 
                 UitleendDatum = "20-03-2026", 
                 TerugDatum = "25-03-2026", 
                 Status = "Te laat", 
