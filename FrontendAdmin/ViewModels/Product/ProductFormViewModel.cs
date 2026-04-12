@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using FrontendAdmin.Grpc;
@@ -29,6 +31,8 @@ public class ProductFormViewModel : ViewModelBase
             x => x.Amount,
             x => x.ImageBytes
         ).Subscribe(_ => Validate());
+        
+        TextBoxWrapper = "0";
 
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
         SaveCommand =
@@ -63,6 +67,7 @@ public class ProductFormViewModel : ViewModelBase
 
             if (success) Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
         }
+
     }
 
     #region Properties
@@ -96,11 +101,44 @@ public class ProductFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
+    
+    public string TextBoxWrapper
+    {
+        get => field;
+        set
+        {
+            string filtered = FilterNumber(value);
+
+            if (field == filtered)
+                return;
+
+            this.RaiseAndSetIfChanged(ref field, filtered);
+
+            if (int.TryParse(filtered, out int result))
+            {
+                if (Amount != result)
+                    Amount = result;
+            }
+        }
+    }
+    private string FilterNumber(string? input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return "0";
+
+        var digitsOnly = new string(input.Where(char.IsDigit).ToArray());
+
+        return string.IsNullOrEmpty(digitsOnly) ? "0" : digitsOnly;
+    }
 
     public int Amount
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            Console.WriteLine(value);
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     }
 
     public string Error
@@ -108,6 +146,8 @@ public class ProductFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
+    
+    
 
     public ICommand SaveCommand { get; }
     public ICommand GetImageCommand { get; }
@@ -137,6 +177,8 @@ public class ProductFormViewModel : ViewModelBase
         Category = existing.Category;
         Description = existing.Description;
         Amount = existing.Amount;
+        
+        TextBoxWrapper = Amount.ToString();
 
         _ = LoadExistingImageAsync(existing.Image);
     }
@@ -178,6 +220,14 @@ public class ProductFormViewModel : ViewModelBase
         PreviewImage = new Bitmap(ms);
         ms.Dispose();
     }
+    private void NumberOnly(object? sender, TextInputEventArgs e)
+    {
+        if (!int.TryParse(e.Text, out _))
+        {
+            e.Handled = true;
+        }
+    }
+    
 
     #endregion
 }

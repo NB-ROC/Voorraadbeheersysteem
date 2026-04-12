@@ -37,7 +37,9 @@
                        Text="{Binding Error}"
                        IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                        Margin="0,0,0,6" />
-            <Button Content="Opsturen" Command="{Binding SaveCommand}" />
+            <StackPanel HorizontalAlignment="Center">
+                <Button Content="Opsturen" Command="{Binding SaveCommand}" />
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </UserControl>
