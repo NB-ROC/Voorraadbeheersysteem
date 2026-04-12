@@ -3,7 +3,6 @@ using System.Reactive;
 using System.Threading.Tasks;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
-using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Protos.User;
 using ReactiveUI;
@@ -33,13 +32,13 @@ public class UserPageViewModel : ViewModelBase
 
         Users.Clear();
         foreach (MetaUser? user in result.Users)
-            Users.Add(new UserViewModel(new UserModel
+            Users.Add(new UserViewModel(Services, new UserModel
             {
                 Id = user.Id.ToByteArray(),
                 Name = user.Name,
                 Email = user.Email,
                 Number = user.Number,
-                Staff = user.Staff,
-            }, Services., this));
+                Staff = user.Staff
+            }));
     }
 }

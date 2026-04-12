@@ -15,7 +15,8 @@ namespace FrontendAdmin.ViewModels.User;
 
 public class UserFormViewModel : ViewModelBase
 {
-    public UserFormViewModel(ServiceProvider services, UserPageViewModel page, UserViewModel? existing = null) : base(services)
+    public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
+        base(services)
     {
         Id = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
         this.WhenAnyValue(
@@ -43,7 +44,7 @@ public class UserFormViewModel : ViewModelBase
                     Name = Name,
                     Email = Email,
                     Number = Number,
-                    Staff = Staff,
+                    Staff = Staff
                 })).Success;
             else
                 success = (await Client.Users.CreateAsync(new UserCreateRequest
@@ -52,13 +53,12 @@ public class UserFormViewModel : ViewModelBase
                     Name = Name,
                     Email = Email,
                     Number = Number,
-                    Staff = Staff,
+                    Staff = Staff
                 })).Success;
 
             if (success)
             {
-                await page.LoadUsersAsync();
-                navigationService.NavigateTo(Page.Users);
+                Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
             }
         }
     }
@@ -122,25 +122,34 @@ public class UserFormViewModel : ViewModelBase
 
     private static bool IsValidEmail(string email)
     {
-        try { _ = new MailAddress(email); return true; }
-        catch { return false; }
+        try
+        {
+            _ = new MailAddress(email);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
-    private static int GetNumberLength(uint? num) => num switch
+    private static int GetNumberLength(uint? num)
     {
-        null => -1,
-        0 => 1,
-        _ => (int)Math.Floor(Math.Log10((double)num)) + 1
-    };
+        return num switch
+        {
+            null => -1,
+            0 => 1,
+            _ => (int)Math.Floor(Math.Log10((double)num)) + 1
+        };
+    }
 
     private void LoadExistingProduct(UserViewModel existing)
     {
         Name = existing.Name;
-        Email =  existing.Email;
+        Email = existing.Email;
         Number = existing.Number;
         Staff = existing.Staff;
-
     }
-    
+
     #endregion
 }

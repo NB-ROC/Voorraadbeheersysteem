@@ -1,6 +1,4 @@
-using System.Windows.Input;
 using FrontendAdmin.ViewModels;
-using FrontendAdmin.ViewModels.Dashboard;
 using ReactiveUI;
 
 namespace FrontendAdmin.Services;

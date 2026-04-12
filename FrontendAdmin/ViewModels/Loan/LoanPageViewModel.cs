@@ -1,6 +1,4 @@
-using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
-using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Loan;
 

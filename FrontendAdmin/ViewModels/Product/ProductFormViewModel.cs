@@ -20,8 +20,7 @@ namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductFormViewModel : ViewModelBase
 {
-    public ProductFormViewModel(ServiceProvider services, ProductPageViewModel page,
-        ProductViewModel? existing = null) : base(services)
+    public ProductFormViewModel(ServiceProvider services, ProductViewModel? existing = null) : base(services)
     {
         this.WhenAnyValue(
             x => x.Name,
@@ -63,11 +62,7 @@ public class ProductFormViewModel : ViewModelBase
                     Image = ByteString.CopyFrom(ImageBytes!)
                 })).Success;
 
-            if (success)
-            {
-                page.LoadProductsCommand.Execute();
-                navigationService.NavigateTo(Page.Products);
-            }
+            if (success) Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
         }
     }
 

@@ -1,10 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
-using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Protos.Product;
 using ReactiveUI;
@@ -18,7 +16,7 @@ public class ProductPageViewModel : ViewModelBase
         LoadProductsCommand = ReactiveCommand.CreateFromTask(LoadProducts);
         LoadProductsCommand.Execute();
     }
-    
+
 
     public ObservableCollection<ProductViewModel> Products { get; } = [];
 
@@ -34,14 +32,17 @@ public class ProductPageViewModel : ViewModelBase
 
         Products.Clear();
         foreach (MetaProduct? product in result.Products)
-            Products.Add(new ProductViewModel(new ProductModel
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Category = product.Category,
-                Description = product.Description,
-                Amount = product.Amount,
-                Image = product.Image
-            }, Navigation, this));
+            Products.Add(
+                new ProductViewModel(Services, new ProductModel
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Category = product.Category,
+                        Description = product.Description,
+                        Amount = product.Amount,
+                        Image = product.Image
+                    }
+                )
+            );
     }
 }

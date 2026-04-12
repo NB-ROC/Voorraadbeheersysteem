@@ -4,25 +4,24 @@ using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Google.Protobuf;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
-public class UserViewModel : ReactiveObject
+public class UserViewModel : ViewModelBase
 {
     private readonly UserModel _model;
-    private readonly UserPageViewModel _parentPage;
 
-    public UserViewModel(UserModel model, NavigationService navigation, UserPageViewModel parent)
+    public UserViewModel(ServiceProvider services, UserModel model) :  base(services)
     {
         _model = model;
-        _parentPage = parent;
 
         EditCommand = ReactiveCommand.Create<UserViewModel>(user =>
         {
-            var formVm = new UserFormViewModel(navigation, parent, user);
-            navigation.NavigateTo(formVm);
+            UserFormViewModel formVm;
+            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services, user));
         });
         DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
     }
@@ -79,6 +78,5 @@ public class UserViewModel : ReactiveObject
     private async Task DeleteAsync()
     {
         bool success = (await Client.Users.DeleteAsync(new UserDeleteRequest { Id = ByteString.CopyFrom(Id) })).Success;
-        if (success) _parentPage.Users.Remove(this);
     }
 }

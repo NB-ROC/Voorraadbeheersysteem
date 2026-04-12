@@ -6,25 +6,23 @@ using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductViewModel : ReactiveObject
+public class ProductViewModel : ViewModelBase
 {
     private readonly ProductModel _model;
-    private readonly ProductPageViewModel _parentPage;
 
-    public ProductViewModel(ProductModel model, NavigationService navigation, ProductPageViewModel parent)
+    public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
         _model = model;
-        _parentPage = parent;
 
         EditCommand = ReactiveCommand.Create<ProductViewModel>(product =>
         {
-            var formVm = new ProductFormViewModel(navigation, parent, product);
-            navigation.NavigateTo(formVm);
+            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services));
         });
         DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
 
@@ -112,7 +110,6 @@ public class ProductViewModel : ReactiveObject
     private async Task DeleteAsync()
     {
         bool success = (await Client.Products.DeleteAsync(new ProductDeleteRequest { Id = Id })).Success;
-        if (success) _parentPage.Products.Remove(this);
     }
 
     private async Task LoadImageAsync()

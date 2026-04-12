@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -8,10 +6,6 @@ using Avalonia.Markup.Xaml;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels;
 using FrontendAdmin.ViewModels.Dashboard;
-using FrontendAdmin.ViewModels.Loan;
-using FrontendAdmin.ViewModels.Product;
-using FrontendAdmin.ViewModels.Reservation;
-using FrontendAdmin.ViewModels.User;
 using FrontendAdmin.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,18 +22,20 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            ServiceCollection services = new();
+            ServiceCollection serviceCollection = new();
 
             MainWindowViewModel mainWindowViewModel = new();
             NavigationService navigationService = new(mainWindowViewModel);
-            
-            services.AddSingleton(navigationService);
+
+            serviceCollection.AddSingleton(navigationService);
 
 
             DisableAvaloniaDataAnnotationValidation();
 
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            ServiceProvider services = serviceCollection.BuildServiceProvider();
 
+
+            mainWindowViewModel.CurrentPage = new DashboardPageViewModel(services);
 
             desktop.MainWindow = new MainWindowView
             {

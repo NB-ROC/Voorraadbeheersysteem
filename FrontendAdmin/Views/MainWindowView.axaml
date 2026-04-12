@@ -1,7 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:FrontendAdmin.ViewModels"
-        xmlns:service="using:FrontendAdmin.Services"
         x:Class="FrontendAdmin.Views.MainWindowView"
         Width="1280"
         Height="720"
@@ -9,74 +8,7 @@
         Title="FrontendAdmin"
         x:DataType="vm:MainWindowViewModel">
 
-    <Grid RowDefinitions="60,*,60">
-
-        <!-- Header -->
-        <Border Background="#6a69ad" Grid.Row="0">
-            <TextBlock Text="Welkom [Naam gebruiker]"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       Padding="20,0,0,0"
-                       Foreground="White"
-                       FontSize="18" />
-        </Border>
-
-        <!-- Scrollable Content -->
-        <ScrollViewer Grid.Row="1">
-            <ContentControl Content="{Binding Navigation.CurrentPage}" />
-        </ScrollViewer>
-
-        <!-- Bottom Navigation -->
-        <Border Background="#3b3b5c" Grid.Row="2">
-            <UniformGrid Rows="1" Columns="4">
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Command="{Binding Navigation.NavigateCommand}"
-                        CommandParameter="{x:Static service:Page.Dashboard}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
-                    </StackPanel>
-                </Button>
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Command="{Binding Navigation.NavigateCommand}"
-                        CommandParameter="{x:Static service:Page.Products}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Producten" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
-                    </StackPanel>
-                </Button>
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Command="{Binding Navigation.NavigateCommand}"
-                        CommandParameter="{x:Static service:Page.Loans}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
-                    </StackPanel>
-                </Button>
-                <Button Background="Transparent" BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Command="{Binding Navigation.NavigateCommand}"
-                        CommandParameter="{x:Static service:Page.Users}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="👤" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                        <TextBlock Text="Gebruikers" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
-                    </StackPanel>
-                </Button>
-
-            </UniformGrid>
-        </Border>
-
-    </Grid>
-
+    <ScrollViewer>
+        <ContentControl Content="{Binding CurrentPage}" />
+    </ScrollViewer>
 </Window>
