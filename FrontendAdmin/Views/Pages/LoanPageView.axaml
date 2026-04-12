@@ -11,18 +11,24 @@
                    FontWeight="Bold"
                    Margin="0,0,0,10"/>
 
-        <!-- zoekbalk -->
-        <TextBox x:Name="SearchBox"
-                 Watermark="Zoeken op product of datum..."
-                 DockPanel.Dock="Top"
-                 Margin="0,0,0,10"
-                 KeyUp="SearchBox_KeyUp"/>
+        <!-- Zoekbalken -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox x:Name="SearchBox"
+                     Width="250"
+                     Watermark="Zoek op product of datum"
+                     KeyUp="SearchBox_KeyUp"
+                     Margin="0,0,10,0"/>
+            <TextBox x:Name="GebruikerSearchBox"
+                     Width="250"
+                     Watermark="Zoek op gebruiker"
+                     KeyUp="SearchBox_KeyUp"/>
+        </StackPanel>
 
         <!-- filters -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
             <Button Content="Actief" Click="FilterButton_Click" Background="#2e7d32" Foreground="White"/>
             <Button Content="Te laat" Click="FilterButton_Click" Background="#d32f2f" Foreground="White"/>
-            <Button Content="Geweest" Click="FilterButton_Click" Background="#0277bd" Foreground="White"/>
+            <Button Content="Ingeleverd" Click="FilterButton_Click" Background="#0277bd" Foreground="White"/>
             <Button Content="Reset" Click="ResetButton_Click" Background="#777777" Foreground="White"/>
         </StackPanel>
 
@@ -53,7 +59,7 @@
 
                                 <!-- Status tekst -->
                                 <Border Background="{Binding StatusKleur}" CornerRadius="4" Padding="5" Grid.Column="3" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Status}" Foreground="White" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Status}" Foreground="White"/>
                                 </Border>
                             </Grid>
                         </Border>

@@ -22,13 +22,13 @@ public partial class LoanPageView : UserControl
         {
             new LeningItem 
             { 
-                ProductNaam = "Laptop", 
+                ProductNaam = "Laptop",
                 LenerNummer = "123456", 
                 UitleendDatum = "01-04-2026", 
                 TerugDatum = "15-04-2026", 
                 Status = "Actief", 
                 StatusKleur = "#2e7d32", 
-                Image = LeningItem.LoadFromAssets("avares://FrontendAdmin/Assets/boek.jpg")
+                Image = LeningItem.LoadFromAssets("avares://FrontendAdmin/Assets/laptop.png")
             },
             new LeningItem 
             { 
@@ -46,9 +46,9 @@ public partial class LoanPageView : UserControl
                 LenerNummer = "345678", 
                 UitleendDatum = "01-02-2026", 
                 TerugDatum = "10-02-2026", 
-                Status = "Geweest", 
+                Status = "Ingeleverd", 
                 StatusKleur = "#0277bd", 
-                Image = LeningItem.LoadFromAssets("avares://FrontendAdmin/Assets/boek.jpg")
+                Image = LeningItem.LoadFromAssets("avares://FrontendAdmin/Assets/tablet.png")
             },
         };
 
@@ -58,11 +58,19 @@ public partial class LoanPageView : UserControl
 
     private void SearchBox_KeyUp(object sender, KeyEventArgs e)
     {
-        var query = SearchBox.Text?.ToLower() ?? "";
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        var productQuery = SearchBox.Text?.ToLower() ?? "";
+        var gebruikerQuery = GebruikerSearchBox.Text?.ToLower() ?? "";
+
         _filteredLeningen.Clear();
         foreach (var item in _alleLeningen.Where(l =>
-                     l.ProductNaam.ToLower().Contains(query) ||
-                     l.UitleendDatum.ToLower().Contains(query)))
+                     (l.ProductNaam.ToLower().Contains(productQuery) ||
+                      l.UitleendDatum.ToLower().Contains(productQuery)) &&
+                     l.LenerNummer.ToLower().Contains(gebruikerQuery)))
         {
             _filteredLeningen.Add(item);
         }
@@ -82,6 +90,7 @@ public partial class LoanPageView : UserControl
     private void ResetButton_Click(object? sender, RoutedEventArgs e)
     {
         SearchBox.Text = "";
+        GebruikerSearchBox.Text = "";
         _filteredLeningen.Clear();
         foreach (var item in _alleLeningen)
             _filteredLeningen.Add(item);
