@@ -24,21 +24,23 @@ public class ProductService : Products.ProductsBase
     public override async Task<ProductPageResponse> Page(ProductPageRequest request, ServerCallContext context)
     {
         _validator.ValidatePage(request);
+
         List<Product> products = await _manager.Page(request.Page, request.PageSize);
 
-        ProductPageResponse response = new();
-
-        response.Products.AddRange(products.Select(MapMeta));
-
-        return response;
+        return new ProductPageResponse
+        {
+            Products = { products.Select(MapMeta) }
+        };
     }
 
     public override async Task<ProductGetResponse> Get(ProductGetRequest request, ServerCallContext context)
     {
         _validator.ValidateGet(request);
+
         Product? product = await _manager.Get(request.Id);
 
-        if (product == null) throw new RpcException(new Status(StatusCode.NotFound, "Invalid product"));
+        if (product == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Invalid product"));
 
         return new ProductGetResponse
         {
@@ -59,10 +61,14 @@ public class ProductService : Products.ProductsBase
         Product product = new()
         {
             Name = request.Name,
-            Category = request.Category,
             Description = request.Description,
-            Amount = request.Amount!.Value,
-            Image = imageName
+            CategoryId = request.CategoryId,
+            Status = ProductStatus.Available,
+            RestrictedRoleId = request.HasRestrictedRoleId ? request.RestrictedRoleId : null,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            PurchaseDate = request.PurchaseDate != null ? request.PurchaseDate.ToDateTime() : null
+            
         };
 
         return new ProductCreateResponse
@@ -76,20 +82,29 @@ public class ProductService : Products.ProductsBase
         (Product product, string extension) = await _validator.ValidateModify(request);
 
         if (request.HasName) product.Name = request.Name;
-
-        if (request.HasCategory) product.Category = request.Category;
-
         if (request.HasDescription) product.Description = request.Description;
+        if (request.HasCategoryId) product.CategoryId = request.CategoryId;
 
-        if (request.Amount != null) product.Amount = request.Amount.Value;
+        if (request.HasRestrictedRoleId)
+            product.RestrictedRoleId = request.RestrictedRoleId;
+
+        if (request.HasStatus)
+            product.Status = (ProductStatus)request.Status;
+
+        if (request.PurchaseDate != null)
+            product.PurchaseDate = request.PurchaseDate.ToDateTime();
+
+        product.UpdatedAt = DateTime.UtcNow;
 
         if (request.HasImage)
+        {
             product.Image = await StorageHelper.ModifyFile(
                 Path.Combine(ImagePath, product.Image),
                 request.Image,
                 extension,
                 ImagePath
             );
+        }
 
         return new ProductModifyResponse
         {
@@ -100,7 +115,9 @@ public class ProductService : Products.ProductsBase
     public override async Task<ProductDeleteResponse> Delete(ProductDeleteRequest request, ServerCallContext context)
     {
         string image = await _validator.ValidateDelete(request);
+
         StorageHelper.DeleteFile(Path.Combine(ImagePath, image));
+
         return new ProductDeleteResponse
         {
             Success = await _manager.Delete(request.Id)
@@ -118,16 +135,16 @@ public class ProductService : Products.ProductsBase
             Extension = Path.GetExtension(request.Name).TrimStart('.')
         });
     }
-
+    
     private static MetaProduct MapMeta(Product product)
     {
         return new MetaProduct
         {
             Id = product.Id,
             Name = product.Name,
-            Category = product.Category,
             Description = product.Description,
-            Amount = product.Amount,
+            CategoryId = product.CategoryId,
+            Status = (int)product.Status,
             Image = product.Image
         };
     }
