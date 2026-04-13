@@ -30,6 +30,9 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
+        <PackageReference Include="ReactiveUI.Avalonia" Version="11.4.12" />
     </ItemGroup>
 
     <ItemGroup>
@@ -37,7 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Views\MainWindow.axaml.cs">
+        <Compile Update="Views\MainWindowView.axaml.cs">
             <DependentUpon>MainWindow.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
