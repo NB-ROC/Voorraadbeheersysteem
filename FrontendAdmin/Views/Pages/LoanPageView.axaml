@@ -10,7 +10,6 @@
                    FontSize="20"
                    FontWeight="Bold"
                    Margin="0,0,0,10"/>
-
         <!-- Zoekbalken -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
             <TextBox x:Name="SearchBox"
@@ -23,7 +22,6 @@
                      Watermark="Zoek op gebruiker"
                      KeyUp="SearchBox_KeyUp"/>
         </StackPanel>
-
         <!-- filters -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
             <Button Content="Actief" Click="FilterButton_Click" Background="#2e7d32" Foreground="White"/>
@@ -31,7 +29,6 @@
             <Button Content="Ingeleverd" Click="FilterButton_Click" Background="#0277bd" Foreground="White"/>
             <Button Content="Reset" Click="ResetButton_Click" Background="#777777" Foreground="White"/>
         </StackPanel>
-
         <!-- Leningen -->
         <ScrollViewer>
             <ItemsControl x:Name="LeningLijst">
