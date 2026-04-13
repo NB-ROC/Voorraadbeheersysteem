@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using ReactiveUI.Avalonia;
 
 namespace Frontend;
 
@@ -21,6 +22,7 @@ internal sealed class Program
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace();
+            .LogToTrace()
+            .UseReactiveUI(config => { }); // <-- New package usage
     }
 }

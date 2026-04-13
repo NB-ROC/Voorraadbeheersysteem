@@ -1,6 +1,12 @@
-﻿namespace Frontend.ViewModels;
+﻿using ReactiveUI;
 
-public class MainWindowViewModel : ViewModelBase
+namespace Frontend.ViewModels;
+
+public class MainWindowViewModel : ReactiveObject
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    public ViewModelBase? CurrentPage
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = null;
 }
