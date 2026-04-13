@@ -5,7 +5,7 @@
              x:DataType="{x:Type product:ProductFormViewModel}"
              x:Class="FrontendAdmin.Views.Product.ProductFormView">
 
-    <Grid ColumnDefinitions="*,*" RowDefinitions="*">
+<Grid ColumnDefinitions="*,*" RowDefinitions="*">
         <!-- Left column unchanged -->
         <StackPanel Grid.Column="0" Margin="20">
             <StackPanel>
@@ -26,12 +26,14 @@
             </StackPanel>
             <StackPanel>
                 <TextBlock Foreground="Black" Text="Aantal:" />
-                <TextBox Text="{Binding Amount}" Margin="0,0,0,10" />
+                <TextBox  Text="{Binding TextBoxWrapper}" Margin="0,0,0,10" />
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Center">
-                <Button Content="Opsturen" Command="{Binding SaveCommand}" />
-                <TextBox Foreground="Red" Text="{Binding Error}" />
+                <StackPanel HorizontalAlignment="Center">
+                    <Button Content="Opsturen" Command="{Binding SaveCommand}" />
+                </StackPanel>
+                <TextBlock Foreground="Red" Text="{Binding Error}" />
             </StackPanel>
         </StackPanel>
 
