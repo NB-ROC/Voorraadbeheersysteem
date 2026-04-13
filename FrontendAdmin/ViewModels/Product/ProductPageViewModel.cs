@@ -41,9 +41,8 @@ public class ProductPageViewModel : PageViewModelBase
                     {
                         Id = product.Id,
                         Name = product.Name,
-                        Category = product.Category,
+                        CategoryId = product.CategoryId,
                         Description = product.Description,
-                        Amount = product.Amount,
                         Image = product.Image
                     }
                 )

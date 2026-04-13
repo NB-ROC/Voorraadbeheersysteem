@@ -26,14 +26,11 @@ public class ProductFormViewModel : ViewModelBase
     {
         this.WhenAnyValue(
             x => x.Name,
-            x => x.Category,
+            x => x.CategoryId,
             x => x.Description,
-            x => x.Amount,
             x => x.ImageBytes
         ).Subscribe(_ => Validate());
         
-        TextBoxWrapper = "0";
-
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
         SaveCommand =
             ReactiveCommand.CreateFromTask(SaveProductAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
@@ -50,18 +47,16 @@ public class ProductFormViewModel : ViewModelBase
                 {
                     Id = existing.Id,
                     Name = Name,
-                    Category = Category,
+                    CategoryId = CategoryId,
                     Description = Description,
-                    Amount = Amount,
                     Image = ByteString.CopyFrom(ImageBytes!)
                 })).Success;
             else
                 success = (await Client.Products.CreateAsync(new ProductCreateRequest
                 {
                     Name = Name,
-                    Category = Category,
+                    CategoryId = CategoryId,
                     Description = Description,
-                    Amount = Amount,
                     Image = ByteString.CopyFrom(ImageBytes!)
                 })).Success;
 
@@ -90,11 +85,11 @@ public class ProductFormViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public string Category
+    public int CategoryId
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    }
 
     public string Description
     {
@@ -102,25 +97,6 @@ public class ProductFormViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
     
-    public string TextBoxWrapper
-    {
-        get => field;
-        set
-        {
-            string filtered = FilterNumber(value);
-
-            if (field == filtered)
-                return;
-
-            this.RaiseAndSetIfChanged(ref field, filtered);
-
-            if (int.TryParse(filtered, out int result))
-            {
-                if (Amount != result)
-                    Amount = result;
-            }
-        }
-    }
     private string FilterNumber(string? input)
     {
         if (string.IsNullOrEmpty(input))
@@ -129,16 +105,6 @@ public class ProductFormViewModel : ViewModelBase
         var digitsOnly = new string(input.Where(char.IsDigit).ToArray());
 
         return string.IsNullOrEmpty(digitsOnly) ? "0" : digitsOnly;
-    }
-
-    public int Amount
-    {
-        get;
-        set
-        {
-            Console.WriteLine(value);
-            this.RaiseAndSetIfChanged(ref field, value);
-        }
     }
 
     public string Error
@@ -160,26 +126,21 @@ public class ProductFormViewModel : ViewModelBase
     {
         Error = string.IsNullOrWhiteSpace(Name)
             ? "Naam is verplicht."
-            : string.IsNullOrWhiteSpace(Category)
+            : CategoryId <= 0
                 ? "Categorie is verplicht."
                 : string.IsNullOrWhiteSpace(Description)
                     ? "Beschrijving is verplicht."
-                    : Amount <= 0
-                        ? "Aantal moet groter zijn dan 0."
-                        : ImageBytes == null
-                            ? "Selecteer een afbeelding."
-                            : string.Empty;
+                    : ImageBytes == null
+                        ? "Selecteer een afbeelding."
+                        : string.Empty;
     }
 
     private void LoadExistingProduct(ProductViewModel existing)
     {
         Name = existing.Name;
-        Category = existing.Category;
+        CategoryId = existing.CategoryId;
         Description = existing.Description;
-        Amount = existing.Amount;
         
-        TextBoxWrapper = Amount.ToString();
-
         _ = LoadExistingImageAsync(existing.Image);
     }
 
