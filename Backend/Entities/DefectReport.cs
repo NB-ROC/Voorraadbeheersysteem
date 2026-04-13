@@ -7,7 +7,7 @@ public class DefectReport
     public int ProductId { get; set; }
     public Product Product { get; set; } = null!;
 
-    public int ReportedBy { get; set; }
+    public byte[] ReportedBy { get; set; } = null;
     public User Reporter { get; set; } = null!;
 
     public string Description { get; set; } = null!;

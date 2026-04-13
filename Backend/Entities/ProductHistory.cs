@@ -9,7 +9,7 @@ public class ProductHistory
 
     public string ActionType { get; set; } = null!;
 
-    public int PerformedBy { get; set; }
+    public byte[] PerformedBy { get; set; } = null!;
     public User Performer { get; set; } = null!;
 
     public DateTime Timestamp { get; set; }

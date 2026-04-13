@@ -37,9 +37,63 @@ public class AppDbContext : DbContext
         optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<LoanProduct>()
-            .HasKey(lp => new { lp.ProductId, lp.LoanId });
-    }
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<LoanProduct>()
+        .HasKey(lp => new { lp.ProductId, lp.LoanId });
+
+    modelBuilder.Entity<User>()
+        .HasOne(u => u.Role)
+        .WithMany()
+        .HasForeignKey(u => u.RoleId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<Product>()
+        .HasOne(p => p.RestrictedRole)
+        .WithMany()
+        .HasForeignKey(p => p.RestrictedRoleId)
+        .OnDelete(DeleteBehavior.SetNull);
+    
+    modelBuilder.Entity<Loan>()
+        .HasOne(l => l.User)
+        .WithMany(u => u.Loans)
+        .HasForeignKey(l => l.UserId)
+        .OnDelete(DeleteBehavior.Restrict);
+    
+    modelBuilder.Entity<Loan>()
+        .HasOne(l => l.Issuer)
+        .WithMany()
+        .HasForeignKey(l => l.IssuedBy)
+        .OnDelete(DeleteBehavior.Restrict);
+    
+    modelBuilder.Entity<DefectReport>()
+        .HasOne(d => d.Reporter)
+        .WithMany()
+        .HasForeignKey(d => d.ReportedBy)
+        .OnDelete(DeleteBehavior.Restrict);
+    
+    modelBuilder.Entity<Penalty>()
+        .HasOne(p => p.User)
+        .WithMany()
+        .HasForeignKey(p => p.UserId)
+        .OnDelete(DeleteBehavior.Restrict);
+    
+    modelBuilder.Entity<Penalty>()
+        .HasOne(p => p.Loan)
+        .WithMany()
+        .HasForeignKey(p => p.LoanId)
+        .OnDelete(DeleteBehavior.Restrict);
+    
+    modelBuilder.Entity<ProductHistory>()
+        .HasOne(ph => ph.Product)
+        .WithMany()
+        .HasForeignKey(ph => ph.ProductId)
+        .OnDelete(DeleteBehavior.Restrict);
+    
+    modelBuilder.Entity<ProductHistory>()
+        .HasOne(ph => ph.Performer)
+        .WithMany()
+        .HasForeignKey(ph => ph.PerformedBy)
+        .OnDelete(DeleteBehavior.Restrict);
+}
 }
