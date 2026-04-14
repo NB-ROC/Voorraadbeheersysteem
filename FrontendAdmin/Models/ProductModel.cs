@@ -13,11 +13,12 @@ public class ProductModel
 
     [MaxLength(CategoryLength)] public string Name { get; set; } = null!;
 
-    [MaxLength(CategoryLength)] public string Category { get; set; } = null!;
+    public int CategoryId { get; set; }
 
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
 
     [MaxLength(ImageLength)] public string Image { get; set; } = null!;
 
-    public int Amount { get; set; }
+    public int Status { get; set; }
+
 }

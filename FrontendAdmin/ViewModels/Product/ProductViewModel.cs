@@ -49,13 +49,13 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public string Category
+    public int CategoryId
     {
-        get => _model.Category;
+        get => _model.CategoryId;
         set
         {
-            if (_model.Category == value) return;
-            _model.Category = value;
+            if (_model.CategoryId == value) return;
+            _model.CategoryId = value;
             this.RaisePropertyChanged();
         }
     }
@@ -78,17 +78,6 @@ public class ProductViewModel : ViewModelBase
         {
             if (_model.Image == value) return;
             _model.Image = value;
-            this.RaisePropertyChanged();
-        }
-    }
-
-    public int Amount
-    {
-        get => _model.Amount;
-        set
-        {
-            if (_model.Amount == value) return;
-            _model.Amount = value;
             this.RaisePropertyChanged();
         }
     }

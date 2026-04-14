@@ -34,13 +34,24 @@ public class UserViewModel : ViewModelBase
 
     public byte[] Id => _model.Id;
 
-    public string Name
+    public string FirstName
     {
-        get => _model.Name;
+        get => _model.FirstName;
         set
         {
-            if (_model.Name == value) return;
-            _model.Name = value;
+            if (_model.FirstName == value) return;
+            _model.FirstName = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    
+    public string LastName
+    {
+        get => _model.LastName;
+        set
+        {
+            if (_model.LastName == value) return;
+            _model.LastName = value;
             this.RaisePropertyChanged();
         }
     }
@@ -56,7 +67,7 @@ public class UserViewModel : ViewModelBase
         }
     }
 
-    public uint Number
+    public int Number
     {
         get => _model.Number;
         set
@@ -66,17 +77,29 @@ public class UserViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-
-    public bool Staff
+    public int RoleId
     {
-        get => _model.Staff;
+        get => _model.RoleId;
         set
         {
-            if (_model.Staff == value) return;
-            _model.Staff = value;
+            if (_model.RoleId == value) return;
+            _model.RoleId = value;
             this.RaisePropertyChanged();
         }
     }
+
+    public bool IsBlocked
+    {
+        get => _model.IsBlocked;
+        set
+        {
+            if (_model.IsBlocked == value) return;
+            _model.IsBlocked = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
+
 
     private async Task DeleteAsync()
     {

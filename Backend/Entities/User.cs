@@ -25,7 +25,7 @@ public class User
     public DateTime CreatedAt { get; set; } 
     public DateTime UpdatedAt { get; set; }
 
-    public uint Number { get; set; }
+    public int Number { get; set; }
 
     public ICollection<Loan> Loans { get; set; } = new List<Loan>();
 }
