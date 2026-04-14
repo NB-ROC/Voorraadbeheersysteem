@@ -62,7 +62,6 @@ public class ProductFormViewModel : ViewModelBase
 
             if (success) Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
         }
-
     }
 
     #region Properties
@@ -102,7 +101,7 @@ public class ProductFormViewModel : ViewModelBase
         if (string.IsNullOrEmpty(input))
             return "0";
 
-        var digitsOnly = new string(input.Where(char.IsDigit).ToArray());
+        string digitsOnly = new(input.Where(char.IsDigit).ToArray());
 
         return string.IsNullOrEmpty(digitsOnly) ? "0" : digitsOnly;
     }
@@ -112,8 +111,7 @@ public class ProductFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
-    
-    
+
 
     public ICommand SaveCommand { get; }
     public ICommand GetImageCommand { get; }
@@ -181,14 +179,11 @@ public class ProductFormViewModel : ViewModelBase
         PreviewImage = new Bitmap(ms);
         ms.Dispose();
     }
+
     private void NumberOnly(object? sender, TextInputEventArgs e)
     {
-        if (!int.TryParse(e.Text, out _))
-        {
-            e.Handled = true;
-        }
+        if (!int.TryParse(e.Text, out _)) e.Handled = true;
     }
-    
 
     #endregion
 }

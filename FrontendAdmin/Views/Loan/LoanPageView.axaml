@@ -8,160 +8,84 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <DockPanel Grid.Row="1" Background="White">
-            <!-- Title -->
+        <DockPanel Grid.Row="1" Background="White" Margin="10">
+            <!-- titel -->
             <TextBlock DockPanel.Dock="Top"
                        Text="Mijn Leningen"
-                       Foreground="#aaaaaa"
                        FontSize="20"
-                       Margin="15,15,15,10" />
+                       FontWeight="Bold"
+                       Margin="0,0,0,10" />
+            <!-- Zoekbalken -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox Width="250"
+                         Watermark="Zoek op product of datum"
+                         Text="{Binding ProductQuery, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,10,0" />
+    
+                <TextBox Width="250"
+                         Watermark="Zoek op gebruiker"
+                         Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
 
-            <!-- Products list -->
-            <ScrollViewer DockPanel.Dock="Top">
-                <StackPanel>
+            <!-- filters -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+                <Button Content="Actief"
+                        Command="{Binding FilterStatusCommand}"
+                        CommandParameter="Active"
+                        Background="#2e7d32"
+                        Foreground="White" />
 
-                    <!-- Lening 1 - Op tijd -->
-                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                <Button Content="Te laat"
+                        Command="{Binding FilterStatusCommand}"
+                        CommandParameter="Overdue"
+                        Background="#d32f2f"
+                        Foreground="White" />
 
-                            <Border Grid.Column="0"
-                                    Width="60" Height="60"
-                                    BorderBrush="#cccccc"
-                                    BorderThickness="1"
-                                    Background="#eeeeee">
-                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           FontSize="20" />
+                <Button Content="Ingeleverd"
+                        Command="{Binding FilterStatusCommand}"
+                        CommandParameter="Returned"
+                        Background="#0277bd"
+                        Foreground="White" />
+
+                <Button Content="Reset"
+                        Command="{Binding ResetCommand}"
+                        Background="#777777"
+                        Foreground="White" />
+            </StackPanel>
+            <!-- Leningen -->
+            <ScrollViewer>
+                <ItemsControl x:Name="LoanList" ItemsSource="{Binding FilteredLoans}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="loan:LoanViewModel">
+                            <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="10">
+                                <Grid ColumnDefinitions="80,*,100,Auto">
+                                    <Image Source="{Binding Image}" Width="70" Height="70" Grid.Column="0" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="{Binding ProductName}" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock FontSize="12" Foreground="#555">
+                                            <Run Text="Borrower:" />
+                                            <Run Text="{Binding BorrowerNumber}" />
+                                        </TextBlock>
+                                        <TextBlock FontSize="12" Foreground="#555">
+                                            <Run Text="Loan date:" />
+                                            <Run Text="{Binding LoanDate}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ReturnDate}" Grid.Column="2"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               FontSize="12" Foreground="#555" />
+                                    <Border Background="{Binding StatusColor}" CornerRadius="4" Padding="5"
+                                            Grid.Column="3" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Status}" Foreground="White" />
+                                    </Border>
+                                </Grid>
                             </Border>
-
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                                <TextBlock Text="Uitgeleend op: 01-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                                <TextBlock Text="Terug voor: 20-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            </StackPanel>
-
-                            <Border Grid.Column="2"
-                                    Background="#e6f4ea"
-                                    CornerRadius="4"
-                                    Padding="10,4"
-                                    VerticalAlignment="Center">
-                                <TextBlock Text="Op tijd" Foreground="#2e7d32" FontSize="12" FontWeight="Bold" />
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <!-- Lening 2 - Bijna te laat -->
-                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0"
-                                    Width="60" Height="60"
-                                    BorderBrush="#cccccc"
-                                    BorderThickness="1"
-                                    Background="#eeeeee">
-                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           FontSize="20" />
-                            </Border>
-
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                                <TextBlock Text="Uitgeleend op: 05-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                                <TextBlock Text="Terug voor: 17-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            </StackPanel>
-
-                            <Border Grid.Column="2"
-                                    Background="#fff8e1"
-                                    CornerRadius="4"
-                                    Padding="10,4"
-                                    VerticalAlignment="Center">
-                                <TextBlock Text="Bijna te laat" Foreground="#f57f17" FontSize="12" FontWeight="Bold" />
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <!-- Lening 3 - Te laat -->
-                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0"
-                                    Width="60" Height="60"
-                                    BorderBrush="#cccccc"
-                                    BorderThickness="1"
-                                    Background="#eeeeee">
-                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           FontSize="20" />
-                            </Border>
-
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                                <TextBlock Text="Uitgeleend op: 20-02-2026" Foreground="#aaaaaa" FontSize="12" />
-                                <TextBlock Text="Terug voor: 05-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            </StackPanel>
-
-                            <Border Grid.Column="2"
-                                    Background="#ffebee"
-                                    CornerRadius="4"
-                                    Padding="10,4"
-                                    VerticalAlignment="Center">
-                                <TextBlock Text="Te laat" Foreground="#c62828" FontSize="12" FontWeight="Bold" />
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <!-- Lening 4 - Terugbrengen -->
-                    <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="15,10">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0"
-                                    Width="60" Height="60"
-                                    BorderBrush="#cccccc"
-                                    BorderThickness="1"
-                                    Background="#eeeeee">
-                                <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           FontSize="20" />
-                            </Border>
-
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="10,0,10,0">
-                                <TextBlock Text="Item Naam" FontWeight="Bold" FontSize="14" Foreground="#aaaaaa" />
-                                <TextBlock Text="Uitgeleend op: 10-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                                <TextBlock Text="Terug voor: 25-03-2026" Foreground="#aaaaaa" FontSize="12" />
-                            </StackPanel>
-
-                            <Button Grid.Column="2"
-                                    Content="Terugbrengen"
-                                    Background="#6a69ad"
-                                    Foreground="White"
-                                    BorderThickness="0"
-                                    CornerRadius="4"
-                                    Padding="10,4"
-                                    FontSize="12"
-                                    VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-
-                </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </ScrollViewer>
-
         </DockPanel>
+
         <ContentControl Grid.Row="2" Content="{Binding Footer}" />
 
 
