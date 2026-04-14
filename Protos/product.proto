@@ -1,30 +1,28 @@
 syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
+
 option csharp_namespace = "Protos.Product";
 
 package product;
 
 service Products {
   rpc Page (ProductPageRequest) returns (ProductPageResponse);
-
   rpc Get (ProductGetRequest) returns (ProductGetResponse);
-
   rpc Create (ProductCreateRequest) returns (ProductCreateResponse);
-
   rpc Modify (ProductModifyRequest) returns (ProductModifyResponse);
-
   rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
-
   rpc Image (ProductImageRequest) returns (stream ProductImageResponse);
 }
 
-// Meta object
+// Meta
 message MetaProduct {
   int32 id = 1;
   string name = 2;
-  string category = 3;
-  string description = 4;
-  int32 amount = 5;
+  string description = 3;
+  int32 category_id = 4;
+  int32 status = 5;
   string image = 6;
 }
 
@@ -49,10 +47,11 @@ message ProductGetResponse {
 
 // Create
 message ProductCreateRequest {
-  string name = 2;
-  string category = 3;
-  string description = 4;
-  google.protobuf.Int32Value amount = 5;
+  string name = 1;
+  string description = 2;
+  int32 category_id = 3;
+  optional int32 restricted_role_id = 4;
+  optional google.protobuf.Timestamp purchase_date = 5;
   bytes image = 6;
 }
 
@@ -63,11 +62,14 @@ message ProductCreateResponse {
 // Modify
 message ProductModifyRequest {
   int32 id = 1;
-    optional string name = 2;
-    optional string category = 3;
-    optional string description = 4;
-    optional google.protobuf.Int32Value amount = 5;
-    optional bytes image = 6;
+
+  optional string name = 2;
+  optional string description = 3;
+  optional int32 category_id = 4;
+  optional int32 restricted_role_id = 5;
+  optional int32 status = 6;
+  optional google.protobuf.Timestamp purchase_date = 7;
+  optional bytes image = 8;
 }
 
 message ProductModifyResponse {

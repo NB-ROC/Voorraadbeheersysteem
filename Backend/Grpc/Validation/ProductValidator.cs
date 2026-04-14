@@ -18,6 +18,7 @@ public class ProductValidator : Validator
     {
         if (request.Page < 1)
             Throw("Invalid page");
+
         if (request.PageSize is < 1 or > 100)
             Throw("Invalid page size");
     }
@@ -30,78 +31,85 @@ public class ProductValidator : Validator
     public string ValidateCreate(ProductCreateRequest request)
     {
         ValidateName(request.Name);
-        ValidateCategory(request.Category);
         ValidateDescription(request.Description);
-        ValidateAmount(request.Amount);
+        ValidateCategoryId(request.CategoryId);
+
         return ValidateImage(request.Image);
     }
 
-    /**
-     * This is async due to the needed database logic here.
-     */
     public async Task<(Product product, string extension)> ValidateModify(ProductModifyRequest request)
     {
         Product? product = await _productManager.Get(request.Id);
-        string extension = "";
-        if (product == null) Throw("Invalid Product");
+
+        if (product == null)
+            Throw("Invalid product");
 
         ValidateId(request.Id);
-        if (request.HasName) ValidateName(request.Name);
-        if (request.HasCategory) ValidateCategory(request.Category);
-        if (request.HasDescription) ValidateDescription(request.Description);
-        if (request.Amount != null) ValidateAmount(request.Amount);
-        if (request.HasImage) extension = ValidateImage(request.Image);
 
-        return (product!, extension);
+        string extension = "";
+
+        if (request.HasName)
+            ValidateName(request.Name);
+
+        if (request.HasDescription)
+            ValidateDescription(request.Description);
+
+        if (request.HasCategoryId)
+            ValidateCategoryId(request.CategoryId);
+
+        if (request.HasImage)
+            extension = ValidateImage(request.Image);
+
+        return (product, extension);
     }
 
     public async Task<string> ValidateDelete(ProductDeleteRequest request)
     {
         ValidateId(request.Id);
+
         Product? product = await _productManager.Get(request.Id);
-        if (product == null) Throw("Invalid product");
-        return product!.Image;
+
+        if (product == null)
+            Throw("Invalid product");
+
+        return product.Image;
     }
 
     private static void ValidateId(int id)
     {
-        if (id <= 0) Throw("Invalid id");
+        if (id <= 0)
+            Throw("Invalid id");
     }
 
-    private static void ValidateName(string? name)
+    private static void ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name) || name.Length > Product.NameLength)
             Throw("Invalid name");
     }
 
-    private static void ValidateCategory(string? category)
-    {
-        if (string.IsNullOrWhiteSpace(category) || category.Length > Product.CategoryLength)
-            Throw("Invalid category");
-    }
-
-    private static void ValidateDescription(string? description)
+    private static void ValidateDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description) || description.Length > Product.DescriptionLength)
             Throw("Invalid description");
     }
 
-    private static void ValidateAmount(int? amount)
+    private static void ValidateCategoryId(int categoryId)
     {
-        if (amount is null or <= 0) Throw("Invalid amount");
+        if (categoryId <= 0)
+            Throw("Invalid category");
     }
 
-    private static string ValidateImage(ByteString? image)
+    private static string ValidateImage(ByteString image)
     {
         string? extension = GetImageFormat(image);
 
         if (extension == null)
             Throw("Invalid image");
 
-        return extension!;
+        return extension;
     }
 
-    private static string? GetImageFormat(ByteString? image)
+    private static string? GetImageFormat(ByteString image)
     {
         if (image == null || image.Length < 4)
             return null;

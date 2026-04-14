@@ -14,12 +14,18 @@ public class User
     public byte[] Id { get; set; } = new byte[IdLength];
 
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;
+    [MaxLength(NameLength)] public string FirstName { get; set; } = null!;
+    [MaxLength(NameLength)] public string LastName { get; set; } = null!;
+    
+    public int RoleId { get; set; }
+    public Role Role { get; set; } = null!;
+    
+    public bool IsBlocked { get; set; }
+    
+    public DateTime CreatedAt { get; set; } 
+    public DateTime UpdatedAt { get; set; }
 
-    [MaxLength(NameLength)] public string Name { get; set; } = null!;
-
-    public uint Number { get; set; }
-
-    public bool Staff { get; set; }
+    public int Number { get; set; }
 
     public ICollection<Loan> Loans { get; set; } = new List<Loan>();
 }

@@ -15,9 +15,12 @@ public class UserModel
 
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;
 
-    [MaxLength(NameLength)] public string Name { get; set; } = null!;
+    [MaxLength(NameLength)] public string FirstName { get; set; } = null!;
+    [MaxLength(NameLength)] public string LastName { get; set; } = null!;
 
-    public uint Number { get; set; }
+    public int Number { get; set; }
+    
+    public int RoleId { get; set; }
 
-    public bool Staff { get; set; }
+    public bool IsBlocked { get; set; }
 }
