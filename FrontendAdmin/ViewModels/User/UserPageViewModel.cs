@@ -41,10 +41,11 @@ public class UserPageViewModel : PageViewModelBase
             Users.Add(new UserViewModel(Services, new UserModel
             {
                 Id = user.Id.ToByteArray(),
-                Name = user.Name,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 Number = user.Number,
-                Staff = user.Staff
+                IsBlocked = user.IsBlocked
             }));
     }
 }

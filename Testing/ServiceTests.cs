@@ -28,9 +28,10 @@ public class ServiceTests
         {
             Id = ByteString.CopyFrom(userId),
             Email = "1234567@student.roc-nijmegen.nl",
-            Name = "Regu Larjoe",
+            FirstName = "Regu",
+            LastName = "Larjoe",
             Number = 123456,
-            Staff = true
+            IsBlocked = true
         }).Success;
 
         List<MetaUser> size1 = Client.Users.Page(new UserPageRequest
@@ -47,7 +48,8 @@ public class ServiceTests
         bool modify = Client.Users.Modify(new UserModifyRequest
         {
             Id = ByteString.CopyFrom(userId),
-            Name = "Cheese Master"
+            FirstName = "Cheese",
+            LastName = "Master"
         }).Success;
 
         MetaUser modifiedUser = Client.Users.Get(new UserGetRequest
@@ -96,8 +98,7 @@ public class ServiceTests
         {
             Name = "Arduino Uno",
             Description = "Dit is een heel mooi ding met allerlei dingetjes",
-            Category = "Microcontrollers",
-            Amount = 12,
+            CategoryId = 1,
             Image = ByteString.CopyFrom(localImageBytes)
         };
 

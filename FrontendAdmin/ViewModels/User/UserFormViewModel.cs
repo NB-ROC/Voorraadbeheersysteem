@@ -18,12 +18,18 @@ public class UserFormViewModel : ViewModelBase
     public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
         base(services)
     {
+        if (existing == null)
+        {
+            Id = Enumerable.Range(0, 7)
+                .Select(_ => (byte)Random.Shared.Next(256))
+                .ToArray();
+        }
         Id = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
         this.WhenAnyValue(
-            x => x.Name,
+            x => x.FirstName,
+            x => x.LastName,
             x => x.Email,
-            x => x.Number,
-            x => x.Staff
+            x => x.Number
         ).Subscribe(_ => Validate());
 
         SaveCommand =
@@ -41,19 +47,23 @@ public class UserFormViewModel : ViewModelBase
                 success = (await Client.Users.ModifyAsync(new UserModifyRequest
                 {
                     Id = ByteString.CopyFrom(existing.Id),
-                    Name = Name,
+                    FirstName = FirstName,
+                    LastName = LastName,
                     Email = Email,
                     Number = Number,
-                    Staff = Staff
+                    RoleId = RoleId,
+                    IsBlocked = IsBlocked
                 })).Success;
             else
                 success = (await Client.Users.CreateAsync(new UserCreateRequest
                 {
                     Id = ByteString.CopyFrom(Id),
-                    Name = Name,
+                    FirstName = FirstName,
+                    LastName = LastName,
                     Email = Email,
                     Number = Number,
-                    Staff = Staff
+                    RoleId = RoleId,
+                    IsBlocked = IsBlocked
                 })).Success;
 
             if (success) Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
@@ -67,12 +77,29 @@ public class UserFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public string Name
+    public string FirstName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
+
+    public string LastName
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public int RoleId
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public bool IsBlocked
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     public string Email
     {
@@ -80,17 +107,12 @@ public class UserFormViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public uint Number
+    public int Number
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = 0;
-
-    public bool Staff
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = false;
+    
 
     public string Error
     {
@@ -108,13 +130,17 @@ public class UserFormViewModel : ViewModelBase
     {
         Error = Id is not { Length: UserModel.IdLength }
             ? "Ongeldig ID."
-            : string.IsNullOrWhiteSpace(Name) || Name.Length > UserModel.NameLength
-                ? "Naam is verplicht en mag niet te lang zijn."
-                : string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email)
-                    ? "Ongeldig e-mailadres."
-                    : GetNumberLength(Number) != (Staff ? UserModel.StaffNumberLength : UserModel.StudentNumberLength)
-                        ? "Ongeldig nummer."
-                        : string.Empty;
+            : string.IsNullOrWhiteSpace(FirstName)
+                ? "Voornaam is verplicht."
+                : string.IsNullOrWhiteSpace(LastName)
+                    ? "Achternaam is verplicht."
+                    : string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email)
+                        ? "Ongeldig e-mailadres."
+                        : RoleId <= 0
+                            ? "Rol is verplicht."
+                            : Number <= 0
+                                ? "Ongeldig nummer."
+                                : string.Empty;
     }
 
     private static bool IsValidEmail(string email)
@@ -142,10 +168,12 @@ public class UserFormViewModel : ViewModelBase
 
     private void LoadExistingProduct(UserViewModel existing)
     {
-        Name = existing.Name;
+        FirstName = existing.FirstName;
+        LastName = existing.LastName;
         Email = existing.Email;
         Number = existing.Number;
-        Staff = existing.Staff;
+        RoleId = existing.RoleId;
+        IsBlocked = existing.IsBlocked;
     }
 
     #endregion
