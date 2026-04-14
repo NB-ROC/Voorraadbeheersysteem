@@ -6,5 +6,55 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Login.LoginPageView"
              x:DataType="{x:Type login:LoginPageViewModel}">
-    Welcome to Avalonia!
+   
+ 
+    <Grid Background="#F3F4F6">
+
+        <!-- Card -->
+        <Border Width="360"
+                Background="White"
+                CornerRadius="20"
+                Padding="25"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+            <StackPanel Spacing="15">
+
+                <!-- Title -->
+                <TextBlock Text="Login"
+                           FontSize="26"
+                           HorizontalAlignment="Center"/>
+
+                <!-- Username -->
+                <Border CornerRadius="15"
+                        BorderBrush="Gray"
+                        BorderThickness="1">
+                    
+                    <TextBox BorderThickness="0"
+                             Padding="10"
+                             Watermark="Username"
+                             Text="{Binding Username}"/>
+                </Border>
+
+                <!-- Password -->
+                <Border CornerRadius="15"
+                        BorderBrush="Gray"
+                        BorderThickness="1">
+                    
+                    <TextBox BorderThickness="0"
+                             Padding="10"
+                             Watermark="Password"
+                             Text="{Binding Password}"/>
+                </Border>
+
+                <!-- Button -->
+                <Button Content="Aanmelden"
+                        Height="40"
+                        Command="{Binding LoginCommand}"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
 </UserControl>
