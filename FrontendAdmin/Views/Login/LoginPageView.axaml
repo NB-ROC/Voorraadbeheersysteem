@@ -6,55 +6,81 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Login.LoginPageView"
              x:DataType="{x:Type login:LoginPageViewModel}">
-   
- 
-    <Grid Background="#F3F4F6">
+    
+<Grid Background="#F3F4F6">
 
-        <!-- Card -->
-        <Border Width="360"
-                Background="White"
-                CornerRadius="20"
-                Padding="25"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+    <!-- Card -->
+    <Border Width="500"
+            Height="450"
+            Background="#D9D9D9"
+            CornerRadius="25"
+            Padding="40"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
 
-            <StackPanel Spacing="15">
+        <StackPanel>
 
-                <!-- Title -->
-                <TextBlock Text="Login"
-                           FontSize="26"
-                           HorizontalAlignment="Center"/>
+            <!-- Title (LEFT aligned like design) -->
+            <TextBlock Text="Login"
+                       FontSize="32"
+                       Margin="0,0,0,30"
+                       Foreground="#2E2E5E"/>
+
+            <!-- Form container -->
+            <StackPanel Spacing="25" Margin="0,40,0,0">
 
                 <!-- Username -->
-                <Border CornerRadius="15"
-                        BorderBrush="Gray"
-                        BorderThickness="1">
+                <Border CornerRadius="25"
+                        BorderBrush="#6C6CB3"
+                        BorderThickness="1"
+                        Height="45"
+                        Width="280"
+                        HorizontalAlignment="Center">
                     
-                    <TextBox BorderThickness="0"
+                    <TextBox Background="Transparent"
+                             BorderThickness="0"
                              Padding="10"
-                             Watermark="Username"
                              Text="{Binding Username}"/>
                 </Border>
 
                 <!-- Password -->
-                <Border CornerRadius="15"
-                        BorderBrush="Gray"
-                        BorderThickness="1">
+                <Border CornerRadius="25"
+                        BorderBrush="#6C6CB3"
+                        BorderThickness="1"
+                        Height="45"
+                        Width="280"
+                        HorizontalAlignment="Center">
                     
-                    <TextBox BorderThickness="0"
+                    <TextBox Background="Transparent"
+                             BorderThickness="0"
                              Padding="10"
-                             Watermark="Password"
                              Text="{Binding Password}"/>
                 </Border>
 
-                <!-- Button -->
-                <Button Content="Aanmelden"
-                        Height="40"
-                        Command="{Binding LoginCommand}"/>
+                <!-- Button + text row -->
+                <StackPanel Orientation="Horizontal"
+                            Margin="40,40,0,0"
+                            VerticalAlignment="Center"
+                            Spacing="20">
+
+                    <!-- Purple pill button -->
+                    <Button Width="120"
+                            Height="35"
+                            Background="#6C6CB3"
+                            CornerRadius="20"
+                            Command="{Binding LoginCommand}"/>
+
+                    <!-- Text next to button -->
+                    <TextBlock Text="Aanmelden"
+                               VerticalAlignment="Center"
+                               Foreground="#6B5E5E"/>
+                </StackPanel>
 
             </StackPanel>
 
-        </Border>
+        </StackPanel>
 
-    </Grid>
+    </Border>
+
+</Grid>
 </UserControl>
