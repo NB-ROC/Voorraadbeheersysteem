@@ -6,81 +6,89 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Login.LoginPageView"
              x:DataType="{x:Type login:LoginPageViewModel}">
-    
-<Grid Background="#F3F4F6">
+     <Grid Background="White">
 
-    <!-- Card -->
-    <Border Width="500"
-            Height="450"
-            Background="#D9D9D9"
-            CornerRadius="25"
-            Padding="40"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+        <Border Width="440"
+                Padding="40"
+                Background="White"
+                CornerRadius="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BoxShadow="0 8 30 #33000000">
 
-        <StackPanel>
+            <StackPanel Spacing="28">
 
-            <!-- Title (LEFT aligned like design) -->
-            <TextBlock Text="Login"
-                       FontSize="32"
-                       Margin="0,0,0,30"
-                       Foreground="#2E2E5E"/>
+                <!-- Title -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Login"
+                               FontSize="32"
+                               FontWeight="Bold"
+                               Foreground="#2A2A2A"/>
+                    <TextBlock Text="to get started."
+                               FontSize="18"
+                               Foreground="#7A7A7A"/>
+                </StackPanel>
 
-            <!-- Form container -->
-            <StackPanel Spacing="25" Margin="0,40,0,0">
-
-                <!-- Username -->
-                <Border CornerRadius="25"
-                        BorderBrush="#6C6CB3"
-                        BorderThickness="1"
-                        Height="45"
-                        Width="280"
-                        HorizontalAlignment="Center">
-                    
-                    <TextBox Background="Transparent"
-                             BorderThickness="0"
-                             Padding="10"
-                             Text="{Binding Username}"/>
-                </Border>
+                <!-- Email -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Email"
+                               Foreground="#2A2A2A"
+                               FontSize="15"/>
+                    <TextBox Text="{Binding Email}"
+                             Watermark="Enter your email"
+                             BorderBrush="#5A1E81"
+                             BorderThickness="2"
+                             CornerRadius="10"
+                             Padding="12"
+                             FontSize="15"/>
+                </StackPanel>
 
                 <!-- Password -->
-                <Border CornerRadius="25"
-                        BorderBrush="#6C6CB3"
-                        BorderThickness="1"
-                        Height="45"
-                        Width="280"
-                        HorizontalAlignment="Center">
-                    
-                    <TextBox Background="Transparent"
-                             BorderThickness="0"
-                             Padding="10"
-                             Text="{Binding Password}"/>
-                </Border>
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Password"
+                               Foreground="#2A2A2A"
+                               FontSize="15"/>
+                    <TextBox Text="{Binding Password}"
+                             PasswordChar="●"
+                             Watermark="Enter your password"
+                             BorderBrush="#5A1E81"
+                             BorderThickness="2"
+                             CornerRadius="10"
+                             Padding="12"
+                             FontSize="15"/>
+                </StackPanel>
 
-                <!-- Button + text row -->
+                <!-- Forgot password -->
+                <TextBlock Text="Forgot Password?"
+                           Foreground="#8E3EC4"
+                           FontSize="14"
+                           HorizontalAlignment="Right"
+                           Cursor="Hand"/>
+
+                <!-- Continue Button -->
+                <Button Content="Continue"
+                        Command="{Binding LoginCommand}"
+                        Background="#0077C8"
+                        Foreground="White"
+                        CornerRadius="12"
+                        Padding="16"
+                        FontSize="18"
+                        HorizontalAlignment="Stretch"/>
+
+                <!-- Register link -->
                 <StackPanel Orientation="Horizontal"
-                            Margin="40,40,0,0"
-                            VerticalAlignment="Center"
-                            Spacing="20">
-
-                    <!-- Purple pill button -->
-                    <Button Width="120"
-                            Height="35"
-                            Background="#6C6CB3"
-                            CornerRadius="20"
-                            Command="{Binding LoginCommand}"/>
-
-                    <!-- Text next to button -->
-                    <TextBlock Text="Aanmelden"
-                               VerticalAlignment="Center"
-                               Foreground="#6B5E5E"/>
+                            HorizontalAlignment="Center"
+                            Spacing="6">
+                    <TextBlock Text="New User?"
+                               Foreground="#7A7A7A"/>
+                    <TextBlock Text="Register"
+                               Foreground="#5A1E81"
+                               FontWeight="Bold"
+                               Cursor="Hand"/>
                 </StackPanel>
 
             </StackPanel>
+        </Border>
 
-        </StackPanel>
-
-    </Border>
-
-</Grid>
+    </Grid>
 </UserControl>
