@@ -1,9 +1,8 @@
 using Frontend.ViewModels;
-using ReactiveUI;
 
 namespace Frontend.Services;
 
-public class NavigationService : ReactiveObject
+public class NavigationService
 {
     private readonly MainWindowViewModel _mainWindow;
 

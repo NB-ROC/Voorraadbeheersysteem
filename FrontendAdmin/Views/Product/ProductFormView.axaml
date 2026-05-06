@@ -6,9 +6,9 @@
              x:Class="FrontendAdmin.Views.Product.ProductFormView">
 
     <Grid ColumnDefinitions="*,*" RowDefinitions="*">
-        
+
         <StackPanel Grid.Column="0" Margin="20">
-            
+
             <StackPanel>
                 <TextBlock Foreground="Black" Text="Naam:" />
                 <TextBox MaxLength="{x:Static models:ProductModel.NameLength}"
@@ -37,7 +37,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="20" Spacing="10">
-            
+
             <Button Content="Selecteer afbeelding"
                     Command="{Binding GetImageCommand}"
                     Margin="0 0 0 10" />

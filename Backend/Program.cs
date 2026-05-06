@@ -2,6 +2,7 @@ using Backend.Database;
 using Backend.Database.Managers;
 using Backend.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 #region DB
 
@@ -23,11 +24,30 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ProductManager>();
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                // TODO: Make this an environment variable
+                new SymmetricSecurityKey("super-secret-key-temp"u8.ToArray())
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 #endregion
 
 #region GRPC
 
 WebApplication app = builder.Build();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
 

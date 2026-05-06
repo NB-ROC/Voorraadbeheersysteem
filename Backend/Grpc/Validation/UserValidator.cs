@@ -44,8 +44,14 @@ public class UserValidator : Validator
 
     private static void ValidateEmail(string email)
     {
-        try { _ = new MailAddress(email); }
-        catch { Throw("Invalid email"); }
+        try
+        {
+            _ = new MailAddress(email);
+        }
+        catch
+        {
+            Throw("Invalid email");
+        }
     }
 
     private static void ValidateName(string name)

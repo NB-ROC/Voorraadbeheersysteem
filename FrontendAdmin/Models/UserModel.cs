@@ -19,7 +19,7 @@ public class UserModel
     [MaxLength(NameLength)] public string LastName { get; set; } = null!;
 
     public int Number { get; set; }
-    
+
     public int RoleId { get; set; }
 
     public bool IsBlocked { get; set; }

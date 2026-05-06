@@ -44,7 +44,7 @@ public class UserViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-    
+
     public string LastName
     {
         get => _model.LastName;
@@ -77,6 +77,7 @@ public class UserViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
+
     public int RoleId
     {
         get => _model.RoleId;
@@ -98,7 +99,6 @@ public class UserViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-
 
 
     private async Task DeleteAsync()

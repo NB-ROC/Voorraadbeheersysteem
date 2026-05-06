@@ -53,7 +53,6 @@ public class UserService : Users.UsersBase
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
-            RoleId = request.RoleId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -71,7 +70,6 @@ public class UserService : Users.UsersBase
         if (request.HasFirstName) user.FirstName = request.FirstName;
         if (request.HasLastName) user.LastName = request.LastName;
         if (request.HasEmail) user.Email = request.Email;
-        if (request.HasRoleId) user.RoleId = request.RoleId;
 
         user.UpdatedAt = DateTime.UtcNow;
 
@@ -97,7 +95,6 @@ public class UserService : Users.UsersBase
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            RoleId = user.RoleId
         };
     }
 }

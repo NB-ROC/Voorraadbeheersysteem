@@ -21,7 +21,7 @@
                          Watermark="Zoek op product of datum"
                          Text="{Binding ProductQuery, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0,0,10,0" />
-    
+
                 <TextBox Width="250"
                          Watermark="Zoek op gebruiker"
                          Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />

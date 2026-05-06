@@ -30,7 +30,7 @@ public class ProductFormViewModel : ViewModelBase
             x => x.Description,
             x => x.ImageBytes
         ).Subscribe(_ => Validate());
-        
+
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
         SaveCommand =
             ReactiveCommand.CreateFromTask(SaveProductAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
@@ -95,7 +95,7 @@ public class ProductFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
-    
+
     private string FilterNumber(string? input)
     {
         if (string.IsNullOrEmpty(input))
@@ -138,7 +138,7 @@ public class ProductFormViewModel : ViewModelBase
         Name = existing.Name;
         CategoryId = existing.CategoryId;
         Description = existing.Description;
-        
+
         _ = LoadExistingImageAsync(existing.Image);
     }
 

@@ -1,5 +1,6 @@
 using Backend.Database.Managers;
 using Backend.Entities;
+using Backend.Entities.Unused;
 using Backend.Grpc.Helpers;
 using Backend.Grpc.Validation;
 using Google.Protobuf;
@@ -63,12 +64,8 @@ public class ProductService : Products.ProductsBase
             Name = request.Name,
             Description = request.Description,
             CategoryId = request.CategoryId,
-            Status = ProductStatus.Available,
-            RestrictedRoleId = request.HasRestrictedRoleId ? request.RestrictedRoleId : null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            PurchaseDate = request.PurchaseDate != null ? request.PurchaseDate.ToDateTime() : null
-            
         };
 
         return new ProductCreateResponse
@@ -85,26 +82,15 @@ public class ProductService : Products.ProductsBase
         if (request.HasDescription) product.Description = request.Description;
         if (request.HasCategoryId) product.CategoryId = request.CategoryId;
 
-        if (request.HasRestrictedRoleId)
-            product.RestrictedRoleId = request.RestrictedRoleId;
-
-        if (request.HasStatus)
-            product.Status = (ProductStatus)request.Status;
-
-        if (request.PurchaseDate != null)
-            product.PurchaseDate = request.PurchaseDate.ToDateTime();
-
         product.UpdatedAt = DateTime.UtcNow;
 
         if (request.HasImage)
-        {
             product.Image = await StorageHelper.ModifyFile(
                 Path.Combine(ImagePath, product.Image),
                 request.Image,
                 extension,
                 ImagePath
             );
-        }
 
         return new ProductModifyResponse
         {
@@ -135,7 +121,7 @@ public class ProductService : Products.ProductsBase
             Extension = Path.GetExtension(request.Name).TrimStart('.')
         });
     }
-    
+
     private static MetaProduct MapMeta(Product product)
     {
         return new MetaProduct
@@ -144,7 +130,6 @@ public class ProductService : Products.ProductsBase
             Name = product.Name,
             Description = product.Description,
             CategoryId = product.CategoryId,
-            Status = (int)product.Status,
             Image = product.Image
         };
     }

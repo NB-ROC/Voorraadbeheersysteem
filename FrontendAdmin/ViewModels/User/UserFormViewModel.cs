@@ -19,11 +19,9 @@ public class UserFormViewModel : ViewModelBase
         base(services)
     {
         if (existing == null)
-        {
             Id = Enumerable.Range(0, 7)
                 .Select(_ => (byte)Random.Shared.Next(256))
                 .ToArray();
-        }
         Id = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
         this.WhenAnyValue(
             x => x.FirstName,
@@ -77,6 +75,7 @@ public class UserFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+
     public string FirstName
     {
         get;
@@ -112,7 +111,7 @@ public class UserFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = 0;
-    
+
 
     public string Error
     {

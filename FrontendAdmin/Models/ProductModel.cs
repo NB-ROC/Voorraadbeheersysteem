@@ -20,5 +20,4 @@ public class ProductModel
     [MaxLength(ImageLength)] public string Image { get; set; } = null!;
 
     public int Status { get; set; }
-
 }

@@ -1,4 +1,5 @@
 using Backend.Entities;
+using Backend.Entities.Relations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -10,16 +11,14 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Admin> Admins => Set<Admin>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<Loan> Loans => Set<Loan>();
-    public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
     public DbSet<Category> Categories => Set<Category>();
-    public DbSet<DefectReport> DefectReport => Set<DefectReport>();
-    public DbSet<Penalty> Penalty => Set<Penalty>();
-    public DbSet<ProductHistory> ProductHistory => Set<ProductHistory>();
+    public DbSet<Loan> Loans => Set<Loan>();
+    public DbSet<Product> Products => Set<Product>();
     public DbSet<Role> Role => Set<Role>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
+    public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<ProductRole> ProductRoles => Set<ProductRole>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,66 +33,85 @@ public class AppDbContext : DbContext
         string connectionString =
             $"server={server};port={port};database={database};user={username};password={password}";
 
-        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        optionsBuilder
+            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 
-   protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    modelBuilder.Entity<LoanProduct>()
-        .HasKey(lp => new { lp.ProductId, lp.LoanId });
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // User key [BINARY(7)] due to card id
+        modelBuilder.Entity<User>()
+            .HasKey(u => new { u.Id });
 
-    modelBuilder.Entity<User>()
-        .HasOne(u => u.Role)
-        .WithMany()
-        .HasForeignKey(u => u.RoleId)
-        .OnDelete(DeleteBehavior.Restrict);
+        // Relation Composite Keys
+        modelBuilder.Entity<LoanProduct>()
+            .HasKey(lp => new { lp.LoanId, lp.ProductId });
+        modelBuilder.Entity<UserRole>()
+            .HasKey(ur => new { ur.UserId, ur.RoleId });
+        modelBuilder.Entity<ProductRole>()
+            .HasKey(pr => new { pr.ProductId, pr.RoleId });
 
-    modelBuilder.Entity<Product>()
-        .HasOne(p => p.RestrictedRole)
-        .WithMany()
-        .HasForeignKey(p => p.RestrictedRoleId)
-        .OnDelete(DeleteBehavior.SetNull);
-    
-    modelBuilder.Entity<Loan>()
-        .HasOne(l => l.User)
-        .WithMany(u => u.Loans)
-        .HasForeignKey(l => l.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<Loan>()
-        .HasOne(l => l.Issuer)
-        .WithMany()
-        .HasForeignKey(l => l.IssuedBy)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<DefectReport>()
-        .HasOne(d => d.Reporter)
-        .WithMany()
-        .HasForeignKey(d => d.ReportedBy)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<Penalty>()
-        .HasOne(p => p.User)
-        .WithMany()
-        .HasForeignKey(p => p.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<Penalty>()
-        .HasOne(p => p.Loan)
-        .WithMany()
-        .HasForeignKey(p => p.LoanId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<ProductHistory>()
-        .HasOne(ph => ph.Product)
-        .WithMany()
-        .HasForeignKey(ph => ph.ProductId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<ProductHistory>()
-        .HasOne(ph => ph.Performer)
-        .WithMany()
-        .HasForeignKey(ph => ph.PerformedBy)
-        .OnDelete(DeleteBehavior.Restrict);
-}
+        // Loan → User (borrower) and User (lender)
+        // Two FKs to the same table require explicit naming to avoid ambiguity
+        modelBuilder.Entity<Loan>()
+            .HasOne(l => l.User)
+            .WithMany()
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Loan>()
+            .HasOne(l => l.Lender)
+            .WithMany()
+            .HasForeignKey(l => l.LenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Product → Category
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Category)
+            .WithMany()
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // LoanProduct → Loan
+        modelBuilder.Entity<LoanProduct>()
+            .HasOne(lp => lp.Loan)
+            .WithMany()
+            .HasForeignKey(lp => lp.LoanId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // LoanProduct → Product
+        modelBuilder.Entity<LoanProduct>()
+            .HasOne(lp => lp.Product)
+            .WithMany()
+            .HasForeignKey(lp => lp.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // UserRole → User
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany()
+            .HasForeignKey(ur => ur.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // UserRole → Role
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.Role)
+            .WithMany()
+            .HasForeignKey(ur => ur.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ProductRole → Product
+        modelBuilder.Entity<ProductRole>()
+            .HasOne(pr => pr.Product)
+            .WithMany()
+            .HasForeignKey(pr => pr.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ProductRole → Role
+        modelBuilder.Entity<ProductRole>()
+            .HasOne(pr => pr.Role)
+            .WithMany()
+            .HasForeignKey(pr => pr.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }
