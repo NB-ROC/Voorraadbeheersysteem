@@ -1,5 +1,6 @@
 using Backend.Entities;
 using Backend.Entities.Relations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -39,9 +40,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // User key [BINARY(7)] due to card id
-        modelBuilder.Entity<User>()
-            .HasKey(u => new { u.Id });
 
         // Relation Composite Keys
         modelBuilder.Entity<LoanProduct>()
@@ -113,5 +111,52 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(pr => pr.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        // Default roles
+        modelBuilder.Entity<Role>()
+            .HasData(
+                new Role { Id = 1, Name = "Admin", },
+                new Role { Id = 2, Name = "Lender", },
+                new Role { Id = 3, Name = "Student", },
+                new Role { Id = 4, Name = "Personnel", },
+                new Role { Id = 5, Name = "Guest", }
+                );
+    }
+    
+    public static async Task SeedAsync(IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        byte[] cardId = [0,1,2,3,4,5,6,7];
+
+        if (!context.Users.Any())
+        {
+            var hasher = new PasswordHasher<User>();
+
+            var user = new User
+            {
+                CardId = cardId,
+                Number = 123456,
+                IsBlocked =  false,
+                Email = "testmail@roc-nijmegen.nl",
+                PasswordHash = hasher.HashPassword(null!, "Placeholder1"),
+                FirstName = "Admin",
+                LastName = "Istrator",
+                CreatedAt = DateTime.Now,
+                
+            };
+
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.UserRoles.Any())
+        {
+            context.UserRoles.Add(new UserRole
+            {
+                RoleId = 1,
+                UserId = 1
+            });
+        }
     }
 }

@@ -21,7 +21,7 @@ public class UserManager
             .ToListAsync();
     }
 
-    public async Task<User?> Get(byte[] id)
+    public async Task<User?> Get(int id)
     {
         return await _context.Users.FindAsync(id);
     }
@@ -56,7 +56,7 @@ public class UserManager
         return true;
     }
 
-    public async Task<bool> Delete(byte[] id)
+    public async Task<bool> Delete(int id)
     {
         try
         {

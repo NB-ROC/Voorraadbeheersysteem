@@ -32,14 +32,14 @@ public class UserValidator : Validator
 
     public async Task<User> ValidateModify(UserModifyRequest request)
     {
-        User? user = await _manager.Get(request.Id.ToByteArray());
+        User? user = await _manager.Get(request.Id);
         if (user == null) Throw("Invalid user");
 
         if (request.HasFirstName) ValidateName(request.FirstName);
         if (request.HasLastName) ValidateName(request.LastName);
         if (request.HasEmail) ValidateEmail(request.Email);
 
-        return user;
+        return user!;
     }
 
     private static void ValidateEmail(string email)

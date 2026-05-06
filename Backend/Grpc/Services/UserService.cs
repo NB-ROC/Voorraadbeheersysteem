@@ -32,7 +32,7 @@ public class UserService : Users.UsersBase
 
     public override async Task<UserGetResponse> Get(UserGetRequest request, ServerCallContext context)
     {
-        User? user = await _manager.Get(request.Id.ToByteArray());
+        User? user = await _manager.Get(request.Id);
 
         if (user == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Invalid user"));
@@ -49,7 +49,7 @@ public class UserService : Users.UsersBase
 
         User user = new()
         {
-            Id = request.Id.ToByteArray(),
+            Id = request.Id,
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
@@ -83,7 +83,7 @@ public class UserService : Users.UsersBase
     {
         return new UserDeleteResponse
         {
-            Success = await _manager.Delete(request.Id.ToByteArray())
+            Success = await _manager.Delete(request.Id)
         };
     }
 
@@ -91,7 +91,8 @@ public class UserService : Users.UsersBase
     {
         return new MetaUser
         {
-            Id = ByteString.CopyFrom(user.Id),
+            Id = user.Id,
+            CardId = ByteString.CopyFrom(user.CardId),
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,

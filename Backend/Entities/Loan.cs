@@ -4,7 +4,7 @@ public class Loan
 {
     public int Id { get; set; }
 
-    public byte[] UserId { get; set; } = null!;
+    public int UserId { get; set; }
     public User User { get; set; } = null!;
 
     public byte[] LenderId { get; set; } = null!;

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backend.Entities.Relations;
 
 namespace Backend.Entities;
 
@@ -11,7 +12,9 @@ public class User
     public const int NameLength = 32;
     private const int PasswordHashLength = 84;
 
-    public byte[] Id { get; set; } = new byte[IdLength];
+    public int Id { get; set; }
+    
+    public byte[] CardId { get; set; } = new byte[IdLength];
 
     public int Number { get; set; }
 
@@ -25,7 +28,8 @@ public class User
 
     [MaxLength(PasswordHashLength)] public string? PasswordHash { get; set; } = null;
 
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

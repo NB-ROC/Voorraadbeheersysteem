@@ -14,13 +14,14 @@ service Users {
 
 // Meta
 message MetaUser {
-  bytes id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string email = 4;
-  int32 role_id = 5;
-  int32 number = 6;
-  bool is_blocked = 7;
+  int32 id = 1;
+  bytes card_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string email = 5;
+  int32 role_id = 6;
+  int32 number = 7;
+  bool is_blocked = 8;
 }
 
 // Page
@@ -35,7 +36,7 @@ message UserPageResponse {
 
 // Get
 message UserGetRequest {
-  bytes id = 1;
+  int32 id = 1;
 }
 
 message UserGetResponse {
@@ -44,13 +45,14 @@ message UserGetResponse {
 
 // Create
 message UserCreateRequest {
-  bytes id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string email = 4;
-  int32 role_id = 5;
-  int32 number = 6;
-  bool is_blocked = 7;
+  int32 id = 1;
+  bytes card_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string email = 5;
+  int32 role_id = 6;
+  int32 number = 7;
+  bool is_blocked = 8;
 }
 
 message UserCreateResponse {
@@ -59,14 +61,15 @@ message UserCreateResponse {
 
 // Modify
 message UserModifyRequest {
-  bytes id = 1;
+  int32 id = 1;
 
-  optional string first_name = 2;
-  optional string last_name = 3;
-  optional string email = 4;
-  optional int32 role_id = 5;
-  int32 number = 6;
-  bool is_blocked = 7;
+  optional bytes card_id = 2;
+  optional string first_name = 3;
+  optional string last_name = 4;
+  optional string email = 5;
+  optional int32 role_id = 6;
+  int32 number = 7;
+  bool is_blocked = 8;
 }
 
 message UserModifyResponse {
@@ -75,7 +78,7 @@ message UserModifyResponse {
 
 // Delete
 message UserDeleteRequest {
-  bytes id = 1;
+  int32 id = 1;
 }
 
 message UserDeleteResponse {
