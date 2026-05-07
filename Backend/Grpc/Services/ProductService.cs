@@ -1,10 +1,10 @@
 using Backend.Database.Managers;
 using Backend.Entities;
-using Backend.Entities.Unused;
 using Backend.Grpc.Helpers;
 using Backend.Grpc.Validation;
 using Google.Protobuf;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Protos.Product;
 
 namespace Backend.Grpc.Services;
@@ -22,6 +22,7 @@ public class ProductService : Products.ProductsBase
         _validator = new ProductValidator(manager);
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductPageResponse> Page(ProductPageRequest request, ServerCallContext context)
     {
         _validator.ValidatePage(request);
@@ -34,6 +35,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductGetResponse> Get(ProductGetRequest request, ServerCallContext context)
     {
         _validator.ValidateGet(request);
@@ -49,6 +51,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductCreateResponse> Create(ProductCreateRequest request, ServerCallContext context)
     {
         string extension = _validator.ValidateCreate(request);
@@ -65,7 +68,7 @@ public class ProductService : Products.ProductsBase
             Description = request.Description,
             CategoryId = request.CategoryId,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         return new ProductCreateResponse
@@ -74,6 +77,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductModifyResponse> Modify(ProductModifyRequest request, ServerCallContext context)
     {
         (Product product, string extension) = await _validator.ValidateModify(request);
@@ -98,6 +102,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductDeleteResponse> Delete(ProductDeleteRequest request, ServerCallContext context)
     {
         string image = await _validator.ValidateDelete(request);
@@ -110,6 +115,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task Image(ProductImageRequest request,
         IServerStreamWriter<ProductImageResponse> responseStream, ServerCallContext context)
     {
@@ -129,7 +135,7 @@ public class ProductService : Products.ProductsBase
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            CategoryId = product.CategoryId,
+            Category = product.Category.Name,
             Image = product.Image
         };
     }

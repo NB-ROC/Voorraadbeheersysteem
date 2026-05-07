@@ -6,7 +6,28 @@ public class Role
 {
     public const int NameLength = 32;
 
-    public int Id { get; set; }
+    public RoleType Id { get; set; }
 
     [MaxLength(NameLength)] public string Name { get; set; } = null!;
+
+    public Role()
+    {
+        
+    }
+
+    public Role(RoleType role)
+    {
+        Id = role;
+        Name = Enum.GetName(role)!;
+    }
+}
+
+public enum RoleType
+{
+    Admin,
+    Manager,
+    Lender,
+    Student,
+    Personnel,
+    Guest
 }

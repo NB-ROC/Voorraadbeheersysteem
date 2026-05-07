@@ -26,7 +26,7 @@ public class UserValidator : Validator
         ValidateName(request.LastName);
         ValidateEmail(request.Email);
 
-        if (request.RoleId <= 0)
+        if (request.RoleId < 0)
             Throw("Invalid role");
     }
 

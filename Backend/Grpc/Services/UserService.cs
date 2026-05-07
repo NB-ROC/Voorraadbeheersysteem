@@ -3,6 +3,7 @@ using Backend.Entities;
 using Backend.Grpc.Validation;
 using Google.Protobuf;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Protos.User;
 
 namespace Backend.Grpc.Services;
@@ -18,6 +19,7 @@ public class UserService : Users.UsersBase
         _validator = new UserValidator(manager);
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserPageResponse> Page(UserPageRequest request, ServerCallContext context)
     {
         _validator.ValidatePage(request);
@@ -30,6 +32,7 @@ public class UserService : Users.UsersBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserGetResponse> Get(UserGetRequest request, ServerCallContext context)
     {
         User? user = await _manager.Get(request.Id);
@@ -43,13 +46,14 @@ public class UserService : Users.UsersBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserCreateResponse> Create(UserCreateRequest request, ServerCallContext context)
     {
         _validator.ValidateCreate(request);
 
         User user = new()
         {
-            Id = request.Id,
+            CardId = request.CardId.ToByteArray(),
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
@@ -63,10 +67,12 @@ public class UserService : Users.UsersBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserModifyResponse> Modify(UserModifyRequest request, ServerCallContext context)
     {
         User user = await _validator.ValidateModify(request);
 
+        if (request.HasCardId) user.CardId = request.CardId.ToByteArray();
         if (request.HasFirstName) user.FirstName = request.FirstName;
         if (request.HasLastName) user.LastName = request.LastName;
         if (request.HasEmail) user.Email = request.Email;
@@ -79,6 +85,7 @@ public class UserService : Users.UsersBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
     {
         return new UserDeleteResponse
@@ -95,7 +102,7 @@ public class UserService : Users.UsersBase
             CardId = ByteString.CopyFrom(user.CardId),
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Email = user.Email,
+            Email = user.Email
         };
     }
 }

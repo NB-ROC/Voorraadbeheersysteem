@@ -16,7 +16,7 @@ message AuthLoginRequest {
 }
 
 message AuthLoginResponse {
-  string token = 1;
+  optional string token = 1;
 }
 
 // Logout
@@ -25,5 +25,5 @@ message AuthLogoutRequest {
 }
 
 message AuthLogoutResponse {
-  
+  bool success = 1;
 }

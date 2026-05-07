@@ -7,7 +7,7 @@ public class Loan
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    public byte[] LenderId { get; set; } = null!;
+    public int LenderId { get; set; }
     public User Lender { get; set; } = null!;
 
     public DateTime LoanedAt { get; set; } = DateTime.UtcNow;

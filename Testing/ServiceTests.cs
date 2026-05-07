@@ -1,5 +1,6 @@
 using Google.Protobuf;
 using Grpc.Core;
+using Protos.Auth;
 using Protos.Product;
 using Protos.User;
 using Testing.Grpc;
@@ -8,76 +9,82 @@ namespace Testing;
 
 public class ServiceTests
 {
+    private string Token;
+    
     [SetUp]
     public void Setup()
     {
+        Token = Client.Auth.Login(new AuthLoginRequest
+        {
+            Email = "testmail@roc-nijmegen.nl",
+            Password = "Placeholder1"
+        }).Token;
     }
 
     [Test]
     public void UserTest()
     {
-        byte[] userId = [12, 12, 12, 12, 12, 12, 12];
+        byte[] cardId = [12, 12, 12, 12, 12, 12, 12];
 
-        List<MetaUser> empty = Client.Users.Page(new UserPageRequest
+        List<MetaUser> sizeOne = Client.Users.Page(new UserPageRequest
         {
             Page = 1,
             PageSize = 10
-        }).Users.ToList();
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Users.ToList();
 
         bool create = Client.Users.Create(new UserCreateRequest
         {
-            Id = ByteString.CopyFrom(userId),
+            CardId = ByteString.CopyFrom(cardId),
             Email = "1234567@student.roc-nijmegen.nl",
             FirstName = "Regu",
             LastName = "Larjoe",
             Number = 123456,
             IsBlocked = true
-        }).Success;
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
 
-        List<MetaUser> size1 = Client.Users.Page(new UserPageRequest
+        List<MetaUser> sizeTwo = Client.Users.Page(new UserPageRequest
         {
             Page = 1,
             PageSize = 10
-        }).Users.ToList();
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Users.ToList();
 
         MetaUser createdUser = Client.Users.Get(new UserGetRequest
         {
-            Id = ByteString.CopyFrom(userId)
-        }).User;
+            Id = 2
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).User;
 
         bool modify = Client.Users.Modify(new UserModifyRequest
         {
-            Id = ByteString.CopyFrom(userId),
+            Id = 2,
             FirstName = "Cheese",
             LastName = "Master"
-        }).Success;
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
 
         MetaUser modifiedUser = Client.Users.Get(new UserGetRequest
         {
-            Id = ByteString.CopyFrom(userId)
-        }).User;
+            Id = 2
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).User;
 
         bool delete = Client.Users.Delete(new UserDeleteRequest
         {
-            Id = ByteString.CopyFrom(userId)
-        }).Success;
+            Id = 2
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
 
-        List<MetaUser> emptyAfterDelete = Client.Users.Page(new UserPageRequest
-            {
-                Page = 1,
-                PageSize = 10
-            })
-            .Users.ToList();
+        List<MetaUser> sizeTwoAfterDelete = Client.Users.Page(new UserPageRequest
+        {
+            Page = 1,
+            PageSize = 10
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Users.ToList();
 
 
-        Assert.IsEmpty(empty);
+        Assert.IsNotEmpty(sizeOne);
         Assert.IsTrue(create);
-        Assert.IsNotEmpty(size1);
-        Assert.AreEqual(createdUser.Id.ToByteArray(), userId);
+        Assert.AreEqual(sizeTwo.Count, 2);
+        Assert.AreEqual(createdUser.Id, 2);
         Assert.IsTrue(modify);
         Assert.AreNotEqual(createdUser, modifiedUser);
         Assert.IsTrue(delete);
-        Assert.IsEmpty(emptyAfterDelete);
+        Assert.IsNotEmpty(sizeTwoAfterDelete);
 
         Console.WriteLine(createdUser);
         Console.WriteLine(modifiedUser);
@@ -90,7 +97,7 @@ public class ServiceTests
         {
             Page = 1,
             PageSize = 10
-        }).Products.ToList();
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Products.ToList();
 
         byte[] localImageBytes =
             await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Assets/borger.jpg"));
@@ -102,18 +109,18 @@ public class ServiceTests
             Image = ByteString.CopyFrom(localImageBytes)
         };
 
-        bool create = Client.Products.Create(createRequest).Success;
+        bool create = Client.Products.Create(createRequest, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
 
         List<MetaProduct> size1 = Client.Products.Page(new ProductPageRequest
         {
             Page = 1,
             PageSize = 10
-        }).Products.ToList();
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Products.ToList();
 
         MetaProduct createdProduct = Client.Products.Get(new ProductGetRequest
         {
             Id = size1[0].Id
-        }).Product;
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Product;
 
         ProductModifyRequest modifyRequest = new()
         {
@@ -121,19 +128,19 @@ public class ServiceTests
             Name = "Arduino Dos"
         };
 
-        bool modify = Client.Products.Modify(modifyRequest).Success;
+        bool modify = Client.Products.Modify(modifyRequest, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
 
         MetaProduct modifiedProduct = Client.Products.Get(new ProductGetRequest
         {
             Id = createdProduct.Id
-        }).Product;
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Product;
 
 
         // --- image call
         using AsyncServerStreamingCall<ProductImageResponse>? call = Client.Products.Image(new ProductImageRequest
         {
             Name = modifiedProduct.Image
-        });
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]);
 
         using MemoryStream imageStream = new();
 
@@ -157,7 +164,7 @@ public class ServiceTests
         {
             Page = 1,
             PageSize = 10
-        }).Products.ToList();
+        }, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Products.ToList();
 
         Assert.IsEmpty(empty);
         Assert.IsTrue(create);

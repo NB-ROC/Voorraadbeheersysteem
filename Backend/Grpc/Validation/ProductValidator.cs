@@ -60,7 +60,7 @@ public class ProductValidator : Validator
         if (request.HasImage)
             extension = ValidateImage(request.Image);
 
-        return (product, extension);
+        return (product!, extension);
     }
 
     public async Task<string> ValidateDelete(ProductDeleteRequest request)
@@ -72,7 +72,7 @@ public class ProductValidator : Validator
         if (product == null)
             Throw("Invalid product");
 
-        return product.Image;
+        return product!.Image;
     }
 
     private static void ValidateId(int id)
@@ -106,10 +106,10 @@ public class ProductValidator : Validator
         if (extension == null)
             Throw("Invalid image");
 
-        return extension;
+        return extension!;
     }
 
-    private static string? GetImageFormat(ByteString image)
+    private static string? GetImageFormat(ByteString? image)
     {
         if (image == null || image.Length < 4)
             return null;

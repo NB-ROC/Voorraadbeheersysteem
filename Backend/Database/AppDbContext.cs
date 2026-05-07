@@ -40,7 +40,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         // Relation Composite Keys
         modelBuilder.Entity<LoanProduct>()
             .HasKey(lp => new { lp.LoanId, lp.ProductId });
@@ -87,8 +86,8 @@ public class AppDbContext : DbContext
         // UserRole → User
         modelBuilder.Entity<UserRole>()
             .HasOne(ur => ur.User)
-            .WithMany()
-            .HasForeignKey(ur => ur.UserId)
+            .WithMany(u => u.UserRoles)
+            .HasForeignKey(ur => ur.UserId) 
             .OnDelete(DeleteBehavior.Cascade);
 
         // UserRole → Role
@@ -111,39 +110,39 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(pr => pr.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         // Default roles
         modelBuilder.Entity<Role>()
             .HasData(
-                new Role { Id = 1, Name = "Admin", },
-                new Role { Id = 2, Name = "Lender", },
-                new Role { Id = 3, Name = "Student", },
-                new Role { Id = 4, Name = "Personnel", },
-                new Role { Id = 5, Name = "Guest", }
-                );
+                new Role(RoleType.Admin),
+                new Role(RoleType.Manager),
+                new Role(RoleType.Lender),
+                new Role(RoleType.Student),
+                new Role(RoleType.Personnel),
+                new Role(RoleType.Guest)
+            );
     }
-    
+
     public static async Task SeedAsync(IServiceProvider services)
     {
-        using var scope = services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        byte[] cardId = [0,1,2,3,4,5,6,7];
+        using IServiceScope scope = services.CreateScope();
+        AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        byte[] cardId = [0, 1, 2, 3, 4, 5, 6, 7];
 
         if (!context.Users.Any())
         {
-            var hasher = new PasswordHasher<User>();
+            PasswordHasher<User> hasher = new();
 
-            var user = new User
+            User user = new()
             {
                 CardId = cardId,
                 Number = 123456,
-                IsBlocked =  false,
+                IsBlocked = false,
                 Email = "testmail@roc-nijmegen.nl",
                 PasswordHash = hasher.HashPassword(null!, "Placeholder1"),
                 FirstName = "Admin",
                 LastName = "Istrator",
-                CreatedAt = DateTime.Now,
-                
+                CreatedAt = DateTime.Now
             };
 
             context.Users.Add(user);
@@ -154,9 +153,10 @@ public class AppDbContext : DbContext
         {
             context.UserRoles.Add(new UserRole
             {
-                RoleId = 1,
+                RoleId = RoleType.Admin,
                 UserId = 1
             });
+            await context.SaveChangesAsync();
         }
     }
 }

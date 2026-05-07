@@ -1,59 +1,77 @@
+using System.Security.Claims;
 using Backend.Database;
 using Backend.Database.Managers;
 using Backend.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-#region DB
 
-// TODO: Make it so it dynamically creates these at runtime to avoid errors
-Directory.CreateDirectory("Storage");
-Directory.CreateDirectory("Storage/Products");
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-string env = builder.Environment.EnvironmentName;
-
-builder.Services.AddGrpc();
-
-// TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("testing"));
-// builder.Services.AddDbContext<AppDbContext>();
-
-builder.Services.AddDbContext<AppDbContext>();
-builder.Services.AddScoped<UserManager>();
-builder.Services.AddScoped<ProductManager>();
-
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+internal class Program
+{
+    // TODO: Make this an environment variable !! URGENT !!
+    public static byte[] JwtSecret = "super-secret-key-temp-dctygftgfgfguyefguwyegfwegfdefwfwefwefwfewfwefwfwfwefwfwfwef"u8.ToArray();
+    
+    public static async Task Main(string[] args)
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey =
-                // TODO: Make this an environment variable
-                new SymmetricSecurityKey("super-secret-key-temp"u8.ToArray())
-        };
-    });
+        #region DB
+        
+        // TODO: Make it so it dynamically creates these at runtime to avoid errors
+        Directory.CreateDirectory("Storage");
+        Directory.CreateDirectory("Storage/Products");
 
-builder.Services.AddAuthorization();
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        string env = builder.Environment.EnvironmentName;
 
-#endregion
+        builder.Services.AddGrpc();
 
-#region GRPC
+        // TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseInMemoryDatabase("testing"));
+        // builder.Services.AddDbContext<AppDbContext>();
 
-WebApplication app = builder.Build();
-app.UseAuthentication();
-app.UseAuthorization();
+        builder.Services.AddDbContext<AppDbContext>();
+        builder.Services.AddScoped<UserManager>();
+        builder.Services.AddScoped<ProductManager>();
 
-app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+        builder.Services.AddAuthentication("Bearer")
+            .AddJwtBearer("Bearer", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(JwtSecret),
+                    
+                    NameClaimType = ClaimTypes.NameIdentifier,
+                    RoleClaimType = ClaimTypes.Role
+                };
+            });
 
-app.MapGrpcService<UserService>();
-app.MapGrpcService<ProductService>();
+        builder.Services.AddAuthorization();
 
-app.Run();
+        #endregion
 
-#endregion
+        #region GRPC
+
+        WebApplication app = builder.Build();
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+
+        await AppDbContext.SeedAsync(app.Services);
+        
+        app.MapGrpcService<UserService>();
+        app.MapGrpcService<ProductService>();
+        app.MapGrpcService<AuthService>();
+
+        app.Run();
+        
+        #endregion
+    }
+}
+

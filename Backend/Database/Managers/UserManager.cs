@@ -72,4 +72,12 @@ public class UserManager
 
         return true;
     }
+
+    public async Task<User?> FindByEmail(string email)
+    {
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
 }
