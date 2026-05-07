@@ -22,14 +22,15 @@
                   VerticalAlignment="Center">
 
                 <!-- Titel -->
-                <TextBlock Text="Header"
+                <TextBlock Text="{Binding Role}"
                            Foreground="White"
                            VerticalAlignment="Center"
                            Margin="20,0"/>
-
+                
                 <!-- Login knop -->
                 <Button Grid.Column="1"
                         Content="Inloggen"
+                        Click="Login_Click"
                         Margin="0,0,20,0"
                         Height="36"
                         MinWidth="110"
@@ -72,18 +73,6 @@
                             Padding="12,8">
                         <TextBlock Text="🔍 Zoek producten..." Foreground="#9CA3AF"/>
                     </Border>
-
-                    <Button Grid.Column="1"
-                            Content="Filters"
-                            Height="38"
-                            MinWidth="100"/>
-
-                    <Button Grid.Column="2"
-                            Content="Product toevoegen"
-                            Height="38"
-                            MinWidth="150"
-                            Background="#4F46E5"
-                            Foreground="White"/>
                 </Grid>
             </Border>
 
@@ -103,9 +92,12 @@
                             <!-- Image -->
                             <Border Width="72" Height="72" Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock Text="📦"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                <Image Source="/Assets/avalonia-logo.ico"
+                                       Width="72"
+                                       Height="72"
+                                       Stretch="UniformToFill"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
                             </Border>
 
                             <!-- Info -->
@@ -132,8 +124,66 @@
                             CornerRadius="12"
                             Padding="14">
 
-                        <TextBlock Text="Nog een test product..." />
+                        <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="14">
 
+                            <!-- Image -->
+                            <Border Width="72" Height="72" Background="#F3F4F6"
+                                    CornerRadius="10">
+                                <Image Source="/Assets/stressbal.jpg"
+                                       Width="72"
+                                       Height="72"
+                                       Stretch="UniformToFill"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Info -->
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="Categorie stresballen" FontSize="12" Foreground="#9CA3AF"/>
+                                <TextBlock Text="Test Product" FontSize="16" FontWeight="Bold"/>
+                                <TextBlock Text="Dit is een beschrijving van het product."
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <!-- Buttons -->
+                            <StackPanel Grid.Column="2" Spacing="8">
+                                <Button Content="Toevoegen aan mandje" Background="Orange" Foreground="White"/>
+                                <Button Content="Verwijder uit mandje" Background="Red" Foreground="White"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+                    <Border Background="White"
+                            BorderBrush="#E5E7EB"
+                            BorderThickness="1"
+                            CornerRadius="12"
+                            Padding="14">
+
+                        <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="14">
+
+                            <!-- Image -->
+                            <Border Width="72" Height="72" Background="#F3F4F6"
+                                    CornerRadius="10">
+                                <TextBlock Text="📦"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Info -->
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="Categorie 3 snoepzooi" FontSize="12" Foreground="#9CA3AF"/>
+                                <TextBlock Text="Test Product" FontSize="16" FontWeight="Bold"/>
+                                <TextBlock Text="Dit is een beschrijving van het product."
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <!-- Buttons -->
+                            <StackPanel Grid.Column="2" Spacing="8">
+                                <Button Content="Toevoegen aan mandje" Background="Orange" Foreground="White"/>
+                                <Button Content="Verwijder uit mandje" Background="Red" Foreground="White"/>
+                            </StackPanel>
+
+                        </Grid>
                     </Border>
 
                 </StackPanel>
