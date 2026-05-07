@@ -9,4 +9,5 @@ public class MainWindowViewModel : ReactiveObject
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = null;
+    
 }
