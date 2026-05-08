@@ -13,9 +13,11 @@ namespace FrontendAdmin.ViewModels.User;
 public class UserPageViewModel : PageViewModelBase
 {
     private readonly BackendService _backend;
+
     public UserPageViewModel(ServiceProvider services) : base(services)
     {
-        _backend = services.GetService<BackendService>()?? throw new NullReferenceException("Backend service not initialised");
+        _backend = services.GetService<BackendService>() ??
+                   throw new NullReferenceException("Backend service not initialised");
         NavigateUserForm = ReactiveCommand.Create(() =>
         {
             Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services));

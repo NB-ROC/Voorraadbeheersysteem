@@ -13,10 +13,12 @@ namespace FrontendAdmin.ViewModels.User;
 public class UserFormViewModel : ViewModelBase
 {
     private readonly BackendService _backend;
+
     public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
         base(services)
     {
-        _backend = services.GetService<BackendService>()?? throw new NullReferenceException("Backend service not initialised");
+        _backend = services.GetService<BackendService>() ??
+                   throw new NullReferenceException("Backend service not initialised");
         if (existing == null)
             CardId = Enumerable.Range(0, 7)
                 .Select(_ => (byte)Random.Shared.Next(256))
@@ -39,7 +41,7 @@ public class UserFormViewModel : ViewModelBase
 
         async Task SaveProductAsync()
         {
-            var model = new UserModel
+            UserModel model = new()
             {
                 Id = Id,
                 CardId = CardId,
@@ -53,12 +55,13 @@ public class UserFormViewModel : ViewModelBase
                 ? _backend.Users.Create(model)
                 : _backend.Users.Modify(model));
 
-            if (result == RequestResult.Success && success) Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
+            if (result == RequestResult.Success && success)
+                Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
         }
     }
 
     #region Properties
-    
+
     public int Id { get; set; }
 
     public byte[] CardId

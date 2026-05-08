@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -49,55 +47,6 @@ public class ProductFormViewModel : ViewModelBase
             LoadExistingProduct(existing);
     }
 
-    #region Properties
-
-    private Bitmap? _previewImage;
-    public Bitmap? PreviewImage
-    {
-        get => _previewImage;
-        set => this.RaiseAndSetIfChanged(ref _previewImage, value);
-    }
-
-    private byte[]? _imageBytes;
-    public byte[]? ImageBytes
-    {
-        get => _imageBytes;
-        set => this.RaiseAndSetIfChanged(ref _imageBytes, value);
-    }
-
-    private string _name = string.Empty;
-    public string Name
-    {
-        get => _name;
-        set => this.RaiseAndSetIfChanged(ref _name, value);
-    }
-
-    private string _category = string.Empty;
-    public string Category
-    {
-        get => _category;
-        set => this.RaiseAndSetIfChanged(ref _category, value);
-    }
-
-    private string _description = string.Empty;
-    public string Description
-    {
-        get => _description;
-        set => this.RaiseAndSetIfChanged(ref _description, value);
-    }
-
-    private string _error = string.Empty;
-    public string Error
-    {
-        get => _error;
-        set => this.RaiseAndSetIfChanged(ref _error, value);
-    }
-
-    public ICommand SaveCommand { get; }
-    public ICommand GetImageCommand { get; }
-
-    #endregion
-
     #region Validation
 
     private void Validate()
@@ -131,32 +80,6 @@ public class ProductFormViewModel : ViewModelBase
 
     #endregion
 
-    #region Product Loading
-
-    private void LoadExistingProduct(ProductViewModel existing)
-    {
-        Name = existing.Name;
-        Category = existing.Category;
-        Description = existing.Description;
-
-        if (!string.IsNullOrWhiteSpace(existing.ImageName))
-            _ = LoadExistingImageAsync(existing.ImageName);
-    }
-
-    private async Task LoadExistingImageAsync(string imageName)
-    {
-        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(imageName);
-
-        if (result != RequestResult.Success || image == null)
-            return;
-
-        ImageBytes = image.Value.bytes;
-        
-        PreviewImage = image.Value.bitmap;
-    }
-
-    #endregion
-
     #region Save
 
     private async Task SaveProductAsync()
@@ -175,10 +98,8 @@ public class ProductFormViewModel : ViewModelBase
                 : _backend.Products.Modify(model, ImageBytes));
 
         if (result == RequestResult.Success && success)
-        {
             Services.GetService<NavigationService>()
                 ?.NavigateTo(new ProductPageViewModel(Services));
-        }
     }
 
     #endregion
@@ -228,6 +149,87 @@ public class ProductFormViewModel : ViewModelBase
         ms.Position = 0;
 
         PreviewImage = new Bitmap(ms);
+    }
+
+    #endregion
+
+    #region Properties
+
+    private Bitmap? _previewImage;
+
+    public Bitmap? PreviewImage
+    {
+        get => _previewImage;
+        set => this.RaiseAndSetIfChanged(ref _previewImage, value);
+    }
+
+    private byte[]? _imageBytes;
+
+    public byte[]? ImageBytes
+    {
+        get => _imageBytes;
+        set => this.RaiseAndSetIfChanged(ref _imageBytes, value);
+    }
+
+    private string _name = string.Empty;
+
+    public string Name
+    {
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
+
+    private string _category = string.Empty;
+
+    public string Category
+    {
+        get => _category;
+        set => this.RaiseAndSetIfChanged(ref _category, value);
+    }
+
+    private string _description = string.Empty;
+
+    public string Description
+    {
+        get => _description;
+        set => this.RaiseAndSetIfChanged(ref _description, value);
+    }
+
+    private string _error = string.Empty;
+
+    public string Error
+    {
+        get => _error;
+        set => this.RaiseAndSetIfChanged(ref _error, value);
+    }
+
+    public ICommand SaveCommand { get; }
+    public ICommand GetImageCommand { get; }
+
+    #endregion
+
+    #region Product Loading
+
+    private void LoadExistingProduct(ProductViewModel existing)
+    {
+        Name = existing.Name;
+        Category = existing.Category;
+        Description = existing.Description;
+
+        if (!string.IsNullOrWhiteSpace(existing.ImageName))
+            _ = LoadExistingImageAsync(existing.ImageName);
+    }
+
+    private async Task LoadExistingImageAsync(string imageName)
+    {
+        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(imageName);
+
+        if (result != RequestResult.Success || image == null)
+            return;
+
+        ImageBytes = image.Value.bytes;
+
+        PreviewImage = image.Value.bitmap;
     }
 
     #endregion

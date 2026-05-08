@@ -19,7 +19,8 @@ public class ProductManager
             .OrderBy(product => product.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync().ConfigureAwait(false);;
+            .ToListAsync().ConfigureAwait(false);
+        ;
     }
 
     public async Task<Product?> Get(int id)

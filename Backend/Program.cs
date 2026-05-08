@@ -5,17 +5,16 @@ using Backend.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-
-
 internal class Program
 {
     // TODO: Make this an environment variable !! URGENT !!
-    public static byte[] JwtSecret = "super-secret-key-temp-dctygftgfgfguyefguwyegfwegfdefwfwefwefwfewfwefwfwfwefwfwfwef"u8.ToArray();
-    
+    public static byte[] JwtSecret =
+        "super-secret-key-temp-dctygftgfgfguyefguwyegfwegfdefwfwefwefwfewfwefwfwfwefwfwfwef"u8.ToArray();
+
     public static async Task Main(string[] args)
     {
         #region DB
-        
+
         // TODO: Make it so it dynamically creates these at runtime to avoid errors
         Directory.CreateDirectory("Storage");
         Directory.CreateDirectory("Storage/Products");
@@ -45,7 +44,7 @@ internal class Program
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey =
                         new SymmetricSecurityKey(JwtSecret),
-                    
+
                     NameClaimType = ClaimTypes.NameIdentifier,
                     RoleClaimType = ClaimTypes.Role
                 };
@@ -64,14 +63,13 @@ internal class Program
         app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
 
         await AppDbContext.SeedAsync(app.Services);
-        
+
         app.MapGrpcService<UserService>();
         app.MapGrpcService<ProductService>();
         app.MapGrpcService<AuthService>();
 
         app.Run();
-        
+
         #endregion
     }
 }
-

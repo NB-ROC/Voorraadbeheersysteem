@@ -30,7 +30,7 @@ public class App : Application
 
             serviceCollection.AddSingleton(navigationService);
             serviceCollection.AddSingleton(backendService);
-            
+
             _ = backendService.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
 
             DisableAvaloniaDataAnnotationValidation();

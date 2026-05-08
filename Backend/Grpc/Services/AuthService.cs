@@ -12,27 +12,25 @@ namespace Backend.Grpc.Services;
 
 public class AuthService : Auth.AuthBase
 {
-    private UserManager _userManager;
-    private PasswordHasher<User> _passwordHasher = new();
+    private readonly PasswordHasher<User> _passwordHasher = new();
+    private readonly UserManager _userManager;
 
     public AuthService(UserManager userManager)
     {
         _userManager = userManager;
     }
-    
+
     [AllowAnonymous]
     public override async Task<AuthLoginResponse> Login(AuthLoginRequest request, ServerCallContext context)
     {
         User? user = await _userManager.FindByEmail(request.Email);
 
-        if (user == null || _passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, request.Password ) == PasswordVerificationResult.Failed)
-        {
-            return new AuthLoginResponse();
-        }
-        
+        if (user == null || _passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, request.Password) ==
+            PasswordVerificationResult.Failed) return new AuthLoginResponse();
+
         return new AuthLoginResponse
         {
-            Token = GenerateToken(user, user.UserRoles.Select(userRole => userRole.Role.Name).ToList()),
+            Token = GenerateToken(user, user.UserRoles.Select(userRole => userRole.Role.Name).ToList())
         };
     }
 

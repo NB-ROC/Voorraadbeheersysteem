@@ -19,5 +19,4 @@ public class ProductModel
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
 
     [MaxLength(ImageLength)] public string ImageName { get; set; } = null!;
-
 }

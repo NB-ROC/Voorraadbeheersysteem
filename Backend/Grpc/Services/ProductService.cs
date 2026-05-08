@@ -26,7 +26,7 @@ public class ProductService : Products.ProductsBase
     public override async Task<ProductPageResponse> Page(ProductPageRequest request, ServerCallContext context)
     {
         _validator.ValidatePage(request);
-        
+
         List<Product> products = await _manager.Page(request.Page, request.PageSize);
 
         IEnumerable<MetaProduct> metaProducts = products.Select(MapMeta);

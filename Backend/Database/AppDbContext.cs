@@ -87,7 +87,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<UserRole>()
             .HasOne(ur => ur.User)
             .WithMany(u => u.UserRoles)
-            .HasForeignKey(ur => ur.UserId) 
+            .HasForeignKey(ur => ur.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         // UserRole → Role
@@ -121,7 +121,7 @@ public class AppDbContext : DbContext
                 new Role(RoleType.Personnel),
                 new Role(RoleType.Guest)
             );
-        
+
         // Default category
         modelBuilder.Entity<Category>()
             .HasData(
@@ -130,7 +130,7 @@ public class AppDbContext : DbContext
                     Id = 1,
                     Name = "Test"
                 }
-                );
+            );
     }
 
     public static async Task SeedAsync(IServiceProvider services)

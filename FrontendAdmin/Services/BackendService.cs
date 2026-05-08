@@ -18,26 +18,26 @@ namespace FrontendAdmin.Services;
 public class BackendService
 {
     private const string GrpcChannelIp = "http://127.0.0.1:8080";
-    
-    private string Token { get; set; } = string.Empty;
-    
-    public Auth.AuthClient AuthClient { get; }
-
-    public UserEndpoint Users { get; }
-    public ProductEndpoint Products { get; }
 
 
     public BackendService()
     {
         GrpcChannel channel = GrpcChannel.ForAddress(GrpcChannelIp);
         TokenInjector injector = new(() => Token);
-        
+
         CallInvoker invoker = channel.Intercept(injector);
-        
+
         AuthClient = new Auth.AuthClient(channel);
         Products = new ProductEndpoint(new Products.ProductsClient(invoker));
         Users = new UserEndpoint(new Users.UsersClient(invoker));
     }
+
+    private string Token { get; set; } = string.Empty;
+
+    public Auth.AuthClient AuthClient { get; }
+
+    public UserEndpoint Users { get; }
+    public ProductEndpoint Products { get; }
 
     public async Task<bool> LogIn(string email, string password)
     {
@@ -54,7 +54,7 @@ public class BackendService
         {
             return false;
         }
-        
+
         if (string.IsNullOrWhiteSpace(response.Token))
             return false;
 
@@ -83,10 +83,7 @@ internal class TokenInjector : Interceptor
 
         string? token = _getToken();
 
-        if (!string.IsNullOrWhiteSpace(token))
-        {
-            headers.Add("Authorization", $"Bearer {token}");
-        }
+        if (!string.IsNullOrWhiteSpace(token)) headers.Add("Authorization", $"Bearer {token}");
 
         CallOptions options = context.Options.WithHeaders(headers);
 
@@ -158,7 +155,7 @@ public class UserEndpoint
 
     public async Task<(RequestResult, List<UserModel>)> Page(int page, int pageSize)
     {
-        var request = new UserPageRequest
+        UserPageRequest request = new()
         {
             Page = page,
             PageSize = pageSize
@@ -183,7 +180,7 @@ public class UserEndpoint
 
     public async Task<(RequestResult, UserModel?)> Get(int id)
     {
-        var request = new UserGetRequest
+        UserGetRequest request = new()
         {
             Id = id
         };
@@ -207,7 +204,7 @@ public class UserEndpoint
 
     public async Task<(RequestResult, bool)> Create(UserModel user)
     {
-        var request = new UserCreateRequest
+        UserCreateRequest request = new()
         {
             CardId = ByteString.CopyFrom(user.CardId),
             Email = user.Email,
@@ -231,7 +228,7 @@ public class UserEndpoint
 
     public async Task<(RequestResult, bool)> Modify(UserModel user)
     {
-        var request = new UserModifyRequest
+        UserModifyRequest request = new()
         {
             Id = user.Id,
             CardId = ByteString.CopyFrom(user.CardId),
@@ -256,7 +253,7 @@ public class UserEndpoint
 
     public async Task<(RequestResult, bool)> Delete(int id)
     {
-        var request = new UserDeleteRequest
+        UserDeleteRequest request = new()
         {
             Id = id
         };
@@ -273,7 +270,7 @@ public class UserEndpoint
 
         return (RequestResult.Success, response.Success);
     }
-    
+
     private static UserModel MapUser(MetaUser user)
     {
         return new UserModel
@@ -304,7 +301,7 @@ public class ProductEndpoint
 
     public async Task<(RequestResult, List<ProductModel>)> Page(int page, int pageSize)
     {
-        var request = new ProductPageRequest
+        ProductPageRequest request = new()
         {
             Page = page,
             PageSize = pageSize
@@ -330,7 +327,7 @@ public class ProductEndpoint
 
     public async Task<(RequestResult, ProductModel?)> Get(int id)
     {
-        var request = new ProductGetRequest
+        ProductGetRequest request = new()
         {
             Id = id
         };
@@ -354,7 +351,7 @@ public class ProductEndpoint
 
     public async Task<(RequestResult, bool)> Create(ProductModel product, byte[]? imageBytes)
     {
-        var request = new ProductCreateRequest
+        ProductCreateRequest request = new()
         {
             Name = product.Name ?? string.Empty,
             Description = product.Description ?? string.Empty,
@@ -378,13 +375,13 @@ public class ProductEndpoint
 
     public async Task<(RequestResult, bool)> Modify(ProductModel product, byte[]? imageBytes)
     {
-        var request = new ProductModifyRequest
+        ProductModifyRequest request = new()
         {
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
             Category = product.Category,
-            RoleId = 1,
+            RoleId = 1
         };
 
         if (imageBytes != null)
@@ -405,7 +402,7 @@ public class ProductEndpoint
 
     public async Task<(RequestResult, bool)> Delete(int id)
     {
-        var request = new ProductDeleteRequest
+        ProductDeleteRequest request = new()
         {
             Id = id
         };
@@ -425,20 +422,20 @@ public class ProductEndpoint
 
     public async Task<(RequestResult, (byte[] bytes, Bitmap bitmap)?)> Image(string name)
     {
-        var request = new ProductImageRequest
+        ProductImageRequest request = new()
         {
             Name = name
         };
 
         try
         {
-            using var call = _client.Image(request);
+            using AsyncServerStreamingCall<ProductImageResponse>? call = _client.Image(request);
 
-            await foreach (var response in call.ResponseStream.ReadAllAsync())
+            await foreach (ProductImageResponse response in call.ResponseStream.ReadAllAsync())
             {
-                var bytes = response.Raw.ToByteArray();
+                byte[]? bytes = response.Raw.ToByteArray();
 
-                using var stream = new MemoryStream(bytes);
+                using MemoryStream stream = new(bytes);
 
                 return
                 (
@@ -466,7 +463,7 @@ public class ProductEndpoint
             Role = new RoleModel
             {
                 Id = 1,
-                Name = "product.Role.Name",
+                Name = "product.Role.Name"
             },
             ImageName = product.Image
         };
@@ -479,4 +476,5 @@ public class ProductEndpoint
             : RequestResult.Failed;
     }
 }
+
 #endregion

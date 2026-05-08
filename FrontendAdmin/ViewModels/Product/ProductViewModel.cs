@@ -1,13 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
@@ -19,7 +16,8 @@ public class ProductViewModel : ViewModelBase
 
     public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
-        _backend = services.GetService<BackendService>()?? throw new NullReferenceException("Backend service not initialised");
+        _backend = services.GetService<BackendService>() ??
+                   throw new NullReferenceException("Backend service not initialised");
         _model = model;
 
         EditCommand = ReactiveCommand.Create(() =>
@@ -75,7 +73,6 @@ public class ProductViewModel : ViewModelBase
 
     public RoleModel Role
     {
-        
         get => _model.Role;
         set
         {
@@ -123,9 +120,9 @@ public class ProductViewModel : ViewModelBase
     {
         IsImageLoading = true;
         ImageFailed = false;
-        
+
         (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(ImageName);
-        
+
         if (result == RequestResult.Success) Thumbnail = image!.Value.bitmap;
         else ImageFailed = true;
         IsImageLoading = false;

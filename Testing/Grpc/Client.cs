@@ -32,11 +32,11 @@ public class AuthInterceptor : Interceptor
         ClientInterceptorContext<TRequest, TResponse> context,
         AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
     {
-        var headers = context.Options.Headers ?? new Metadata();
+        Metadata headers = context.Options.Headers ?? new Metadata();
         headers.Add("Authorization", $"Bearer {_token}");
 
-        var newOptions = context.Options.WithHeaders(headers);
-        var newContext = new ClientInterceptorContext<TRequest, TResponse>(
+        CallOptions newOptions = context.Options.WithHeaders(headers);
+        ClientInterceptorContext<TRequest, TResponse> newContext = new(
             context.Method,
             context.Host,
             newOptions

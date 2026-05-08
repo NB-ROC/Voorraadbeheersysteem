@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Grpc\" />
+        <Folder Include="Grpc\"/>
     </ItemGroup>
 
 </Project>

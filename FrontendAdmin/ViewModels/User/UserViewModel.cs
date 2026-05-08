@@ -16,7 +16,8 @@ public class UserViewModel : ViewModelBase
     public UserViewModel(ServiceProvider services, UserModel model) : base(services)
     {
         _model = model;
-        _backend = services.GetService<BackendService>()?? throw new NullReferenceException("Backend service not initialised");
+        _backend = services.GetService<BackendService>() ??
+                   throw new NullReferenceException("Backend service not initialised");
 
         EditCommand = ReactiveCommand.Create(() =>
         {
@@ -31,7 +32,7 @@ public class UserViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
-    
+
     public int Id { get; set; }
 
     public byte[] CardId => _model.CardId;

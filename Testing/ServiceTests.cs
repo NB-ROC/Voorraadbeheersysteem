@@ -10,7 +10,7 @@ namespace Testing;
 public class ServiceTests
 {
     private string Token;
-    
+
     [SetUp]
     public void Setup()
     {
@@ -109,7 +109,8 @@ public class ServiceTests
             Image = ByteString.CopyFrom(localImageBytes)
         };
 
-        bool create = Client.Products.Create(createRequest, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
+        bool create = Client.Products.Create(createRequest, [new Metadata.Entry("Authorization", $"Bearer {Token}")])
+            .Success;
 
         List<MetaProduct> size1 = Client.Products.Page(new ProductPageRequest
         {
@@ -128,7 +129,8 @@ public class ServiceTests
             Name = "Arduino Dos"
         };
 
-        bool modify = Client.Products.Modify(modifyRequest, [new Metadata.Entry("Authorization", $"Bearer {Token}")]).Success;
+        bool modify = Client.Products.Modify(modifyRequest, [new Metadata.Entry("Authorization", $"Bearer {Token}")])
+            .Success;
 
         MetaProduct modifiedProduct = Client.Products.Get(new ProductGetRequest
         {

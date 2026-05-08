@@ -6,13 +6,8 @@ public class Role
 {
     public const int NameLength = 32;
 
-    public RoleType Id { get; set; }
-
-    [MaxLength(NameLength)] public string Name { get; set; } = null!;
-
     public Role()
     {
-        
     }
 
     public Role(RoleType role)
@@ -20,6 +15,10 @@ public class Role
         Id = role;
         Name = Enum.GetName(role)!;
     }
+
+    public RoleType Id { get; set; }
+
+    [MaxLength(NameLength)] public string Name { get; set; } = null!;
 }
 
 public enum RoleType
