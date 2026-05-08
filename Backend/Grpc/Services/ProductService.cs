@@ -4,6 +4,7 @@ using Backend.Grpc.Helpers;
 using Backend.Grpc.Validation;
 using Google.Protobuf;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Protos.Product;
 
 namespace Backend.Grpc.Services;
@@ -21,18 +22,21 @@ public class ProductService : Products.ProductsBase
         _validator = new ProductValidator(manager);
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductPageResponse> Page(ProductPageRequest request, ServerCallContext context)
     {
         _validator.ValidatePage(request);
 
         List<Product> products = await _manager.Page(request.Page, request.PageSize);
 
+        IEnumerable<MetaProduct> metaProducts = products.Select(MapMeta);
         return new ProductPageResponse
         {
-            Products = { products.Select(MapMeta) }
+            Products = { metaProducts }
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductGetResponse> Get(ProductGetRequest request, ServerCallContext context)
     {
         _validator.ValidateGet(request);
@@ -48,6 +52,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductCreateResponse> Create(ProductCreateRequest request, ServerCallContext context)
     {
         string extension = _validator.ValidateCreate(request);
@@ -62,13 +67,10 @@ public class ProductService : Products.ProductsBase
         {
             Name = request.Name,
             Description = request.Description,
-            CategoryId = request.CategoryId,
-            Status = ProductStatus.Available,
-            RestrictedRoleId = request.HasRestrictedRoleId ? request.RestrictedRoleId : null,
+            CategoryId = 1,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            PurchaseDate = request.PurchaseDate != null ? request.PurchaseDate.ToDateTime() : null
-            
+            Image = imageName
         };
 
         return new ProductCreateResponse
@@ -77,34 +79,24 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductModifyResponse> Modify(ProductModifyRequest request, ServerCallContext context)
     {
         (Product product, string extension) = await _validator.ValidateModify(request);
 
         if (request.HasName) product.Name = request.Name;
         if (request.HasDescription) product.Description = request.Description;
-        if (request.HasCategoryId) product.CategoryId = request.CategoryId;
-
-        if (request.HasRestrictedRoleId)
-            product.RestrictedRoleId = request.RestrictedRoleId;
-
-        if (request.HasStatus)
-            product.Status = (ProductStatus)request.Status;
-
-        if (request.PurchaseDate != null)
-            product.PurchaseDate = request.PurchaseDate.ToDateTime();
+        product.CategoryId = 1;
 
         product.UpdatedAt = DateTime.UtcNow;
 
         if (request.HasImage)
-        {
             product.Image = await StorageHelper.ModifyFile(
                 Path.Combine(ImagePath, product.Image),
                 request.Image,
                 extension,
                 ImagePath
             );
-        }
 
         return new ProductModifyResponse
         {
@@ -112,6 +104,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductDeleteResponse> Delete(ProductDeleteRequest request, ServerCallContext context)
     {
         string image = await _validator.ValidateDelete(request);
@@ -124,6 +117,7 @@ public class ProductService : Products.ProductsBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task Image(ProductImageRequest request,
         IServerStreamWriter<ProductImageResponse> responseStream, ServerCallContext context)
     {
@@ -135,7 +129,7 @@ public class ProductService : Products.ProductsBase
             Extension = Path.GetExtension(request.Name).TrimStart('.')
         });
     }
-    
+
     private static MetaProduct MapMeta(Product product)
     {
         return new MetaProduct
@@ -143,8 +137,7 @@ public class ProductService : Products.ProductsBase
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            CategoryId = product.CategoryId,
-            Status = (int)product.Status,
+            Category = "",
             Image = product.Image
         };
     }

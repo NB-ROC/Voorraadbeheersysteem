@@ -1,39 +1,75 @@
+using System.Security.Claims;
 using Backend.Database;
 using Backend.Database.Managers;
 using Backend.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
-#region DB
+internal class Program
+{
+    // TODO: Make this an environment variable !! URGENT !!
+    public static byte[] JwtSecret =
+        "super-secret-key-temp-dctygftgfgfguyefguwyegfwegfdefwfwefwefwfewfwefwfwfwefwfwfwef"u8.ToArray();
 
-// TODO: Make it so it dynamically creates these at runtime to avoid errors
-Directory.CreateDirectory("Storage");
-Directory.CreateDirectory("Storage/Products");
+    public static async Task Main(string[] args)
+    {
+        #region DB
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-string env = builder.Environment.EnvironmentName;
+        // TODO: Make it so it dynamically creates these at runtime to avoid errors
+        Directory.CreateDirectory("Storage");
+        Directory.CreateDirectory("Storage/Products");
 
-builder.Services.AddGrpc();
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        string env = builder.Environment.EnvironmentName;
 
-// TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("testing"));
-// builder.Services.AddDbContext<AppDbContext>();
+        builder.Services.AddGrpc();
 
-builder.Services.AddDbContext<AppDbContext>();
-builder.Services.AddScoped<UserManager>();
-builder.Services.AddScoped<ProductManager>();
+        // TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseInMemoryDatabase("testing"));
+        // builder.Services.AddDbContext<AppDbContext>();
 
-#endregion
+        builder.Services.AddDbContext<AppDbContext>();
+        builder.Services.AddScoped<UserManager>();
+        builder.Services.AddScoped<ProductManager>();
 
-#region GRPC
+        builder.Services.AddAuthentication("Bearer")
+            .AddJwtBearer("Bearer", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(JwtSecret),
 
-WebApplication app = builder.Build();
+                    NameClaimType = ClaimTypes.NameIdentifier,
+                    RoleClaimType = ClaimTypes.Role
+                };
+            });
 
-app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+        builder.Services.AddAuthorization();
 
-app.MapGrpcService<UserService>();
-app.MapGrpcService<ProductService>();
+        #endregion
 
-app.Run();
+        #region GRPC
 
-#endregion
+        WebApplication app = builder.Build();
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+
+        await AppDbContext.SeedAsync(app.Services);
+
+        app.MapGrpcService<UserService>();
+        app.MapGrpcService<ProductService>();
+        app.MapGrpcService<AuthService>();
+
+        app.Run();
+
+        #endregion
+    }
+}

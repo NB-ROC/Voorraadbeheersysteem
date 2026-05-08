@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -15,11 +16,11 @@ public class LoanViewModel
         _model = model;
     }
 
-    public string ProductName    => _model.ProductName;
+    public string ProductName => _model.ProductName;
     public string BorrowerNumber => _model.BorrowerNumber;
-    public string LoanDate       => _model.LoanDate;
-    public string ReturnDate     => _model.ReturnDate;
-    public string Status         => _model.Status;
+    public string LoanDate => _model.LoanDate;
+    public string ReturnDate => _model.ReturnDate;
+    public string Status => _model.Status;
 
     public Bitmap? Image
     {
@@ -29,19 +30,22 @@ public class LoanViewModel
                 return null;
             try
             {
-                var stream = AssetLoader.Open(new Uri(_model.Image));
+                Stream stream = AssetLoader.Open(new Uri(_model.Image));
                 return new Bitmap(stream);
             }
-            catch { return null; }
+            catch
+            {
+                return null;
+            }
         }
     }
 
     public IBrush StatusColor => _model.Status switch
     {
-        "Active"   => Brushes.Green,
-        "Overdue"  => Brushes.Red,
+        "Active" => Brushes.Green,
+        "Overdue" => Brushes.Red,
         "Returned" => Brushes.Gray,
-        "Pending"  => Brushes.Orange,
-        _          => Brushes.Transparent
+        "Pending" => Brushes.Orange,
+        _ => Brushes.Transparent
     };
 }

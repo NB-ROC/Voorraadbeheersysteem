@@ -1,22 +1,23 @@
+using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Google.Protobuf;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
 public class UserViewModel : ViewModelBase
 {
+    private readonly BackendService _backend;
     private readonly UserModel _model;
 
     public UserViewModel(ServiceProvider services, UserModel model) : base(services)
     {
         _model = model;
+        _backend = services.GetService<BackendService>() ??
+                   throw new NullReferenceException("Backend service not initialised");
 
         EditCommand = ReactiveCommand.Create(() =>
         {
@@ -32,7 +33,9 @@ public class UserViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
-    public byte[] Id => _model.Id;
+    public int Id { get; set; }
+
+    public byte[] CardId => _model.CardId;
 
     public string FirstName
     {
@@ -44,7 +47,7 @@ public class UserViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-    
+
     public string LastName
     {
         get => _model.LastName;
@@ -77,32 +80,10 @@ public class UserViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-    public int RoleId
-    {
-        get => _model.RoleId;
-        set
-        {
-            if (_model.RoleId == value) return;
-            _model.RoleId = value;
-            this.RaisePropertyChanged();
-        }
-    }
-
-    public bool IsBlocked
-    {
-        get => _model.IsBlocked;
-        set
-        {
-            if (_model.IsBlocked == value) return;
-            _model.IsBlocked = value;
-            this.RaisePropertyChanged();
-        }
-    }
-
 
 
     private async Task DeleteAsync()
     {
-        bool success = (await Client.Users.DeleteAsync(new UserDeleteRequest { Id = ByteString.CopyFrom(Id) })).Success;
+        await _backend.Users.Delete(Id);
     }
 }

@@ -1,23 +1,23 @@
-﻿using System.IO;
+﻿using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
-using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductViewModel : ViewModelBase
 {
+    private readonly BackendService _backend;
     private readonly ProductModel _model;
 
     public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
+        _backend = services.GetService<BackendService>() ??
+                   throw new NullReferenceException("Backend service not initialised");
         _model = model;
 
         EditCommand = ReactiveCommand.Create(() =>
@@ -49,13 +49,13 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public int CategoryId
+    public string Category
     {
-        get => _model.CategoryId;
+        get => _model.Category;
         set
         {
-            if (_model.CategoryId == value) return;
-            _model.CategoryId = value;
+            if (_model.Category == value) return;
+            _model.Category = value;
             this.RaisePropertyChanged();
         }
     }
@@ -71,13 +71,24 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public string Image
+    public RoleModel Role
     {
-        get => _model.Image;
+        get => _model.Role;
         set
         {
-            if (_model.Image == value) return;
-            _model.Image = value;
+            if (_model.Role == value) return;
+            _model.Role = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
+    public string ImageName
+    {
+        get => _model.ImageName;
+        set
+        {
+            if (_model.ImageName == value) return;
+            _model.ImageName = value;
             this.RaisePropertyChanged();
         }
     }
@@ -102,38 +113,18 @@ public class ProductViewModel : ViewModelBase
 
     private async Task DeleteAsync()
     {
-        bool success = (await Client.Products.DeleteAsync(new ProductDeleteRequest { Id = Id })).Success;
+        await _backend.Products.Delete(Id);
     }
 
     private async Task LoadImageAsync()
     {
         IsImageLoading = true;
+        ImageFailed = false;
 
-        try
-        {
-            using MemoryStream ms = new();
+        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(ImageName);
 
-            using AsyncServerStreamingCall<ProductImageResponse>? call = Client.Products.Image(new ProductImageRequest
-            {
-                Name = Image
-            });
-
-            await foreach (ProductImageResponse chunk in call.ResponseStream.ReadAllAsync())
-            {
-                byte[] bytes = chunk.Raw.ToByteArray();
-                await ms.WriteAsync(bytes);
-            }
-
-            ms.Seek(0, SeekOrigin.Begin);
-            Thumbnail = new Bitmap(ms);
-        }
-        catch
-        {
-            ImageFailed = true;
-        }
-        finally
-        {
-            IsImageLoading = false;
-        }
+        if (result == RequestResult.Success) Thumbnail = image!.Value.bitmap;
+        else ImageFailed = true;
+        IsImageLoading = false;
     }
 }

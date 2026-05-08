@@ -25,27 +25,30 @@ public class UserValidator : Validator
         ValidateName(request.FirstName);
         ValidateName(request.LastName);
         ValidateEmail(request.Email);
-
-        if (request.RoleId <= 0)
-            Throw("Invalid role");
     }
 
     public async Task<User> ValidateModify(UserModifyRequest request)
     {
-        User? user = await _manager.Get(request.Id.ToByteArray());
+        User? user = await _manager.Get(request.Id);
         if (user == null) Throw("Invalid user");
 
         if (request.HasFirstName) ValidateName(request.FirstName);
         if (request.HasLastName) ValidateName(request.LastName);
         if (request.HasEmail) ValidateEmail(request.Email);
 
-        return user;
+        return user!;
     }
 
     private static void ValidateEmail(string email)
     {
-        try { _ = new MailAddress(email); }
-        catch { Throw("Invalid email"); }
+        try
+        {
+            _ = new MailAddress(email);
+        }
+        catch
+        {
+            Throw("Invalid email");
+        }
     }
 
     private static void ValidateName(string name)

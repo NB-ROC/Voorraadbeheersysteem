@@ -21,7 +21,7 @@ public class UserManager
             .ToListAsync();
     }
 
-    public async Task<User?> Get(byte[] id)
+    public async Task<User?> Get(int id)
     {
         return await _context.Users.FindAsync(id);
     }
@@ -56,7 +56,7 @@ public class UserManager
         return true;
     }
 
-    public async Task<bool> Delete(byte[] id)
+    public async Task<bool> Delete(int id)
     {
         try
         {
@@ -71,5 +71,13 @@ public class UserManager
         }
 
         return true;
+    }
+
+    public async Task<User?> FindByEmail(string email)
+    {
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 }

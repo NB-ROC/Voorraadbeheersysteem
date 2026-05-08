@@ -1,10 +1,10 @@
-﻿namespace Backend.Entities;
+﻿namespace Backend.Entities.Unused;
 
 public class Penalty
 {
     public int Id { get; set; }
 
-    public byte[] UserId { get; set; } = null!;
+    public int UserId { get; set; }
     public User User { get; set; } = null!;
 
     public int LoanId { get; set; }

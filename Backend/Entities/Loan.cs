@@ -4,17 +4,13 @@ public class Loan
 {
     public int Id { get; set; }
 
-    public byte[] UserId { get; set; } = null!;
+    public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    public byte[] IssuedBy { get; set; } = null!; //uitleenmedewerker
-    public User Issuer { get; set; } = null!;
-    
-    public DateTime IssueDate { get; set; }
+    public int LenderId { get; set; }
+    public User Lender { get; set; } = null!;
+
+    public DateTime LoanedAt { get; set; } = DateTime.UtcNow;
     public DateTime DueDate { get; set; }
-    public DateTime? ReturnDate { get; set; }
-    
-    public LoanStatus Status { get; set; }
-    
-    public ICollection<LoanProduct> LoanProducts { get; set; } = new List<LoanProduct>();
+    public DateTime? ReturnedAt { get; set; }
 }

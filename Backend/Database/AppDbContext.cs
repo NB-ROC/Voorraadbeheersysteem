@@ -1,4 +1,6 @@
 using Backend.Entities;
+using Backend.Entities.Relations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -10,16 +12,14 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Admin> Admins => Set<Admin>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<Loan> Loans => Set<Loan>();
-    public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
     public DbSet<Category> Categories => Set<Category>();
-    public DbSet<DefectReport> DefectReport => Set<DefectReport>();
-    public DbSet<Penalty> Penalty => Set<Penalty>();
-    public DbSet<ProductHistory> ProductHistory => Set<ProductHistory>();
+    public DbSet<Loan> Loans => Set<Loan>();
+    public DbSet<Product> Products => Set<Product>();
     public DbSet<Role> Role => Set<Role>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
+    public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<ProductRole> ProductRoles => Set<ProductRole>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,66 +34,139 @@ public class AppDbContext : DbContext
         string connectionString =
             $"server={server};port={port};database={database};user={username};password={password}";
 
-        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        optionsBuilder
+            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 
-   protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    modelBuilder.Entity<LoanProduct>()
-        .HasKey(lp => new { lp.ProductId, lp.LoanId });
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Relation Composite Keys
+        modelBuilder.Entity<LoanProduct>()
+            .HasKey(lp => new { lp.LoanId, lp.ProductId });
+        modelBuilder.Entity<UserRole>()
+            .HasKey(ur => new { ur.UserId, ur.RoleId });
+        modelBuilder.Entity<ProductRole>()
+            .HasKey(pr => new { pr.ProductId, pr.RoleId });
 
-    modelBuilder.Entity<User>()
-        .HasOne(u => u.Role)
-        .WithMany()
-        .HasForeignKey(u => u.RoleId)
-        .OnDelete(DeleteBehavior.Restrict);
+        // Loan → User (borrower) and User (lender)
+        // Two FKs to the same table require explicit naming to avoid ambiguity
+        modelBuilder.Entity<Loan>()
+            .HasOne(l => l.User)
+            .WithMany()
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-    modelBuilder.Entity<Product>()
-        .HasOne(p => p.RestrictedRole)
-        .WithMany()
-        .HasForeignKey(p => p.RestrictedRoleId)
-        .OnDelete(DeleteBehavior.SetNull);
-    
-    modelBuilder.Entity<Loan>()
-        .HasOne(l => l.User)
-        .WithMany(u => u.Loans)
-        .HasForeignKey(l => l.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<Loan>()
-        .HasOne(l => l.Issuer)
-        .WithMany()
-        .HasForeignKey(l => l.IssuedBy)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<DefectReport>()
-        .HasOne(d => d.Reporter)
-        .WithMany()
-        .HasForeignKey(d => d.ReportedBy)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<Penalty>()
-        .HasOne(p => p.User)
-        .WithMany()
-        .HasForeignKey(p => p.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<Penalty>()
-        .HasOne(p => p.Loan)
-        .WithMany()
-        .HasForeignKey(p => p.LoanId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<ProductHistory>()
-        .HasOne(ph => ph.Product)
-        .WithMany()
-        .HasForeignKey(ph => ph.ProductId)
-        .OnDelete(DeleteBehavior.Restrict);
-    
-    modelBuilder.Entity<ProductHistory>()
-        .HasOne(ph => ph.Performer)
-        .WithMany()
-        .HasForeignKey(ph => ph.PerformedBy)
-        .OnDelete(DeleteBehavior.Restrict);
-}
+        modelBuilder.Entity<Loan>()
+            .HasOne(l => l.Lender)
+            .WithMany()
+            .HasForeignKey(l => l.LenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Product → Category
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Category)
+            .WithMany()
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // LoanProduct → Loan
+        modelBuilder.Entity<LoanProduct>()
+            .HasOne(lp => lp.Loan)
+            .WithMany()
+            .HasForeignKey(lp => lp.LoanId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // LoanProduct → Product
+        modelBuilder.Entity<LoanProduct>()
+            .HasOne(lp => lp.Product)
+            .WithMany()
+            .HasForeignKey(lp => lp.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // UserRole → User
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany(u => u.UserRoles)
+            .HasForeignKey(ur => ur.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // UserRole → Role
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.Role)
+            .WithMany()
+            .HasForeignKey(ur => ur.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ProductRole → Product
+        modelBuilder.Entity<ProductRole>()
+            .HasOne(pr => pr.Product)
+            .WithMany()
+            .HasForeignKey(pr => pr.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ProductRole → Role
+        modelBuilder.Entity<ProductRole>()
+            .HasOne(pr => pr.Role)
+            .WithMany()
+            .HasForeignKey(pr => pr.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Default roles
+        modelBuilder.Entity<Role>()
+            .HasData(
+                new Role(RoleType.Admin),
+                new Role(RoleType.Manager),
+                new Role(RoleType.Lender),
+                new Role(RoleType.Student),
+                new Role(RoleType.Personnel),
+                new Role(RoleType.Guest)
+            );
+
+        // Default category
+        modelBuilder.Entity<Category>()
+            .HasData(
+                new Category
+                {
+                    Id = 1,
+                    Name = "Test"
+                }
+            );
+    }
+
+    public static async Task SeedAsync(IServiceProvider services)
+    {
+        using IServiceScope scope = services.CreateScope();
+        AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        byte[] cardId = [0, 1, 2, 3, 4, 5, 6, 7];
+
+        if (!context.Users.Any())
+        {
+            PasswordHasher<User> hasher = new();
+
+            User user = new()
+            {
+                CardId = cardId,
+                Number = 123456,
+                IsBlocked = false,
+                Email = "testmail@roc-nijmegen.nl",
+                PasswordHash = hasher.HashPassword(null!, "Placeholder1"),
+                FirstName = "Admin",
+                LastName = "Istrator",
+                CreatedAt = DateTime.Now
+            };
+
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.UserRoles.Any())
+        {
+            context.UserRoles.Add(new UserRole
+            {
+                RoleId = RoleType.Admin,
+                UserId = 1
+            });
+            await context.SaveChangesAsync();
+        }
+    }
 }

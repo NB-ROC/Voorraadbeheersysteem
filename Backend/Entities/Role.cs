@@ -4,8 +4,29 @@ namespace Backend.Entities;
 
 public class Role
 {
-    public int Id { get; set; }
+    public const int NameLength = 32;
 
-    [MaxLength(50)]
-    public string Name { get; set; } = null!;
+    public Role()
+    {
+    }
+
+    public Role(RoleType role)
+    {
+        Id = role;
+        Name = Enum.GetName(role)!;
+    }
+
+    public RoleType Id { get; set; }
+
+    [MaxLength(NameLength)] public string Name { get; set; } = null!;
+}
+
+public enum RoleType
+{
+    Admin,
+    Manager,
+    Lender,
+    Student,
+    Personnel,
+    Guest
 }
