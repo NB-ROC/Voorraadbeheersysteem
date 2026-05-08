@@ -3,7 +3,7 @@ using ReactiveUI;
 
 namespace FrontendAdmin.Services;
 
-public class NavigationService : ReactiveObject
+public class NavigationService
 {
     private readonly MainWindowViewModel _mainWindow;
 

@@ -26,12 +26,13 @@ public class ProductService : Products.ProductsBase
     public override async Task<ProductPageResponse> Page(ProductPageRequest request, ServerCallContext context)
     {
         _validator.ValidatePage(request);
-
+        
         List<Product> products = await _manager.Page(request.Page, request.PageSize);
 
+        IEnumerable<MetaProduct> metaProducts = products.Select(MapMeta);
         return new ProductPageResponse
         {
-            Products = { products.Select(MapMeta) }
+            Products = { metaProducts }
         };
     }
 
@@ -66,9 +67,10 @@ public class ProductService : Products.ProductsBase
         {
             Name = request.Name,
             Description = request.Description,
-            CategoryId = request.CategoryId,
+            CategoryId = 1,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            Image = imageName
         };
 
         return new ProductCreateResponse
@@ -84,7 +86,7 @@ public class ProductService : Products.ProductsBase
 
         if (request.HasName) product.Name = request.Name;
         if (request.HasDescription) product.Description = request.Description;
-        if (request.HasCategoryId) product.CategoryId = request.CategoryId;
+        product.CategoryId = 1;
 
         product.UpdatedAt = DateTime.UtcNow;
 
@@ -135,7 +137,7 @@ public class ProductService : Products.ProductsBase
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Category = product.Category.Name,
+            Category = "",
             Image = product.Image
         };
     }

@@ -3,26 +3,25 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Google.Protobuf;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
 public class UserFormViewModel : ViewModelBase
 {
+    private readonly BackendService _backend;
     public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
         base(services)
     {
+        _backend = services.GetService<BackendService>()?? throw new NullReferenceException("Backend service not initialised");
         if (existing == null)
-            Id = Enumerable.Range(0, 7)
+            CardId = Enumerable.Range(0, 7)
                 .Select(_ => (byte)Random.Shared.Next(256))
                 .ToArray();
-        Id = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
+        CardId = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
         this.WhenAnyValue(
             x => x.FirstName,
             x => x.LastName,
@@ -40,37 +39,29 @@ public class UserFormViewModel : ViewModelBase
 
         async Task SaveProductAsync()
         {
-            bool success;
-            if (existing != null)
-                success = (await Client.Users.ModifyAsync(new UserModifyRequest
-                {
-                    Id = ByteString.CopyFrom(existing.Id),
-                    FirstName = FirstName,
-                    LastName = LastName,
-                    Email = Email,
-                    Number = Number,
-                    RoleId = RoleId,
-                    IsBlocked = IsBlocked
-                })).Success;
-            else
-                success = (await Client.Users.CreateAsync(new UserCreateRequest
-                {
-                    Id = ByteString.CopyFrom(Id),
-                    FirstName = FirstName,
-                    LastName = LastName,
-                    Email = Email,
-                    Number = Number,
-                    RoleId = RoleId,
-                    IsBlocked = IsBlocked
-                })).Success;
+            var model = new UserModel
+            {
+                Id = Id,
+                CardId = CardId,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                Number = Number
+            };
 
-            if (success) Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
+            (RequestResult result, bool success) = await (existing == null
+                ? _backend.Users.Create(model)
+                : _backend.Users.Modify(model));
+
+            if (result == RequestResult.Success && success) Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
         }
     }
 
     #region Properties
+    
+    public int Id { get; set; }
 
-    public byte[] Id
+    public byte[] CardId
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -127,7 +118,7 @@ public class UserFormViewModel : ViewModelBase
 
     private void Validate()
     {
-        Error = Id is not { Length: UserModel.IdLength }
+        Error = CardId is not { Length: UserModel.IdLength }
             ? "Ongeldig ID."
             : string.IsNullOrWhiteSpace(FirstName)
                 ? "Voornaam is verplicht."
@@ -167,12 +158,12 @@ public class UserFormViewModel : ViewModelBase
 
     private void LoadExistingProduct(UserViewModel existing)
     {
+        Id = existing.Id;
+        CardId = existing.CardId;
         FirstName = existing.FirstName;
         LastName = existing.LastName;
         Email = existing.Email;
         Number = existing.Number;
-        RoleId = existing.RoleId;
-        IsBlocked = existing.IsBlocked;
     }
 
     #endregion

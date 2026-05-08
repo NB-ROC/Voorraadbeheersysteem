@@ -27,7 +27,6 @@ public class AuthService : Auth.AuthBase
 
         if (user == null || _passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, request.Password ) == PasswordVerificationResult.Failed)
         {
-            Console.WriteLine("Invalid");
             return new AuthLoginResponse();
         }
         

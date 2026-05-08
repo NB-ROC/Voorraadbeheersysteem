@@ -19,9 +19,7 @@ message MetaUser {
   string first_name = 3;
   string last_name = 4;
   string email = 5;
-  int32 role_id = 6;
-  int32 number = 7;
-  bool is_blocked = 8;
+  int32 number = 6;
 }
 
 // Page
@@ -49,9 +47,7 @@ message UserCreateRequest {
   string first_name = 3;
   string last_name = 4;
   string email = 5;
-  int32 role_id = 6;
-  int32 number = 7;
-  bool is_blocked = 8;
+  int32 number = 6;
 }
 
 message UserCreateResponse {
@@ -66,9 +62,7 @@ message UserModifyRequest {
   optional string first_name = 3;
   optional string last_name = 4;
   optional string email = 5;
-  optional int32 role_id = 6;
-  int32 number = 7;
-  bool is_blocked = 8;
+  optional int32 number = 6;
 }
 
 message UserModifyResponse {

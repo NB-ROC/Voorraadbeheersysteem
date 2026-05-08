@@ -1,19 +1,21 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
-using FrontendAdmin.Grpc;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.User;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
 public class UserPageViewModel : PageViewModelBase
 {
+    private readonly BackendService _backend;
     public UserPageViewModel(ServiceProvider services) : base(services)
     {
+        _backend = services.GetService<BackendService>()?? throw new NullReferenceException("Backend service not initialised");
         NavigateUserForm = ReactiveCommand.Create(() =>
         {
             Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services));
@@ -30,22 +32,10 @@ public class UserPageViewModel : PageViewModelBase
 
     public async Task LoadUsersAsync()
     {
-        UserPageResponse? result = await Client.Users.PageAsync(new UserPageRequest
-        {
-            Page = 1,
-            PageSize = 20
-        });
+        (RequestResult result, List<UserModel> users) = await _backend.Users.Page(1, 20);
 
         Users.Clear();
-        foreach (MetaUser? user in result.Users)
-            Users.Add(new UserViewModel(Services, new UserModel
-            {
-                Id = user.Id.ToByteArray(),
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Number = user.Number,
-                IsBlocked = user.IsBlocked
-            }));
+        foreach (UserModel user in users)
+            Users.Add(new UserViewModel(Services, user));
     }
 }

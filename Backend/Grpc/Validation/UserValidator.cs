@@ -25,9 +25,6 @@ public class UserValidator : Validator
         ValidateName(request.FirstName);
         ValidateName(request.LastName);
         ValidateEmail(request.Email);
-
-        if (request.RoleId < 0)
-            Throw("Invalid role");
     }
 
     public async Task<User> ValidateModify(UserModifyRequest request)

@@ -32,7 +32,7 @@ public class ProductValidator : Validator
     {
         ValidateName(request.Name);
         ValidateDescription(request.Description);
-        ValidateCategoryId(request.CategoryId);
+        // ValidateCategoryId(request.CategoryId);
 
         return ValidateImage(request.Image);
     }
@@ -54,8 +54,8 @@ public class ProductValidator : Validator
         if (request.HasDescription)
             ValidateDescription(request.Description);
 
-        if (request.HasCategoryId)
-            ValidateCategoryId(request.CategoryId);
+        // if (request.HasCategory)
+        //     ValidateCategoryId(request.Category);
 
         if (request.HasImage)
             extension = ValidateImage(request.Image);

@@ -15,10 +15,11 @@ public class ProductManager
     public async Task<List<Product>> Page(int page, int pageSize)
     {
         return await _context.Products
+            .Include(p => p.Category)
             .OrderBy(product => product.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync().ConfigureAwait(false);;
     }
 
     public async Task<Product?> Get(int id)

@@ -7,45 +7,61 @@
 
     <Grid ColumnDefinitions="*,*" RowDefinitions="*">
 
-        <StackPanel Grid.Column="0" Margin="20">
+        <!-- LEFT -->
+        <StackPanel Grid.Column="0"
+                    Margin="20"
+                    Spacing="10">
 
             <StackPanel>
-                <TextBlock Foreground="Black" Text="Naam:" />
-                <TextBox MaxLength="{x:Static models:ProductModel.NameLength}"
-                         Text="{Binding Name}" Margin="0,0,0,10" />
+                <TextBlock Text="Naam:" />
+                <TextBox Text="{Binding Name}"
+                         MaxLength="{x:Static models:ProductModel.NameLength}" />
             </StackPanel>
 
             <StackPanel>
-                <TextBlock Foreground="Black" Text="Categorie ID:" />
-                <TextBox Text="{Binding CategoryId}" Margin="0,0,0,10" />
+                <TextBlock Text="Categorie:" />
+                <TextBox Text="{Binding Category}" />
             </StackPanel>
 
             <StackPanel>
-                <TextBlock Foreground="Black" Text="Beschrijving:" />
-                <TextBox MinLines="3"
+                <TextBlock Text="Beschrijving:" />
+                <TextBox Text="{Binding Description}"
+                         MinLines="5"
                          TextWrapping="Wrap"
-                         MaxLength="{x:Static models:ProductModel.DescriptionLength}"
-                         Text="{Binding Description}"
-                         Margin="0,0,0,10" />
+                         AcceptsReturn="True"
+                         MaxLength="{x:Static models:ProductModel.DescriptionLength}" />
             </StackPanel>
 
-            <StackPanel HorizontalAlignment="Center">
-                <Button Content="Opslaan" Command="{Binding SaveCommand}" />
-                <TextBlock Foreground="Red" Text="{Binding Error}" />
-            </StackPanel>
+            <Button Content="Opslaan"
+                    Command="{Binding SaveCommand}"
+                    HorizontalAlignment="Center"
+                    Margin="0,10,0,0" />
+
+            <TextBlock Text="{Binding Error}"
+                       Foreground="Red"
+                       TextWrapping="Wrap" />
 
         </StackPanel>
 
-        <StackPanel Grid.Column="1" Margin="20" Spacing="10">
+        <!-- RIGHT -->
+        <StackPanel Grid.Column="1"
+                    Margin="20"
+                    Spacing="10">
 
             <Button Content="Selecteer afbeelding"
-                    Command="{Binding GetImageCommand}"
-                    Margin="0 0 0 10" />
+                    Command="{Binding GetImageCommand}" />
 
-            <Border Height="400" Width="400" BorderThickness="1" BorderBrush="Black">
-                <Image Source="{Binding PreviewImage}" Stretch="Uniform" />
+            <Border Width="400"
+                    Height="400"
+                    BorderBrush="Black"
+                    BorderThickness="1">
+
+                <Image Source="{Binding PreviewImage}"
+                       Stretch="Uniform" />
+
             </Border>
 
         </StackPanel>
+
     </Grid>
 </UserControl>

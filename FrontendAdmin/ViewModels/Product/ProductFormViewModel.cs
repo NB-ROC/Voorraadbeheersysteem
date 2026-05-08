@@ -2,187 +2,232 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
-using FrontendAdmin.Grpc;
+using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Google.Protobuf;
-using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductFormViewModel : ViewModelBase
 {
-    public ProductFormViewModel(ServiceProvider services, ProductViewModel? existing = null) : base(services)
+    private readonly BackendService _backend;
+    private readonly ProductViewModel? _existing;
+
+    public ProductFormViewModel(ServiceProvider services, ProductViewModel? existing = null)
+        : base(services)
     {
+        _backend = Services.GetService<BackendService>()
+                   ?? throw new NullReferenceException("Backend service not initialised");
+
+        _existing = existing;
+
         this.WhenAnyValue(
-            x => x.Name,
-            x => x.CategoryId,
-            x => x.Description,
-            x => x.ImageBytes
-        ).Subscribe(_ => Validate());
+                x => x.Name,
+                x => x.Category,
+                x => x.Description,
+                x => x.ImageBytes
+            )
+            .Subscribe(_ => Validate());
 
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
-        SaveCommand =
-            ReactiveCommand.CreateFromTask(SaveProductAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
 
-        if (existing != null) LoadExistingProduct(existing);
+        SaveCommand = ReactiveCommand.CreateFromTask(
+            SaveProductAsync,
+            this.WhenAnyValue(x => x.Error,
+                error => string.IsNullOrWhiteSpace(error)));
 
-        return;
-
-        async Task SaveProductAsync()
-        {
-            bool success;
-            if (existing != null)
-                success = (await Client.Products.ModifyAsync(new ProductModifyRequest
-                {
-                    Id = existing.Id,
-                    Name = Name,
-                    CategoryId = CategoryId,
-                    Description = Description,
-                    Image = ByteString.CopyFrom(ImageBytes!)
-                })).Success;
-            else
-                success = (await Client.Products.CreateAsync(new ProductCreateRequest
-                {
-                    Name = Name,
-                    CategoryId = CategoryId,
-                    Description = Description,
-                    Image = ByteString.CopyFrom(ImageBytes!)
-                })).Success;
-
-            if (success) Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
-        }
+        if (existing != null)
+            LoadExistingProduct(existing);
     }
 
     #region Properties
 
+    private Bitmap? _previewImage;
     public Bitmap? PreviewImage
     {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        get => _previewImage;
+        set => this.RaiseAndSetIfChanged(ref _previewImage, value);
     }
 
+    private byte[]? _imageBytes;
     public byte[]? ImageBytes
     {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        get => _imageBytes;
+        set => this.RaiseAndSetIfChanged(ref _imageBytes, value);
     }
 
+    private string _name = string.Empty;
     public string Name
     {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
-
-    public int CategoryId
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
     }
 
+    private string _category = string.Empty;
+    public string Category
+    {
+        get => _category;
+        set => this.RaiseAndSetIfChanged(ref _category, value);
+    }
+
+    private string _description = string.Empty;
     public string Description
     {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
-
-    private string FilterNumber(string? input)
-    {
-        if (string.IsNullOrEmpty(input))
-            return "0";
-
-        string digitsOnly = new(input.Where(char.IsDigit).ToArray());
-
-        return string.IsNullOrEmpty(digitsOnly) ? "0" : digitsOnly;
+        get => _description;
+        set => this.RaiseAndSetIfChanged(ref _description, value);
     }
 
+    private string _error = string.Empty;
     public string Error
     {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
-
+        get => _error;
+        set => this.RaiseAndSetIfChanged(ref _error, value);
+    }
 
     public ICommand SaveCommand { get; }
     public ICommand GetImageCommand { get; }
 
     #endregion
 
-    #region Private Methods
+    #region Validation
 
     private void Validate()
     {
-        Error = string.IsNullOrWhiteSpace(Name)
-            ? "Naam is verplicht."
-            : CategoryId <= 0
-                ? "Categorie is verplicht."
-                : string.IsNullOrWhiteSpace(Description)
-                    ? "Beschrijving is verplicht."
-                    : ImageBytes == null
-                        ? "Selecteer een afbeelding."
-                        : string.Empty;
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            Error = "Naam is verplicht.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Category))
+        {
+            Error = "Categorie is verplicht.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            Error = "Beschrijving is verplicht.";
+            return;
+        }
+
+        if (ImageBytes == null || ImageBytes.Length == 0)
+        {
+            Error = "Selecteer een afbeelding.";
+            return;
+        }
+
+        Error = string.Empty;
     }
+
+    #endregion
+
+    #region Product Loading
 
     private void LoadExistingProduct(ProductViewModel existing)
     {
         Name = existing.Name;
-        CategoryId = existing.CategoryId;
+        Category = existing.Category;
         Description = existing.Description;
 
-        _ = LoadExistingImageAsync(existing.Image);
+        if (!string.IsNullOrWhiteSpace(existing.ImageName))
+            _ = LoadExistingImageAsync(existing.ImageName);
     }
 
     private async Task LoadExistingImageAsync(string imageName)
     {
-        using MemoryStream ms = new();
-        using AsyncServerStreamingCall<ProductImageResponse>? call = Client.Products.Image(new ProductImageRequest
-            { Name = imageName });
+        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(imageName);
 
-        await foreach (ProductImageResponse chunk in call.ResponseStream.ReadAllAsync())
-            await ms.WriteAsync(chunk.Raw.ToByteArray());
+        if (result != RequestResult.Success || image == null)
+            return;
 
-        ms.Seek(0, SeekOrigin.Begin);
-        ImageBytes = ms.ToArray();
-        PreviewImage = new Bitmap(ms);
+        ImageBytes = image.Value.bytes;
+        
+        PreviewImage = image.Value.bitmap;
     }
 
-    public async Task OpenImageFileAsync()
+    #endregion
+
+    #region Save
+
+    private async Task SaveProductAsync()
+    {
+        ProductModel model = new()
+        {
+            Id = _existing?.Id ?? 0,
+            Name = Name,
+            Category = Category,
+            Description = Description
+        };
+
+        (RequestResult result, bool success) =
+            await (_existing == null
+                ? _backend.Products.Create(model, ImageBytes)
+                : _backend.Products.Modify(model, ImageBytes));
+
+        if (result == RequestResult.Success && success)
+        {
+            Services.GetService<NavigationService>()
+                ?.NavigateTo(new ProductPageViewModel(Services));
+        }
+    }
+
+    #endregion
+
+    #region Image Picker
+
+    private async Task OpenImageFileAsync()
     {
         TopLevel? topLevel =
             TopLevel.GetTopLevel(
-                Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                Application.Current?.ApplicationLifetime
+                    is IClassicDesktopStyleApplicationLifetime desktop
                     ? desktop.MainWindow
                     : null);
-        if (topLevel == null) return;
-        IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            Title = "Selecteer afbeelding", AllowMultiple = false,
-            FileTypeFilter = [new FilePickerFileType("Images") { Patterns = ["*.jpg", "*.jpeg", "*.png"] }]
-        });
-        if (files.Count == 0) return;
-        IStorageFile file = files[0];
-        await using Stream stream = await file.OpenReadAsync();
-        MemoryStream ms = new();
-        await stream.CopyToAsync(ms);
-        ImageBytes = ms.ToArray();
-        ms.Seek(0, SeekOrigin.Begin);
-        PreviewImage = new Bitmap(ms);
-        ms.Dispose();
-    }
 
-    private void NumberOnly(object? sender, TextInputEventArgs e)
-    {
-        if (!int.TryParse(e.Text, out _)) e.Handled = true;
+        if (topLevel == null)
+            return;
+
+        IReadOnlyList<IStorageFile> files =
+            await topLevel.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = "Selecteer afbeelding",
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Images")
+                        {
+                            Patterns = ["*.jpg", "*.jpeg", "*.png"]
+                        }
+                    ]
+                });
+
+        if (files.Count == 0)
+            return;
+
+        IStorageFile file = files[0];
+
+        await using Stream stream = await file.OpenReadAsync();
+
+        using MemoryStream ms = new();
+
+        await stream.CopyToAsync(ms);
+
+        ImageBytes = ms.ToArray();
+
+        ms.Position = 0;
+
+        PreviewImage = new Bitmap(ms);
     }
 
     #endregion

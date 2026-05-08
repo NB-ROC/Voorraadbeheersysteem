@@ -121,6 +121,16 @@ public class AppDbContext : DbContext
                 new Role(RoleType.Personnel),
                 new Role(RoleType.Guest)
             );
+        
+        // Default category
+        modelBuilder.Entity<Category>()
+            .HasData(
+                new Category
+                {
+                    Id = 1,
+                    Name = "Test"
+                }
+                );
     }
 
     public static async Task SeedAsync(IServiceProvider services)

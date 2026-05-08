@@ -11,7 +11,9 @@ public class UserModel
     public const int NameLength = 32;
 
 
-    public byte[] Id { get; set; } = new byte[IdLength];
+    public int Id { get; set; }
+    
+    public byte[] CardId { get; set; } = new byte[IdLength];
 
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;
 
@@ -19,8 +21,4 @@ public class UserModel
     [MaxLength(NameLength)] public string LastName { get; set; } = null!;
 
     public int Number { get; set; }
-
-    public int RoleId { get; set; }
-
-    public bool IsBlocked { get; set; }
 }

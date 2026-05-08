@@ -26,9 +26,12 @@ public class App : Application
 
             MainWindowViewModel mainWindowViewModel = new();
             NavigationService navigationService = new(mainWindowViewModel);
+            BackendService backendService = new();
 
             serviceCollection.AddSingleton(navigationService);
-
+            serviceCollection.AddSingleton(backendService);
+            
+            _ = backendService.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
 
             DisableAvaloniaDataAnnotationValidation();
 

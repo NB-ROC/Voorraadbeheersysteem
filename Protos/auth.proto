@@ -6,7 +6,6 @@ package auth;
 
 service Auth {
   rpc Login (AuthLoginRequest) returns (AuthLoginResponse);
-  rpc Logout (AuthLogoutRequest) returns (AuthLogoutResponse);
 }
 
 // Login
@@ -17,13 +16,4 @@ message AuthLoginRequest {
 
 message AuthLoginResponse {
   optional string token = 1;
-}
-
-// Logout
-message AuthLogoutRequest {
-  string token = 1;
-}
-
-message AuthLogoutResponse {
-  bool success = 1;
 }
