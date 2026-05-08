@@ -37,9 +37,12 @@ public class ProductPageViewModel : PageViewModelBase
 
         Products.Clear();
         foreach (ProductModel product in products)
+        {
+            Console.WriteLine(product.Id);
             Products.Add(
                 new ProductViewModel(Services, product
                 )
             );
+        }
     }
 }

@@ -16,6 +16,7 @@ public class ProductViewModel : ViewModelBase
 
     public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
+        Console.WriteLine(model.Id);
         _backend = services.GetService<BackendService>() ??
                    throw new NullReferenceException("Backend service not initialised");
         _model = model;

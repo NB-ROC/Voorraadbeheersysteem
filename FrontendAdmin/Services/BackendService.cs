@@ -354,7 +354,11 @@ public class ProductEndpoint
         {
             Name = productModel.Name,
             Description = productModel.Description,
-            CategoryId = productModel.CategoryModel.Id,
+            Category = new Category
+            {
+                Id = productModel.CategoryModel.Id,
+                Name = productModel.CategoryModel.Name
+            },
             RoleId = productModel.RoleModel.Id,
             Image = ByteString.CopyFrom(imageBytes)
         };
@@ -379,7 +383,11 @@ public class ProductEndpoint
             Id = productModel.Id,
             Name = productModel.Name,
             Description = productModel.Description,
-            CategoryId = productModel.CategoryModel.Id,
+            Category = new Category
+            {
+                Id = productModel.CategoryModel.Id,
+                Name = productModel.CategoryModel.Name
+            },
             RoleId = productModel.RoleModel.Id,
             Image = ByteString.CopyFrom(imageBytes)
         };

@@ -96,11 +96,12 @@ public class ProductFormViewModel : ViewModelBase
     {
         ProductModel model = new()
         {
-            Id = _existing?.Id ?? 0,
+            Id = Id,
             Name = Name,
             CategoryModel = !string.IsNullOrWhiteSpace(CustomCategory)
                 ? new CategoryModel
                 {
+                    Id = -1,
                     Name = CustomCategory
                 }
                 : CategoryModel!,
@@ -170,6 +171,8 @@ public class ProductFormViewModel : ViewModelBase
     #endregion
 
     #region Properties
+    
+    public int Id { get; set; }
 
     public Bitmap? PreviewImage
     {
@@ -256,6 +259,7 @@ public class ProductFormViewModel : ViewModelBase
 
     private void LoadExistingProduct(ProductViewModel existing)
     {
+        Id = existing.Id;
         Name = existing.Name;
         CategoryModel = existing.CategoryModel;
         Description = existing.Description;

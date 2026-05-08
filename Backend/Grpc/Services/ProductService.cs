@@ -69,7 +69,11 @@ public class ProductService : Products.ProductsBase
         {
             Name = request.Name,
             Description = request.Description,
-            CategoryId = request.CategoryId,
+            Category = new Entities.Category
+            {
+                Id = request.Category.Id,
+                Name = request.Category.Name
+            },
             RoleId = request.RoleId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
@@ -89,7 +93,11 @@ public class ProductService : Products.ProductsBase
 
         if (request.HasName) product.Name = request.Name;
         if (request.HasDescription) product.Description = request.Description;
-        if (request.HasCategoryId) product.CategoryId = request.CategoryId;
+        if (request.Category != null) product.Category = new Entities.Category
+        {
+            Id = request.Category.Id,
+            Name = request.Category.Name
+        };
         if (request.HasRoleId) product.RoleId = request.RoleId;
 
         product.UpdatedAt = DateTime.UtcNow;

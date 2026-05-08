@@ -58,7 +58,7 @@ message ProductGetResponse {
 message ProductCreateRequest {
   string name = 1;
   string description = 2;
-  int32 category_id = 3;
+  Category category = 3;
   int32 role_id = 4;
   bytes image = 5;
 }
@@ -73,7 +73,7 @@ message ProductModifyRequest {
 
   optional string name = 2;
   optional string description = 3;
-  optional int32 category_id = 4;
+  optional Category category = 4;
   optional int32 role_id = 5;
   optional bytes image = 6;
 }
