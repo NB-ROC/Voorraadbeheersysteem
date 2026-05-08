@@ -1,42 +1,24 @@
-﻿using System.IO;
-using System.Reactive;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
-using Frontend.Grpc;
-using Frontend.Services;
-using Frontend.Grpc;
 using Frontend.Models;
 using Frontend.Services;
-using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.Product;
 using ReactiveUI;
 
 namespace Frontend.ViewModels.Product;
 
 public class ProductViewModel : ViewModelBase
 {
+    private readonly BackendService _backend;
     private readonly ProductModel _model;
 
     public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
         _model = model;
-
-        EditCommand = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services, this));
-        });
-        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            await DeleteAsync();
-            Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
-        });
+        _backend = services.GetRequiredService<BackendService>();
 
         _ = LoadImageAsync();
     }
-
-    public ReactiveCommand<Unit, Unit> EditCommand { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
     public int Id => _model.Id;
 
@@ -51,16 +33,18 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public int CategoryId
+    public CategoryModel Category
     {
-        get => _model.CategoryId;
+        get => _model.Category;
         set
         {
-            if (_model.CategoryId == value) return;
-            _model.CategoryId = value;
+            if (_model.Category == value) return;
+            _model.Category = value;
             this.RaisePropertyChanged();
         }
     }
+    
+    public string CategoryName => _model.Category.Name;
 
     public string Description
     {
@@ -102,40 +86,15 @@ public class ProductViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private async Task DeleteAsync()
-    {
-        bool success = (await Client.Products.DeleteAsync(new ProductDeleteRequest { Id = Id })).Success;
-    }
-
     private async Task LoadImageAsync()
     {
         IsImageLoading = true;
+        ImageFailed = false;
 
-        try
-        {
-            using MemoryStream ms = new();
+        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(Image);
 
-            using AsyncServerStreamingCall<ProductImageResponse>? call = Client.Products.Image(new ProductImageRequest
-            {
-                Name = Image
-            });
-
-            await foreach (ProductImageResponse chunk in call.ResponseStream.ReadAllAsync())
-            {
-                byte[] bytes = chunk.Raw.ToByteArray();
-                await ms.WriteAsync(bytes);
-            }
-
-            ms.Seek(0, SeekOrigin.Begin);
-            Thumbnail = new Bitmap(ms);
-        }
-        catch
-        {
-            ImageFailed = true;
-        }
-        finally
-        {
-            IsImageLoading = false;
-        }
+        if (result == RequestResult.Success) Thumbnail = image!.Value.bitmap;
+        else ImageFailed = true;
+        IsImageLoading = false;
     }
 }

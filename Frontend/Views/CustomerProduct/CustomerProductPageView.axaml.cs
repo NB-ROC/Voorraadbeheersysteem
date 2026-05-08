@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace FrontendAdmin.Views.Customer;
+namespace Frontend.Views.CustomerProduct;
 
 public partial class CustomerProductPageView : UserControl
 {
