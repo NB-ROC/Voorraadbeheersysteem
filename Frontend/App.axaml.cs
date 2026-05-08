@@ -5,6 +5,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Frontend.Services;
 using Frontend.ViewModels;
+using Frontend.ViewModels.CustomerProduct;
 using Frontend.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,8 +26,12 @@ public class App : Application
 
             MainWindowViewModel mainWindowViewModel = new();
             NavigationService navigationService = new(mainWindowViewModel);
+            BackendService backendService = new();
 
             serviceCollection.AddSingleton(navigationService);
+            serviceCollection.AddSingleton(backendService);
+
+            _ = backendService.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
 
 
             DisableAvaloniaDataAnnotationValidation();
@@ -34,7 +39,7 @@ public class App : Application
             ServiceProvider services = serviceCollection.BuildServiceProvider();
 
 
-            // mainWindowViewModel.CurrentPage = new DashboardPageViewModel(services);
+            mainWindowViewModel.CurrentPage = new CustomerProductPageViewModel(services);
 
             desktop.MainWindow = new MainWindowView
             {

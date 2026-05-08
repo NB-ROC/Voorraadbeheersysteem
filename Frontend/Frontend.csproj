@@ -50,18 +50,5 @@
           <DependentUpon>ProductPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Product\ProductFormView.axaml.cs">
-          <DependentUpon>ProductFormView.axaml</DependentUpon>
-          <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Product\ProductPageView.axaml.cs">
-          <DependentUpon>ProductPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Views\Product\ProductFormView.axaml" />
-      <AdditionalFiles Include="Views\Product\ProductPageView.axaml" />
     </ItemGroup>
 </Project>

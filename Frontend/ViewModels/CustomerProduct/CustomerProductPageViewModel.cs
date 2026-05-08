@@ -1,17 +1,20 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Frontend.Grpc;
+using Frontend.Models;
+using Frontend.Services;
+using Frontend.ViewModels.Product;
 using Microsoft.Extensions.DependencyInjection;
-using Protos.Product;
 using ReactiveUI;
 
 namespace Frontend.ViewModels.CustomerProduct;
 
 public class CustomerProductPageViewModel : PageViewModelBase
 {
+    private BackendService _backend;
     private readonly ServiceProvider _services;
     
-    // public ObservableCollection<ProductViewModel> Products { get; } = [];
+    public ObservableCollection<ProductViewModel> Products { get; } = [];
 
     private bool _isLoading;
 
@@ -24,28 +27,26 @@ public class CustomerProductPageViewModel : PageViewModelBase
     public CustomerProductPageViewModel(ServiceProvider services) : base(services)
     {
         _services = services;
+        _backend = services.GetRequiredService<BackendService>();
 
         _ = LoadProducts();
     }
 
     private async Task LoadProducts()
     {
+        await _backend.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
         try
         {
             IsLoading = true;
 
-            ProductPageResponse? result =
-                await Client.Products.PageAsync(
-                    new ProductPageRequest
-                    {
-                        Page = 1,
-                        PageSize = 20
-                    }
-                );
+             (RequestResult result, List<ProductModel> models) = await _backend.Products.Page(1, 20);
 
-            // Products.Clear();
-
-            
+            Products.Clear();
+            foreach (ProductModel model in models)
+            {
+                Products.Add(new ProductViewModel(Services,  model));
+            }
+            this.RaisePropertyChanged(nameof(Products));
         }
         finally
         {
