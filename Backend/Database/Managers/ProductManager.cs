@@ -30,32 +30,40 @@ public class ProductManager
 
     public async Task<bool> Create(Product product)
     {
-        _context.Products.Add(product);
         try
         {
+            product.CategoryId = await EnsureCategory(product);
+
+            product.Category = null!;
+            
+            _context.Products.Add(product);
+
             await _context.SaveChangesAsync();
+            return true;
         }
         catch (DbUpdateException)
         {
             return false;
         }
-
-        return true;
     }
 
     public async Task<bool> Modify(Product product)
     {
-        _context.Products.Update(product);
         try
         {
+            product.CategoryId = await EnsureCategory(product);
+            
+            product.Category = null!;
+
+            _context.Products.Update(product);
+
             await _context.SaveChangesAsync();
+            return true;
         }
         catch (DbUpdateException)
         {
             return false;
         }
-
-        return true;
     }
 
     public async Task<bool> Delete(int id)
@@ -73,5 +81,46 @@ public class ProductManager
         }
 
         return true;
+    }
+
+    public async Task<List<Role>> Role()
+    {
+        return await _context.Role.ToListAsync();
+    }
+
+    public async Task<List<Category>> Category()
+    {
+        return await _context.Categories.ToListAsync();
+    }
+    
+    private async Task<int> EnsureCategory(Product product)
+    {
+        if (product.Category != null && product.Category.Id != -1)
+        {
+            return product.Category.Id;
+        }
+
+        if (product.Category != null && !string.IsNullOrWhiteSpace(product.Category.Name))
+        {
+            var existingCategory = await _context.Categories
+                .FirstOrDefaultAsync(c => c.Name == product.Category.Name);
+
+            if (existingCategory != null)
+            {
+                return existingCategory.Id;
+            }
+
+            var newCategory = new Category
+            {
+                Name = product.Category.Name
+            };
+
+            _context.Categories.Add(newCategory);
+            await _context.SaveChangesAsync();
+
+            return newCategory.Id;
+        }
+
+        throw new Exception("Invalid category");
     }
 }

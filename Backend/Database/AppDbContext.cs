@@ -137,7 +137,7 @@ public class AppDbContext : DbContext
     {
         using IServiceScope scope = services.CreateScope();
         AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        byte[] cardId = [0, 1, 2, 3, 4, 5, 6, 7];
+        byte[] cardId = [0, 1, 2, 3, 4, 5, 6];
 
         if (!context.Users.Any())
         {

@@ -13,8 +13,8 @@ public class ProductModel
 
     [MaxLength(CategoryLength)] public string Name { get; set; } = null!;
 
-    public string Category { get; set; } = null!;
-    public RoleModel Role { get; set; } = null!;
+    public CategoryModel CategoryModel { get; set; } = null!;
+    public RoleModel RoleModel { get; set; } = null!;
 
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
 

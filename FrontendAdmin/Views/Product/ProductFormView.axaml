@@ -18,9 +18,40 @@
                          MaxLength="{x:Static models:ProductModel.NameLength}" />
             </StackPanel>
 
-            <StackPanel>
+            <StackPanel Spacing="5">
                 <TextBlock Text="Categorie:" />
-                <TextBox Text="{Binding Category}" />
+
+                <!-- Existing categories -->
+                <ComboBox ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding CategoryModel}">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
+
+                <!-- Optional custom category -->
+                <TextBlock Text="Of nieuwe categorie:" />
+
+                <TextBox Text="{Binding CustomCategory}"
+                         Watermark="Nieuwe categorie..." />
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <TextBlock Text="Rol:" />
+
+                <ComboBox ItemsSource="{Binding Roles}"
+                          SelectedItem="{Binding RoleModel}">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
             </StackPanel>
 
             <StackPanel>

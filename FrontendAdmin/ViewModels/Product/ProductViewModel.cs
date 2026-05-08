@@ -2,10 +2,10 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
-using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using FrontendAdmin.Models;
 
 namespace FrontendAdmin.ViewModels.Product;
 
@@ -16,6 +16,7 @@ public class ProductViewModel : ViewModelBase
 
     public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
     {
+        Console.WriteLine(model.Id);
         _backend = services.GetService<BackendService>() ??
                    throw new NullReferenceException("Backend service not initialised");
         _model = model;
@@ -49,16 +50,18 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public string Category
+    public CategoryModel CategoryModel
     {
-        get => _model.Category;
+        get => _model.CategoryModel;
         set
         {
-            if (_model.Category == value) return;
-            _model.Category = value;
+            if (_model.CategoryModel.Equals(value)) return;
+            _model.CategoryModel = value;
             this.RaisePropertyChanged();
         }
     }
+    
+    public string CategoryName => CategoryModel.Name;
 
     public string Description
     {
@@ -71,13 +74,13 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public RoleModel Role
+    public RoleModel RoleModel
     {
-        get => _model.Role;
+        get => _model.RoleModel;
         set
         {
-            if (_model.Role == value) return;
-            _model.Role = value;
+            if (_model.RoleModel == value) return;
+            _model.RoleModel = value;
             this.RaisePropertyChanged();
         }
     }
