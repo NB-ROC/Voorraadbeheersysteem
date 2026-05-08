@@ -1,0 +1,53 @@
+﻿using System;
+using System.Reactive;
+using System.Threading.Tasks;
+using FrontendAdmin.Services;
+using FrontendAdmin.ViewModels.Dashboard;
+using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
+
+namespace FrontendAdmin.ViewModels.Login;
+
+public class LoginPageViewModel : PageViewModelBase
+{
+    public LoginPageViewModel(ServiceProvider services) : base(services)
+    {
+        var canLogin = this.WhenAnyValue(
+            x => x.Password,
+            (p) => !string.IsNullOrWhiteSpace(p)
+            );
+        
+        LoginCommand = ReactiveCommand.CreateFromTask(Login, canLogin);
+    }
+
+    public string Password
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public string Email
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public string ErrorMessage
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public ReactiveCommand<Unit, Unit> LoginCommand { get; }
+
+    private async Task Login()
+    {
+        bool success = await Services.GetService<BackendService>()!.LogIn(Email, Password);
+
+        if (success)
+        {
+            Services.GetService<NavigationService>()?.NavigateTo(new DashboardPageViewModel(Services));
+        }
+    }
+    
+}

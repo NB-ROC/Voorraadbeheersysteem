@@ -1,0 +1,75 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:login="clr-namespace:FrontendAdmin.ViewModels.Login"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FrontendAdmin.Views.Login.LoginPageView"
+             x:DataType="{x:Type login:LoginPageViewModel}">
+     <Grid Background="White">
+
+        <Border Width="440"
+                Padding="40"
+                Background="White"
+                CornerRadius="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BoxShadow="0 8 30 #33000000">
+
+            <StackPanel Spacing="28">
+
+                <!-- Title -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Login"
+                               FontSize="32"
+                               FontWeight="Bold"
+                               Foreground="#2A2A2A"/>
+                    <TextBlock Text="to get started."
+                               FontSize="18"
+                               Foreground="#7A7A7A"/>
+                </StackPanel>
+
+                <!-- Email -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Email"
+                               Foreground="#2A2A2A"
+                               FontSize="15"/>
+                    <TextBox Text="{Binding Email}"
+                             Watermark="Enter your email"
+                             BorderBrush="#5A1E81"
+                             BorderThickness="2"
+                             CornerRadius="10"
+                             Padding="12"
+                             FontSize="15"/>
+                </StackPanel>
+
+                <!-- Password -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Password"
+                               Foreground="#2A2A2A"
+                               FontSize="15"/>
+                    <TextBox Text="{Binding Password}"
+                             PasswordChar="●"
+                             Watermark="Enter your password"
+                             BorderBrush="#5A1E81"
+                             BorderThickness="2"
+                             CornerRadius="10"
+                             Padding="12"
+                             FontSize="15"/>
+                </StackPanel>
+
+                <!-- Continue Button -->
+                <Button Content="Continue"
+                        Command="{Binding LoginCommand}"
+                        Background="#0077C8"
+                        Foreground="White"
+                        CornerRadius="12"
+                        Padding="16"
+                        FontSize="18"
+                        HorizontalAlignment="Stretch"/>
+
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</UserControl>
