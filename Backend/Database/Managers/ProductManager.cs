@@ -74,4 +74,14 @@ public class ProductManager
 
         return true;
     }
+
+    public async Task<List<Role>> Role()
+    {
+        return await _context.Role.ToListAsync();
+    }
+
+    public async Task<List<Category>> Category()
+    {
+        return await _context.Categories.ToListAsync();
+    }
 }

@@ -19,7 +19,6 @@ public class BackendService
 {
     private const string GrpcChannelIp = "http://127.0.0.1:8080";
 
-
     public BackendService()
     {
         GrpcChannel channel = GrpcChannel.ForAddress(GrpcChannelIp);
@@ -349,14 +348,14 @@ public class ProductEndpoint
         );
     }
 
-    public async Task<(RequestResult, bool)> Create(ProductModel product, byte[]? imageBytes)
+    public async Task<(RequestResult, bool)> Create(ProductModel productModel, byte[]? imageBytes)
     {
         ProductCreateRequest request = new()
         {
-            Name = product.Name ?? string.Empty,
-            Description = product.Description ?? string.Empty,
-            Category = product.Category ?? string.Empty,
-            RoleId = 1,
+            Name = productModel.Name,
+            Description = productModel.Description,
+            CategoryId = productModel.CategoryModel.Id,
+            RoleId = productModel.RoleModel.Id,
             Image = ByteString.CopyFrom(imageBytes)
         };
 
@@ -373,15 +372,16 @@ public class ProductEndpoint
         return (RequestResult.Success, response.Success);
     }
 
-    public async Task<(RequestResult, bool)> Modify(ProductModel product, byte[]? imageBytes)
+    public async Task<(RequestResult, bool)> Modify(ProductModel productModel, byte[]? imageBytes)
     {
         ProductModifyRequest request = new()
         {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Category = product.Category,
-            RoleId = 1
+            Id = productModel.Id,
+            Name = productModel.Name,
+            Description = productModel.Description,
+            CategoryId = productModel.CategoryModel.Id,
+            RoleId = productModel.RoleModel.Id,
+            Image = ByteString.CopyFrom(imageBytes)
         };
 
         if (imageBytes != null)
@@ -452,6 +452,44 @@ public class ProductEndpoint
         }
     }
 
+    public async Task<(RequestResult, List<CategoryModel>)> Category()
+    {
+        ProductCategoryResponse? response;
+        try
+        {
+            response = await _client.CategoryAsync(new ProductCategoryRequest());
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return (RequestResult.Success, response.Categories.Select(c => new CategoryModel
+        {
+            Id  = c.Id,
+            Name = c.Name
+        }).ToList());
+    }
+    
+    public async Task<(RequestResult, List<RoleModel>)> Role()
+    {
+        ProductRoleResponse? response;
+        try
+        {
+            response = await _client.RoleAsync(new ProductRoleRequest());
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return (RequestResult.Success, response.Roles.Select(c => new RoleModel
+        {
+            Id  = c.Id,
+            Name = c.Name
+        }).ToList());
+    }
+
     private static ProductModel MapProduct(MetaProduct product)
     {
         return new ProductModel
@@ -459,11 +497,15 @@ public class ProductEndpoint
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Category = product.Category,
-            Role = new RoleModel
+            CategoryModel = new CategoryModel
             {
-                Id = 1,
-                Name = "product.Role.Name"
+                Id = product.Category.Id,
+                Name = product.Category.Name
+            },
+            RoleModel = new RoleModel
+            {
+                Id = product.Id,
+                Name = product.Name
             },
             ImageName = product.Image
         };

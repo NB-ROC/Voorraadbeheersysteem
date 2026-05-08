@@ -6,6 +6,8 @@ using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Protos.Product;
+using Category = Protos.Product.Category;
+using Role = Protos.Product.Role;
 
 namespace Backend.Grpc.Services;
 
@@ -67,7 +69,8 @@ public class ProductService : Products.ProductsBase
         {
             Name = request.Name,
             Description = request.Description,
-            CategoryId = 1,
+            CategoryId = request.CategoryId,
+            RoleId = request.RoleId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Image = imageName
@@ -86,7 +89,8 @@ public class ProductService : Products.ProductsBase
 
         if (request.HasName) product.Name = request.Name;
         if (request.HasDescription) product.Description = request.Description;
-        product.CategoryId = 1;
+        if (request.HasCategoryId) product.CategoryId = request.CategoryId;
+        if (request.HasRoleId) product.RoleId = request.RoleId;
 
         product.UpdatedAt = DateTime.UtcNow;
 
@@ -129,6 +133,30 @@ public class ProductService : Products.ProductsBase
             Extension = Path.GetExtension(request.Name).TrimStart('.')
         });
     }
+    
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
+    public override async Task<ProductRoleResponse> Role(ProductRoleRequest request, ServerCallContext context)
+    {
+        ProductRoleResponse response = new();
+        response.Roles.AddRange((await _manager.Role()).Select(r => new Role
+        {
+            Id = (int) r.Id,
+            Name = r.Name
+        }));
+        return response;
+    }
+
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
+    public override async Task<ProductCategoryResponse> Category(ProductCategoryRequest request, ServerCallContext context)
+    {
+        ProductCategoryResponse response = new();
+        response.Categories.AddRange((await _manager.Category()).Select(c => new Category
+        {
+            Id = c.Id,
+            Name = c.Name
+        }));
+        return response;
+    }
 
     private static MetaProduct MapMeta(Product product)
     {
@@ -137,7 +165,11 @@ public class ProductService : Products.ProductsBase
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Category = "",
+            Category = new Category
+            {
+                Id = product.CategoryId,
+                Name = product.Category.Name
+            },
             Image = product.Image
         };
     }

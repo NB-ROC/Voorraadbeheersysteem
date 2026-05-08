@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -30,7 +31,7 @@ public class ProductFormViewModel : ViewModelBase
 
         this.WhenAnyValue(
                 x => x.Name,
-                x => x.Category,
+                x => x.CategoryModel,
                 x => x.Description,
                 x => x.ImageBytes
             )
@@ -43,21 +44,23 @@ public class ProductFormViewModel : ViewModelBase
             this.WhenAnyValue(x => x.Error,
                 error => string.IsNullOrWhiteSpace(error)));
 
+        _ = LoadLookupDataAsync();
+
         if (existing != null)
             LoadExistingProduct(existing);
     }
-
     #region Validation
 
     private void Validate()
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
+            Console.WriteLine(Name);
             Error = "Naam is verplicht.";
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(Category))
+        if (string.IsNullOrWhiteSpace(CategoryModel?.Name))
         {
             Error = "Categorie is verplicht.";
             return;
@@ -74,6 +77,13 @@ public class ProductFormViewModel : ViewModelBase
             Error = "Selecteer een afbeelding.";
             return;
         }
+        
+        if ((CategoryModel == null || string.IsNullOrWhiteSpace(CategoryModel.Name)) &&
+            string.IsNullOrWhiteSpace(CustomCategory))
+        {
+            Error = "Categorie is verplicht.";
+            return;
+        }
 
         Error = string.Empty;
     }
@@ -88,7 +98,13 @@ public class ProductFormViewModel : ViewModelBase
         {
             Id = _existing?.Id ?? 0,
             Name = Name,
-            Category = Category,
+            CategoryModel = !string.IsNullOrWhiteSpace(CustomCategory)
+                ? new CategoryModel
+                {
+                    Name = CustomCategory
+                }
+                : CategoryModel!,
+            RoleModel = RoleModel,
             Description = Description
         };
 
@@ -155,52 +171,80 @@ public class ProductFormViewModel : ViewModelBase
 
     #region Properties
 
-    private Bitmap? _previewImage;
-
     public Bitmap? PreviewImage
     {
-        get => _previewImage;
-        set => this.RaiseAndSetIfChanged(ref _previewImage, value);
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    private byte[]? _imageBytes;
 
     public byte[]? ImageBytes
     {
-        get => _imageBytes;
-        set => this.RaiseAndSetIfChanged(ref _imageBytes, value);
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    private string _name = string.Empty;
 
     public string Name
     {
-        get => _name;
-        set => this.RaiseAndSetIfChanged(ref _name, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
-    private string _category = string.Empty;
-
-    public string Category
+    public CategoryModel CategoryModel
     {
-        get => _category;
-        set => this.RaiseAndSetIfChanged(ref _category, value);
-    }
-
-    private string _description = string.Empty;
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = null!;
 
     public string Description
     {
-        get => _description;
-        set => this.RaiseAndSetIfChanged(ref _description, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
-    private string _error = string.Empty;
+    public RoleModel RoleModel
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = null!;
 
     public string Error
     {
-        get => _error;
-        set => this.RaiseAndSetIfChanged(ref _error, value);
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+    
+    public string CustomCategory
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public ObservableCollection<CategoryModel> Categories { get; } = [];
+    public ObservableCollection<RoleModel> Roles { get; } = [];
+    
+    private async Task LoadLookupDataAsync()
+    {
+        (RequestResult categoryResult, List<CategoryModel> categories) =
+            await _backend.Products.Category();
+
+        if (categoryResult == RequestResult.Success)
+        {
+            Categories.Clear();
+
+            foreach (CategoryModel category in categories)
+                Categories.Add(category);
+        }
+
+        (RequestResult roleResult, List<RoleModel> roles) =
+            await _backend.Products.Role();
+
+        if (roleResult == RequestResult.Success)
+        {
+            Roles.Clear();
+
+            foreach (RoleModel role in roles)
+                Roles.Add(role);
+        }
     }
 
     public ICommand SaveCommand { get; }
@@ -213,8 +257,9 @@ public class ProductFormViewModel : ViewModelBase
     private void LoadExistingProduct(ProductViewModel existing)
     {
         Name = existing.Name;
-        Category = existing.Category;
+        CategoryModel = existing.CategoryModel;
         Description = existing.Description;
+        RoleModel = existing.RoleModel;
 
         if (!string.IsNullOrWhiteSpace(existing.ImageName))
             _ = LoadExistingImageAsync(existing.ImageName);
