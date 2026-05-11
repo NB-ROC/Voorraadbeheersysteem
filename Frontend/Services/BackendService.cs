@@ -165,7 +165,6 @@ public class ProductEndpoint
         }
         catch (RpcException e)
         {
-            Console.WriteLine(e.Message);
             return (GetFailCode(e), null!);
         }
 
@@ -268,6 +267,7 @@ public class ProductEndpoint
 
     private static RequestResult GetFailCode(RpcException e)
     {
+        Console.WriteLine(e.Message);
         return e.StatusCode == StatusCode.PermissionDenied
             ? RequestResult.Denied
             : RequestResult.Failed;

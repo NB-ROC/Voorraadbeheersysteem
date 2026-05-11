@@ -27,9 +27,11 @@ public class App : Application
             MainWindowViewModel mainWindowViewModel = new();
             NavigationService navigationService = new(mainWindowViewModel);
             BackendService backendService = new();
+            ScannerService scannerService = new();
 
             serviceCollection.AddSingleton(navigationService);
             serviceCollection.AddSingleton(backendService);
+            serviceCollection.AddSingleton(scannerService);
 
             _ = backendService.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
 
