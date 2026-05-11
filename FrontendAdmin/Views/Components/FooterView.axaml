@@ -35,6 +35,16 @@
                     Command="{Binding NavigateLoans}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                     <TextBlock Text="📋" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Aanvragen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
+                </StackPanel>
+            </Button>
+            <Button Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding NavigateLoans}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="✅" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                     <TextBlock Text="Leningen" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>

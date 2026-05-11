@@ -37,4 +37,28 @@
         <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Views\Loan-Overview\Loan-OverviewPageView.axaml.cs">
+        <DependentUpon>Loan-OverviewPageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Loan-Overview\Loan-OverviewPageView.axaml.cs">
+        <DependentUpon>LoanPageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ViewModels\LoanRequestOverview\LoanRequestOverviewPage.axaml.cs">
+        <DependentUpon>LoanRequestOverviewPage.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ViewModels\LoanRequestOverview\LoanRequestOverviewPage.axaml.cs">
+        <DependentUpon>LoanRequestOverviewPage.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="ViewModels\LoanRequestOverview\LoanRequestOverviewPage.axaml" />
+      <AdditionalFiles Include="Views\LoanRequestOverview\Loan-OverviewPageView.axaml" />
+    </ItemGroup>
+
 </Project>

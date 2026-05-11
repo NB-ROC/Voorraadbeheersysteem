@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.Loan"
-             x:Class="FrontendAdmin.Views.Loan.LoanPageView"
+             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.LoanRequestOverview"
+             x:Class="FrontendAdmin.Views.LoanRequestOverview.LoanPageView"
              x:DataType="{x:Type loan:LoanPageViewModel}">
 
     <Grid RowDefinitions="60,*,60">
