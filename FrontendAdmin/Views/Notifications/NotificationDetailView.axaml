@@ -1,0 +1,59 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FrontendAdmin.ViewModels.Notifications"
+             x:Class="FrontendAdmin.Views.Notifications.NotificationDetailView"
+             x:DataType="vm:NotificationDetailViewModel">
+
+    <Grid RowDefinitions="60,*">
+
+        <ContentControl Content="{Binding Header}" />
+
+        <StackPanel Grid.Row="1"
+                    Margin="20"
+                    Spacing="16">
+
+            <TextBlock Text="{Binding Title}"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#111827"/>
+
+            <Border Background="White"
+                    Padding="16"
+                    CornerRadius="12"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="1">
+
+                <StackPanel Spacing="12">
+
+                    <TextBlock Text="{Binding Description}"
+                               FontSize="14"
+                               Foreground="#374151"
+                               TextWrapping="Wrap"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="12">
+
+                        <Button Content="Goedkeuren"
+                                Background="#10B981"
+                                Foreground="White"
+                                CornerRadius="8"
+                                Padding="14,8"
+                                Command="{Binding ApproveCommand}"/>
+
+                        <Button Content="Afwijzen"
+                                Background="#EF4444"
+                                Foreground="White"
+                                CornerRadius="8"
+                                Padding="14,8"
+                                Command="{Binding RejectCommand}"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+            </Border>
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>
