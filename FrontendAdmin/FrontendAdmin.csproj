@@ -50,14 +50,9 @@
         <DependentUpon>LoanRequestOverviewPage.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="ViewModels\LoanRequestOverview\LoanRequestOverviewPage.axaml.cs">
-        <DependentUpon>LoanRequestOverviewPage.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="ViewModels\LoanRequestOverview\LoanRequestOverviewPage.axaml" />
       <AdditionalFiles Include="Views\LoanRequestOverview\Loan-OverviewPageView.axaml" />
     </ItemGroup>
 

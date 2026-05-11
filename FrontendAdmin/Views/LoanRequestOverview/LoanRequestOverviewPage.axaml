@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.LoanRequestOverview"
+             xmlns:loan="clr-namespace:FrontendAdmin.ViewModels.Loan"
              x:Class="FrontendAdmin.Views.LoanRequestOverview.LoanPageView"
              x:DataType="{x:Type loan:LoanPageViewModel}">
 
