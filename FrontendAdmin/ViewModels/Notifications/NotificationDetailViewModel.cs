@@ -10,9 +10,8 @@ public class NotificationDetailViewModel : PageViewModelBase
 {
     public string Title { get; }
     public string Description { get; }
+    public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
-    public ReactiveCommand<Unit, Unit> ApproveCommand { get; }
-    public ReactiveCommand<Unit, Unit> RejectCommand { get; }
 
     public NotificationDetailViewModel(
         ServiceProvider services,
@@ -22,33 +21,14 @@ public class NotificationDetailViewModel : PageViewModelBase
         Title = notification.Title;
         Description = notification.Description;
 
-        ApproveCommand = ReactiveCommand.Create(() =>
+        BackCommand = ReactiveCommand.Create(() =>
         {
-            ApproveRegistration();
-        });
-
-        RejectCommand = ReactiveCommand.Create(() =>
-        {
-            RejectRegistration();
+            GoBack();
         });
     }
-
-    private void ApproveRegistration()
+    
+    private void GoBack()
     {
-        Console.WriteLine("Registratie goedgekeurd");
-        // als de registratie wordt gemaakt kunnen we de consolewriteline voor:
-        // await _backend.Registrations.Approve(registrationId);
-        
-        Services.GetService<NavigationService>()?
-            .NavigateTo(new NotificationPageViewModel(Services));
-    }
-
-    private void RejectRegistration()
-    {
-        Console.WriteLine("Registratie afgewezen");
-
-        // als de registratie wordt gemaakt kunnen we de consolewriteline voor:
-        // await _backend.Registrations.Reject(registrationId);
         Services.GetService<NavigationService>()?
             .NavigateTo(new NotificationPageViewModel(Services));
     }

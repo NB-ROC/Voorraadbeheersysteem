@@ -4,13 +4,23 @@
              x:Class="FrontendAdmin.Views.Notifications.NotificationDetailView"
              x:DataType="vm:NotificationDetailViewModel">
 
-    <Grid RowDefinitions="60,*">
+    <Grid RowDefinitions="60,*,60">
 
         <ContentControl Content="{Binding Header}" />
 
         <StackPanel Grid.Row="1"
                     Margin="20"
                     Spacing="16">
+
+            <!-- Terug knop -->
+            <Button Content="← Terug"
+                    Width="100"
+                    HorizontalAlignment="Left"
+                    Background="#E5E7EB"
+                    Foreground="#111827"
+                    CornerRadius="8"
+                    Padding="12,8"
+                    Command="{Binding BackCommand}" />
 
             <TextBlock Text="{Binding Title}"
                        FontSize="28"
@@ -29,30 +39,13 @@
                                FontSize="14"
                                Foreground="#374151"
                                TextWrapping="Wrap"/>
-
-                    <StackPanel Orientation="Horizontal"
-                                Spacing="12">
-
-                        <Button Content="Goedkeuren"
-                                Background="#10B981"
-                                Foreground="White"
-                                CornerRadius="8"
-                                Padding="14,8"
-                                Command="{Binding ApproveCommand}"/>
-
-                        <Button Content="Afwijzen"
-                                Background="#EF4444"
-                                Foreground="White"
-                                CornerRadius="8"
-                                Padding="14,8"
-                                Command="{Binding RejectCommand}"/>
-                    </StackPanel>
-
                 </StackPanel>
 
             </Border>
 
         </StackPanel>
+        
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
 
     </Grid>
 

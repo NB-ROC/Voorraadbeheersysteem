@@ -15,14 +15,14 @@ public class NotificationPageViewModel : PageViewModelBase
             new NotificationModel
             {
                 Title = "Nieuwe registratie",
-                Description = "Jan Jansen wacht op goedkeuring."
+                Description = "Jan Jansen heeft zich geregistreerd."
             }));
 
         Notifications.Add(new NotificationViewModel(Services,
             new NotificationModel
             {
                 Title = "Nieuwe registratie",
-                Description = "gandalf the grey wacht op goedkeuring."
+                Description = "gandalf the grey heeft zich geregistreerd."
             }));
     }
 }
