@@ -10,8 +10,9 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Protos.Auth;
+using Protos.Scan;
 using Protos.Product;
-using Protos.User;
+using TryLoginResponse = Frontend.Models.TryLoginResponse;
 
 namespace Frontend.Services;
 
@@ -273,5 +274,33 @@ public class ProductEndpoint
             : RequestResult.Failed;
     }
 }
+
+// public class ScanEndpoint
+// {
+//     private Scans.ScansClient _client;
+//
+//     public ScanEndpoint(Scans.ScansClient client)
+//     {
+//         _client = client;
+//     }
+//
+//     public async Task<(RequestResult, TryLoginResponse?)> TryLogin(byte[] cardId)
+//     {
+//         Protos.Scan.TryLoginResponse? response;
+//         try
+//         {
+//             response = await _client.TryLoginAsync(new()
+//             {
+//                 CardId = ByteString.CopyFrom(cardId)
+//             });
+//         }
+//         catch (RpcException e)
+//         {
+//             return (, null);
+//         }
+//     }
+//     
+//     
+// }
 
 #endregion

@@ -55,6 +55,7 @@ public class ScannerService
 
         if (uid == null) return;
         _callback(uid);
+        _callback = null;
     }
 
     

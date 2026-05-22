@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "Protos.Scan";
+
+package scan;
+
+service Scans {
+  rpc TryLogin (TryLoginRequest) returns (TryLoginResponse);
+}
+
+enum LoginResult {
+  succes = 0;
+  invalid = 1;
+  not_registered = 2;
+}
+
+message TryLoginRequest {
+  bytes card_id = 1;
+}
+
+message TryLoginResponse {
+  LoginResult result = 1;
+  string token = 2;
+}
