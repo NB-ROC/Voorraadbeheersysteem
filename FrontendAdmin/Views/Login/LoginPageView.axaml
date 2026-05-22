@@ -14,6 +14,8 @@
                 CornerRadius="20"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                BorderBrush="#6E6EB4"
+                BorderThickness="3"
                 BoxShadow="0 8 30 #33000000">
 
             <StackPanel Spacing="28">
@@ -23,20 +25,20 @@
                     <TextBlock Text="Login"
                                FontSize="32"
                                FontWeight="Bold"
-                               Foreground="#4B4B4D"/>
+                               Foreground="#6E6EB4"/>
                     <TextBlock Text="to get started."
                                FontSize="18"
-                               Foreground="#7A7A7A"/>
+                               Foreground="#4b4b4d"/>
                 </StackPanel>
 
                 <!-- Email -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Email"
-                               Foreground="#4B4B4D"
+                               Foreground="#4b4b4d"
                                FontSize="15"/>
                     <TextBox Text="{Binding Email}"
                              Watermark="Enter your email"
-                             BorderBrush="#6E6EB4"
+                             BorderBrush="#4b4b4d"
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
@@ -46,12 +48,12 @@
                 <!-- Password -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Password"
-                               Foreground="#4B4B4D"
+                               Foreground="#4b4b4d"
                                FontSize="15"/>
                     <TextBox Text="{Binding Password}"
                              PasswordChar="*"
                              Watermark="Enter your password"
-                             BorderBrush="#6E6EB4"
+                             BorderBrush="#4b4b4d"
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
@@ -61,7 +63,7 @@
                 <!-- Continue Button -->
                 <Button Content="Continue"
                         Command="{Binding LoginCommand}"
-                        Background="#0077C8"
+                        Background="#6E6EB4"
                         Foreground="#FAFAFA"
                         CornerRadius="12"
                         Padding="16"
