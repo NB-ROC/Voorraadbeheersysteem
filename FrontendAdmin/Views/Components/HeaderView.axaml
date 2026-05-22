@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Components.HeaderView">
-    <Border Background="#6a69ad">
+    <Border Background="#6E6EB4">
         <TextBlock Text="Welkom [Naam gebruiker]"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    Padding="20,0,0,0"
-                   Foreground="White"
+                   Foreground="#FAFAFA"
                    FontSize="18" />
     </Border>
 </UserControl>
