@@ -24,7 +24,7 @@
             <!-- Toolbar -->
             <Border Grid.Row="1"
                     Margin="20,0,20,16"
-                    Background="White"
+                    Background="#FAFAFA"
                     CornerRadius="12"
                     Padding="14"
                     BorderBrush="#E5E7EB"
@@ -63,8 +63,8 @@
                             Content="Gebruiker toevoegen"
                             Height="38"
                             MinWidth="150"
-                            Background="#4F46E5"
-                            Foreground="White"
+                            Background="#6E6EB4"
+                            Foreground="#FAFAFA"
                             BorderThickness="0"
                             CornerRadius="8"
                             HorizontalContentAlignment="Center"
@@ -80,7 +80,7 @@
                         <DataTemplate DataType="{x:Type user:UserViewModel}">
                             <StackPanel Spacing="12">
 
-                                <Border Background="White"
+                                <Border Background="#FAFAFA"
                                         BorderBrush="#E5E7EB"
                                         BorderThickness="1"
                                         CornerRadius="12"
@@ -110,7 +110,7 @@
                                                    VerticalAlignment="Center">
                                             <Button Content="Bewerk"
                                                     Background="Orange"
-                                                    Foreground="White"
+                                                    Foreground="#FAFAFA"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"
@@ -118,7 +118,7 @@
                                                     Command="{Binding EditCommand}" />
                                             <Button Content="Verwijder"
                                                     Background="Red"
-                                                    Foreground="White"
+                                                    Foreground="#FAFAFA"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"

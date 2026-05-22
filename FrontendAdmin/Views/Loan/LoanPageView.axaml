@@ -8,7 +8,7 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <DockPanel Grid.Row="1" Background="White" Margin="10">
+        <DockPanel Grid.Row="1" Background="#FAFAFA" Margin="10">
             <!-- titel -->
             <TextBlock DockPanel.Dock="Top"
                        Text="Mijn Leningen"
@@ -33,24 +33,24 @@
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Active"
                         Background="#2e7d32"
-                        Foreground="White" />
+                        Foreground="#FAFAFA" />
 
                 <Button Content="Te laat"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Overdue"
                         Background="#d32f2f"
-                        Foreground="White" />
+                        Foreground="#FAFAFA" />
 
                 <Button Content="Ingeleverd"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Returned"
                         Background="#0277bd"
-                        Foreground="White" />
+                        Foreground="#FAFAFA" />
 
                 <Button Content="Reset"
                         Command="{Binding ResetCommand}"
                         Background="#777777"
-                        Foreground="White" />
+                        Foreground="#FAFAFA" />
             </StackPanel>
             <!-- Leningen -->
             <ScrollViewer>
@@ -76,7 +76,7 @@
                                                FontSize="12" Foreground="#555" />
                                     <Border Background="{Binding StatusColor}" CornerRadius="4" Padding="5"
                                             Grid.Column="3" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Status}" Foreground="White" />
+                                        <TextBlock Text="{Binding Status}" Foreground="#FAFAFA" />
                                     </Border>
                                 </Grid>
                             </Border>

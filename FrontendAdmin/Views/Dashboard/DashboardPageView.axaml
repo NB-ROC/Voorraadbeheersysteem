@@ -8,37 +8,37 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <DockPanel Background="White" Grid.Row="1">
+        <DockPanel Background="#FAFAFA" Grid.Row="1">
             <Border Height="250" DockPanel.Dock="Top" Padding="15">
                 <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
-                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                    <Border Background="#6E6EB4" Margin="0,0,8,0">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="40"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Actieve Leningen" Foreground="White" HorizontalAlignment="Center"
+                            <TextBlock Text="Actieve Leningen" Foreground="#FAFAFA" HorizontalAlignment="Center"
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>
-                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                    <Border Background="#6E6EB4" Margin="0,0,8,0">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="40"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Bijna te laat" Foreground="White" HorizontalAlignment="Center"
+                            <TextBlock Text="Bijna te laat" Foreground="#FAFAFA" HorizontalAlignment="Center"
                                        FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                    <Border Background="#6E6EB4" Margin="0,0,8,0">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="40"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Te laat" Foreground="White" HorizontalAlignment="Center" FontSize="22" />
+                            <TextBlock Text="Te laat" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="#6a69ad">
+                    <Border Background="#6E6EB4">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="40"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Beschikbare Products" Foreground="White" HorizontalAlignment="Center"
+                            <TextBlock Text="Beschikbare Products" Foreground="#FAFAFA" HorizontalAlignment="Center"
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>
@@ -48,24 +48,24 @@
             <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="15,5,15,0">
                 <Button HorizontalAlignment="Stretch"
                         Height="60"
-                        Background="#6a69ad"
+                        Background="#6E6EB4"
                         CornerRadius="4"
                         Click="OnNieuwProductClick">
                     <TextBlock Text="＋  Nieuw product reserveren"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
-                               Foreground="White"
+                               Foreground="#FAFAFA"
                                FontSize="14" />
                 </Button>
                 <Button HorizontalAlignment="Stretch"
                         Height="60"
-                        Background="#6a69ad"
+                        Background="#6E6EB4"
                         CornerRadius="4"
                         Click="OnLeningClick">
                     <TextBlock Text="≡  Mijn leningen bekijken"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
-                               Foreground="White"
+                               Foreground="#FAFAFA"
                                FontSize="14" />
                 </Button>
             </StackPanel>

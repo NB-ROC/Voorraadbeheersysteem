@@ -8,7 +8,7 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <DockPanel Grid.Row="1" Background="White">
+        <DockPanel Grid.Row="1" Background="#FAFAFA">
 
             <!-- Bottom buttons -->
             <Grid DockPanel.Dock="Bottom" Margin="15,10,15,15" ColumnDefinitions="*,10,*">
@@ -19,8 +19,8 @@
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         Height="40"
-                        Background="#6a69ad"
-                        Foreground="White"
+                        Background="#6E6EB4"
+                        Foreground="#FAFAFA"
                         CornerRadius="4"
                         HorizontalContentAlignment="Center"
                         Click="OnAnnuleerClick" />
@@ -31,8 +31,8 @@
                         VerticalContentAlignment="Center"
                         HorizontalAlignment="Stretch"
                         Height="40"
-                        Background="#6a69ad"
-                        Foreground="White"
+                        Background="#6E6EB4"
+                        Foreground="#FAFAFA"
                         CornerRadius="4"
                         HorizontalContentAlignment="Center"
                         Click="OnBevestigClick" />
