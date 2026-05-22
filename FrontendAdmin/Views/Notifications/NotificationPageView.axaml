@@ -1,0 +1,84 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FrontendAdmin.ViewModels.Notifications"
+             x:Class="FrontendAdmin.Views.Notifications.NotificationPageView"
+             x:DataType="vm:NotificationPageViewModel">
+
+    <Grid RowDefinitions="60,*,60">
+
+        <!-- Header -->
+        <ContentControl Content="{Binding Header}" />
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1"
+                      Background="#F6F7FB">
+
+            <StackPanel Margin="20"
+                        Spacing="16">
+
+                <!-- Titel -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Meldingen"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#111827"/>
+
+                    <TextBlock Text="Nieuwe registratie aanvragen"
+                               FontSize="13"
+                               Foreground="#6B7280"/>
+                </StackPanel>
+
+                <!-- Meldingen -->
+                <ItemsControl ItemsSource="{Binding Notifications}">
+                    <ItemsControl.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <Border Background="White"
+                                    CornerRadius="12"
+                                    Padding="16"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="1">
+
+                                <Grid ColumnDefinitions="*,Auto">
+
+                                    <StackPanel Spacing="4">
+
+                                        <TextBlock Text="{Binding Title}"
+                                                   FontWeight="Bold"
+                                                   FontSize="16"
+                                                   Foreground="#111827"/>
+
+                                        <TextBlock Text="{Binding Description}"
+                                                   Foreground="#6B7280"
+                                                   FontSize="13"/>
+
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1"
+                                            Content="Bekijken"
+                                            Background="#4F46E5"
+                                            Foreground="White"
+                                            CornerRadius="8"
+                                            Command="{Binding ViewCommand}"
+                                            Padding="12,8"/>
+                                    
+
+                                </Grid>
+
+                            </Border>
+
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </StackPanel>
+
+        </ScrollViewer>
+        
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+
+    </Grid>
+
+</UserControl>
