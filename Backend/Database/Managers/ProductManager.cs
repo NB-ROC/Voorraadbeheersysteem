@@ -35,7 +35,7 @@ public class ProductManager
             product.CategoryId = await EnsureCategory(product);
 
             product.Category = null!;
-            
+
             _context.Products.Add(product);
 
             await _context.SaveChangesAsync();
@@ -52,7 +52,7 @@ public class ProductManager
         try
         {
             product.CategoryId = await EnsureCategory(product);
-            
+
             product.Category = null!;
 
             _context.Products.Update(product);
@@ -92,25 +92,19 @@ public class ProductManager
     {
         return await _context.Categories.ToListAsync();
     }
-    
+
     private async Task<int> EnsureCategory(Product product)
     {
-        if (product.Category != null && product.Category.Id != -1)
-        {
-            return product.Category.Id;
-        }
+        if (product.Category != null && product.Category.Id != -1) return product.Category.Id;
 
         if (product.Category != null && !string.IsNullOrWhiteSpace(product.Category.Name))
         {
-            var existingCategory = await _context.Categories
+            Category? existingCategory = await _context.Categories
                 .FirstOrDefaultAsync(c => c.Name == product.Category.Name);
 
-            if (existingCategory != null)
-            {
-                return existingCategory.Id;
-            }
+            if (existingCategory != null) return existingCategory.Id;
 
-            var newCategory = new Category
+            Category newCategory = new()
             {
                 Name = product.Category.Name
             };

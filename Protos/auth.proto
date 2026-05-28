@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "user.proto";
 
 option csharp_namespace = "Protos.Auth";
 
@@ -16,4 +17,5 @@ message AuthLoginRequest {
 
 message AuthLoginResponse {
   optional string token = 1;
+  optional user.MetaUser user = 2;
 }

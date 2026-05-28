@@ -42,7 +42,7 @@
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
-                             FontSize="15"/>
+                             FontSize="15" />
                 </StackPanel>
 
                 <!-- Password -->
@@ -57,7 +57,7 @@
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
-                             FontSize="15"/>
+                             FontSize="15" />
                 </StackPanel>
 
                 <!-- Continue Button -->
@@ -68,7 +68,7 @@
                         CornerRadius="12"
                         Padding="16"
                         FontSize="18"
-                        HorizontalAlignment="Stretch"/>
+                        HorizontalAlignment="Stretch" />
 
             </StackPanel>
         </Border>

@@ -16,7 +16,7 @@ public class Product
 
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
-    
+
     public int RoleId { get; set; }
     public Role Role { get; set; } = null!;
 

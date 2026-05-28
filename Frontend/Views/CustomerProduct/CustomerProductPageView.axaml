@@ -23,27 +23,27 @@
         <ScrollViewer Grid.Row="1" Margin="20,0,20,20">
 
             <ListBox ItemsSource="{Binding Products}">
-            
+
                 <ListBox.ItemTemplate>
-            
+
                     <DataTemplate DataType="{x:Type product:ProductViewModel}">
-            
+
                         <Border Background="White"
                                 BorderBrush="#E5E7EB"
                                 BorderThickness="1"
                                 CornerRadius="12"
                                 Padding="14"
                                 Margin="0,0,0,12">
-            
+
                             <Grid ColumnDefinitions="80,*,Auto"
                                   ColumnSpacing="14">
-            
+
                                 <!-- IMAGE -->
                                 <Border Width="72"
                                         Height="72"
                                         Background="#F3F4F6"
                                         CornerRadius="10">
-            
+
                                     <Panel>
                                         <!-- Loading -->
                                         <TextBlock Text="⏳"
@@ -66,55 +66,53 @@
                                                    IsVisible="{Binding ImageFailed}" />
                                     </Panel>
                                 </Border>
-            
+
                                 <!-- INFO -->
                                 <StackPanel Grid.Column="1"
                                             Spacing="4"
                                             VerticalAlignment="Center">
-            
+
                                     <TextBlock Text="{Binding CategoryName}"
                                                FontSize="12"
-                                               Foreground="#9CA3AF"/>
-            
+                                               Foreground="#9CA3AF" />
+
                                     <TextBlock Text="{Binding Name}"
                                                FontSize="16"
-                                               FontWeight="Bold"/>
-            
+                                               FontWeight="Bold" />
+
                                     <TextBlock Text="{Binding Description}"
                                                FontSize="13"
                                                Foreground="#6B7280"
-                                               TextWrapping="Wrap"/>
+                                               TextWrapping="Wrap" />
                                 </StackPanel>
-            
+
                                 <!-- ACTIONS -->
                                 <StackPanel Grid.Column="2"
                                             Spacing="8"
                                             VerticalAlignment="Center">
-            
+
                                     <Button Content="Toevoegen aan mandje"
                                             Background="Orange"
                                             Foreground="White"
                                             Padding="12,6"
-                                            CornerRadius="8"
-                                            />
-            
+                                            CornerRadius="8" />
+
                                     <Button Content="Verwijderen"
                                             Background="Red"
                                             Foreground="White"
                                             Padding="12,6"
-                                            CornerRadius="8"
-                                            />
-            
+                                            CornerRadius="8" />
+
                                 </StackPanel>
-            
+
                             </Grid>
-            
+
                         </Border>
-            
+
                     </DataTemplate>
-            
+
                 </ListBox.ItemTemplate>
-            
+
             </ListBox>
 
         </ScrollViewer>

@@ -2,10 +2,10 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using FrontendAdmin.Models;
 
 namespace FrontendAdmin.ViewModels.Product;
 
@@ -60,7 +60,7 @@ public class ProductViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-    
+
     public string CategoryName => CategoryModel.Name;
 
     public string Description

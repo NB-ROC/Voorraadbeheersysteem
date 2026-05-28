@@ -2,9 +2,10 @@
 
 namespace Frontend.ViewModels;
 
-public partial class MainWindowViewModel : ReactiveObject
-{    
+public class MainWindowViewModel : ReactiveObject
+{
     private string _role = "gast";
+
     public ViewModelBase? CurrentPage
     {
         get;
@@ -17,6 +18,7 @@ public partial class MainWindowViewModel : ReactiveObject
         get => _role;
         set => this.RaiseAndSetIfChanged(ref _role, value);
     }
+
     public void Login()
     {
         Role = "Admin";
