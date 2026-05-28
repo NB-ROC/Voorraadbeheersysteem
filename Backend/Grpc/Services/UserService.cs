@@ -5,6 +5,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Protos.User;
+using Role = Protos.Product.Role;
 
 namespace Backend.Grpc.Services;
 
@@ -57,17 +58,24 @@ public class UserService : Users.UsersBase
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
+            Number = request.Number,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
 
-        return new UserCreateResponse
+        bool created = await _manager.Create(user);
+        if (!created)
+            return new UserCreateResponse { Success = false };
+
+        if (request.RoleIds.Count > 0)
         {
-            Success = await _manager.Create(user)
-        };
+            IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
+            await _manager.SetRoles(user.Id, roles);
+        }
+
+        return new UserCreateResponse { Success = true };
     }
 
-    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserModifyResponse> Modify(UserModifyRequest request, ServerCallContext context)
     {
         User user = await _validator.ValidateModify(request);
@@ -76,13 +84,44 @@ public class UserService : Users.UsersBase
         if (request.HasFirstName) user.FirstName = request.FirstName;
         if (request.HasLastName) user.LastName = request.LastName;
         if (request.HasEmail) user.Email = request.Email;
+        if (request.HasNumber) user.Number = request.Number;
 
         user.UpdatedAt = DateTime.UtcNow;
 
-        return new UserModifyResponse
+        bool modified = await _manager.Modify(user);
+        if (!modified)
+            return new UserModifyResponse { Success = false };
+
+        // Only update roles if the caller sent at least one (empty list = no change).
+        // If you want empty list to mean "clear all roles", remove this guard.
+        if (request.RoleIds.Count > 0)
         {
-            Success = await _manager.Modify(user)
+            IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
+            await _manager.SetRoles(user.Id, roles);
+        }
+
+        return new UserModifyResponse { Success = true };
+    }
+
+    private static MetaUser MapMeta(User user)
+    {
+        MetaUser meta = new()
+        {
+            Id = user.Id,
+            CardId = ByteString.CopyFrom(user.CardId),
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Number = user.Number
         };
+
+        meta.Roles.AddRange(user.UserRoles.Select(ur => new Role
+        {
+            Id = (int)ur.Role.Id,
+            Name = ur.Role.Name
+        }));
+
+        return meta;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
@@ -110,27 +149,17 @@ public class UserService : Users.UsersBase
 
         return response;
     }
-    
+
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Lender)}")]
-    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request, ServerCallContext context)
+    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request,
+        ServerCallContext context)
     {
         List<User> users = await _manager.LenderPage(request.Page, request.PageSize);
 
         return new UserLenderPageResponse
         {
             Users = { users.Select(MapMeta) }
-        };;
-    }
-
-    private static MetaUser MapMeta(User user)
-    {
-        return new MetaUser
-        {
-            Id = user.Id,
-            CardId = ByteString.CopyFrom(user.CardId),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email
         };
+        ;
     }
 }

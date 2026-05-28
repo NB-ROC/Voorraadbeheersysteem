@@ -1,4 +1,5 @@
 using Backend.Entities;
+using Backend.Entities.Relations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Managers;
@@ -15,6 +16,8 @@ public class UserManager
     public async Task<List<User>> Page(int page, int pageSize)
     {
         return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .OrderBy(user => user.Number)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -23,7 +26,40 @@ public class UserManager
 
     public async Task<User?> Get(int id)
     {
-        return await _context.Users.FindAsync(id);
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
+
+// Replaces all roles for a user atomically.
+    public async Task<bool> SetRoles(int userId, IEnumerable<RoleType> roleIds)
+    {
+        // Remove existing roles for this user
+        List<UserRole> existing = await _context.UserRoles
+            .Where(ur => ur.UserId == userId)
+            .ToListAsync();
+
+        _context.UserRoles.RemoveRange(existing);
+
+        // Add the new set
+        foreach (RoleType roleId in roleIds)
+            _context.UserRoles.Add(new UserRole
+            {
+                UserId = userId,
+                RoleId = roleId
+            });
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public async Task<bool> Create(User user)
@@ -98,12 +134,14 @@ public class UserManager
 
         return (users[0].Email, users[0].FirstName + " " + users[0].LastName);
     }
-    
+
     public async Task<List<User>> LenderPage(int page, int pageSize)
     {
         return await _context.Users
             .Include(u => u.UserRoles)
-            .Where(u => u.UserRoles.Any(ur => ur.Role.Name == "Student" || ur.Role.Name == "Personnel" ||  ur.Role.Name == "Guest"))
+            .ThenInclude(ur => ur.Role)
+            .Where(u => u.UserRoles.Any(ur =>
+                ur.Role.Name == "Student" || ur.Role.Name == "Personnel" || ur.Role.Name == "Guest"))
             .OrderBy(user => user.Number)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)

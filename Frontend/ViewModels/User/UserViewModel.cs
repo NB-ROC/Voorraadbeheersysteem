@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Threading.Tasks;
 using Frontend.Models;
@@ -33,7 +34,16 @@ public class UserViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
-    public int Id { get; set; }
+    public int Id
+    {
+        get => _model.Id;
+        set
+        {
+            if (_model.Id == value) return;
+            _model.Id = value;
+            this.RaisePropertyChanged();
+        }
+    }
 
     public byte[] CardId => _model.CardId;
 
@@ -77,6 +87,17 @@ public class UserViewModel : ViewModelBase
         {
             if (_model.Number == value) return;
             _model.Number = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
+    public List<RoleModel> Roles
+    {
+        get => _model.Roles;
+        set
+        {
+            if (_model.Roles == value) return;
+            _model.Roles = value;
             this.RaisePropertyChanged();
         }
     }

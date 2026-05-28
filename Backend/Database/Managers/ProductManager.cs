@@ -117,4 +117,11 @@ public class ProductManager
 
         throw new Exception("Invalid category");
     }
+
+    public async Task<List<Role>> LenderRole()
+    {
+        return await _context.Role
+            .Where(r => (int)r.Id > 2)
+            .ToListAsync();
+    }
 }

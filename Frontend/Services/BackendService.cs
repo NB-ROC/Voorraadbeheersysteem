@@ -35,7 +35,7 @@ public class BackendService
 
     public UserModel? LoggedInUser { get; private set; }
 
-    public Auth.AuthClient AuthClient { get; }
+    private Auth.AuthClient AuthClient { get; }
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
@@ -51,7 +51,7 @@ public class BackendService
                 Password = password
             });
         }
-        catch (RpcException e)
+        catch (RpcException)
         {
             return false;
         }
@@ -223,6 +223,9 @@ public class UserEndpoint
             Number = userModel.Number
         };
 
+        request.RoleIds.Add(userModel.Roles.Select(r => r.Id));
+
+
         UserCreateResponse? response;
         try
         {
@@ -247,6 +250,8 @@ public class UserEndpoint
             Email = userModel.Email,
             Number = userModel.Number
         };
+
+        request.RoleIds.Add(userModel.Roles.Select(r => r.Id));
 
         UserModifyResponse? response;
         try
@@ -300,7 +305,7 @@ public class UserEndpoint
 
         return (RequestResult.Success, (response.Email, response.Name));
     }
-    
+
     public async Task<(RequestResult, List<UserModel>)> LenderPage(int page, int pageSize)
     {
         UserLenderPageRequest request = new()
@@ -336,7 +341,12 @@ public class UserEndpoint
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Number = user.Number
+            Number = user.Number,
+            Roles = user.Roles.Select(r => new RoleModel
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList()
         };
     }
 
@@ -575,6 +585,25 @@ public class ProductEndpoint
             },
             ImageName = product.Image
         };
+    }
+
+    public async Task<(RequestResult, List<RoleModel>)> LenderRole()
+    {
+        ProductLenderRoleResponse? response;
+        try
+        {
+            response = await _client.LenderRoleAsync(new ProductLenderRoleRequest());
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return (RequestResult.Success, response.Roles.Select(c => new RoleModel
+        {
+            Id = c.Id,
+            Name = c.Name
+        }).ToList());
     }
 
     private static RequestResult GetFailCode(RpcException e)

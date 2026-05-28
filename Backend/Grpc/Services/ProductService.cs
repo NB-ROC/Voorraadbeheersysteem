@@ -168,6 +168,19 @@ public class ProductService : Products.ProductsBase
         return response;
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
+    public override async Task<ProductLenderRoleResponse> LenderRole(ProductLenderRoleRequest request,
+        ServerCallContext context)
+    {
+        ProductLenderRoleResponse response = new();
+        response.Roles.AddRange((await _manager.Role()).Select(r => new Role
+        {
+            Id = (int)r.Id,
+            Name = r.Name
+        }));
+        return response;
+    }
+
     private static MetaProduct MapMeta(Product product)
     {
         return new MetaProduct

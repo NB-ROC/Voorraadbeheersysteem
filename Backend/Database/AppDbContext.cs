@@ -122,6 +122,7 @@ public class AppDbContext : DbContext
                 new Role(RoleType.Guest)
             );
 
+
         // Default category
         modelBuilder.Entity<Category>()
             .HasData(

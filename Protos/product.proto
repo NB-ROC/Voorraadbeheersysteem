@@ -13,6 +13,7 @@ service Products {
   rpc Image (ProductImageRequest) returns (stream ProductImageResponse);
   rpc Role (ProductRoleRequest) returns (ProductRoleResponse);
   rpc Category (ProductCategoryRequest) returns (ProductCategoryResponse);
+  rpc LenderRole (ProductLenderRoleRequest) returns (ProductLenderRoleResponse);
 }
 
 // Meta
@@ -117,3 +118,9 @@ message ProductCategoryResponse {
   repeated Category categories = 1;
 }
 
+message ProductLenderRoleRequest {
+}
+
+message ProductLenderRoleResponse {
+  repeated Role Roles = 1;
+}

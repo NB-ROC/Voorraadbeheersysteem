@@ -6,8 +6,12 @@
              x:Class="Frontend.Views.User.UserFormView">
 
     <Grid RowDefinitions="100,*,100">
-        <ContentControl Content="{Binding Header}"/>
+        <ContentControl Content="{Binding Header}" />
         <StackPanel Grid.Row="1" Margin="20">
+
+            <StackPanel>
+                <TextBlock FontSize="16" Text="{Binding CardIdText}" Margin="0,0,0,15" />
+            </StackPanel>
 
             <StackPanel>
                 <TextBlock Text="Voornaam:" />
@@ -35,9 +39,17 @@
                                Margin="0,0,0,10" />
             </StackPanel>
 
-            <StackPanel>
-                <TextBlock Text="Rol ID:" />
-                <TextBox Text="{Binding RoleId}" Margin="0,0,0,10" />
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Rollen:" />
+
+                <ItemsControl ItemsSource="{Binding Roles}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Name}"
+                                      IsChecked="{Binding IsSelected}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
 
             <CheckBox Content="Geblokkeerd"
@@ -52,7 +64,7 @@
                     Command="{Binding SaveCommand}" />
 
         </StackPanel>
-        <ContentControl Grid.Row="2" Content="{Binding Footer}"/>
-        
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+
     </Grid>
 </UserControl>

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.Models;
@@ -21,4 +22,6 @@ public class UserModel
     [MaxLength(NameLength)] public string LastName { get; set; } = null!;
 
     public int Number { get; set; }
+
+    public List<RoleModel> Roles { get; set; } = null!;
 }
