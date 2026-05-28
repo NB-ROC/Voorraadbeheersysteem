@@ -42,9 +42,9 @@ public class LoanViewModel
 
     public IBrush StatusColor => _model.Status switch
     {
-        "Actief" => Brushes.Green,
-        "Te laat" => Brushes.Red,
-        "Ingeleverd" => Brushes.Gray,
+        "Active" => Brushes.Green,
+        "Overdue" => Brushes.Red,
+        "Returned" => Brushes.Gray,
         "Pending" => Brushes.Orange,
         _ => Brushes.Transparent
     };
