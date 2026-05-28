@@ -474,11 +474,11 @@ public class ProductEndpoint
 
         return (RequestResult.Success, response.Categories.Select(c => new CategoryModel
         {
-            Id  = c.Id,
+            Id = c.Id,
             Name = c.Name
         }).ToList());
     }
-    
+
     public async Task<(RequestResult, List<RoleModel>)> Role()
     {
         ProductRoleResponse? response;
@@ -493,7 +493,7 @@ public class ProductEndpoint
 
         return (RequestResult.Success, response.Roles.Select(c => new RoleModel
         {
-            Id  = c.Id,
+            Id = c.Id,
             Name = c.Name
         }).ToList());
     }

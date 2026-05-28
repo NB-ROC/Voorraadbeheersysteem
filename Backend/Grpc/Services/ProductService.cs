@@ -93,11 +93,12 @@ public class ProductService : Products.ProductsBase
 
         if (request.HasName) product.Name = request.Name;
         if (request.HasDescription) product.Description = request.Description;
-        if (request.Category != null) product.Category = new Entities.Category
-        {
-            Id = request.Category.Id,
-            Name = request.Category.Name
-        };
+        if (request.Category != null)
+            product.Category = new Entities.Category
+            {
+                Id = request.Category.Id,
+                Name = request.Category.Name
+            };
         if (request.HasRoleId) product.RoleId = request.RoleId;
 
         product.UpdatedAt = DateTime.UtcNow;
@@ -141,21 +142,22 @@ public class ProductService : Products.ProductsBase
             Extension = Path.GetExtension(request.Name).TrimStart('.')
         });
     }
-    
+
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<ProductRoleResponse> Role(ProductRoleRequest request, ServerCallContext context)
     {
         ProductRoleResponse response = new();
         response.Roles.AddRange((await _manager.Role()).Select(r => new Role
         {
-            Id = (int) r.Id,
+            Id = (int)r.Id,
             Name = r.Name
         }));
         return response;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
-    public override async Task<ProductCategoryResponse> Category(ProductCategoryRequest request, ServerCallContext context)
+    public override async Task<ProductCategoryResponse> Category(ProductCategoryRequest request,
+        ServerCallContext context)
     {
         ProductCategoryResponse response = new();
         response.Categories.AddRange((await _manager.Category()).Select(c => new Category

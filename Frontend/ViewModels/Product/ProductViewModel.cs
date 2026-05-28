@@ -43,7 +43,7 @@ public class ProductViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-    
+
     public string CategoryName => _model.Category.Name;
 
     public string Description

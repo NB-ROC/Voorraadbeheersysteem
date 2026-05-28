@@ -1,5 +1,4 @@
-﻿using Backend.Database;
-using Backend.DTOs;
+﻿using Backend.DTOs;
 using Backend.Entities;
 using Microsoft.EntityFrameworkCore;
 

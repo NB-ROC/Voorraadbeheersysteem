@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Login.LoginPageView"
              x:DataType="{x:Type login:LoginPageViewModel}">
-     <Grid Background="White">
+    <Grid Background="White">
 
         <Border Width="440"
                 Padding="40"
@@ -23,31 +23,31 @@
                     <TextBlock Text="Login"
                                FontSize="32"
                                FontWeight="Bold"
-                               Foreground="#2A2A2A"/>
+                               Foreground="#2A2A2A" />
                     <TextBlock Text="to get started."
                                FontSize="18"
-                               Foreground="#7A7A7A"/>
+                               Foreground="#7A7A7A" />
                 </StackPanel>
 
                 <!-- Email -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Email"
                                Foreground="#2A2A2A"
-                               FontSize="15"/>
+                               FontSize="15" />
                     <TextBox Text="{Binding Email}"
                              Watermark="Enter your email"
                              BorderBrush="#5A1E81"
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
-                             FontSize="15"/>
+                             FontSize="15" />
                 </StackPanel>
 
                 <!-- Password -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Password"
                                Foreground="#2A2A2A"
-                               FontSize="15"/>
+                               FontSize="15" />
                     <TextBox Text="{Binding Password}"
                              PasswordChar="●"
                              Watermark="Enter your password"
@@ -55,7 +55,7 @@
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
-                             FontSize="15"/>
+                             FontSize="15" />
                 </StackPanel>
 
                 <!-- Continue Button -->
@@ -66,7 +66,7 @@
                         CornerRadius="12"
                         Padding="16"
                         FontSize="18"
-                        HorizontalAlignment="Stretch"/>
+                        HorizontalAlignment="Stretch" />
 
             </StackPanel>
         </Border>

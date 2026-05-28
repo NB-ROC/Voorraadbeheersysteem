@@ -2,8 +2,6 @@
 using System.Security.Claims;
 using Backend.Database;
 using Backend.Entities;
-using Backend.Entities.Relations;
-using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,9 +25,9 @@ public class ScanService : Scans.ScansBase
 
         User? user = await _context.Users
             .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+            .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.CardId == cardId);
-        
+
         if (user == null)
             return new TryLoginResponse { Result = LoginResult.NotRegistered };
 
@@ -52,7 +50,7 @@ public class ScanService : Scans.ScansBase
             Token = token,
             IsLender = isLender,
             FirstName = user.FirstName,
-            LastName = user.LastName,
+            LastName = user.LastName
         };
 
         // repeated field vul je zo in met AddRange
@@ -65,8 +63,8 @@ public class ScanService : Scans.ScansBase
     {
         List<Claim> claims =
         [
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email)
         ];
 
         // Voeg elke rol toe als aparte claim zodat [Authorize(Roles = "...")] werkt

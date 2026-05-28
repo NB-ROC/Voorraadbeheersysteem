@@ -5,7 +5,6 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels;
-using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Login;
 using FrontendAdmin.Views;
 using Microsoft.Extensions.DependencyInjection;

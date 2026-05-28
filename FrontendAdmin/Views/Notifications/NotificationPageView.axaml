@@ -21,11 +21,11 @@
                     <TextBlock Text="Meldingen"
                                FontSize="28"
                                FontWeight="Bold"
-                               Foreground="#111827"/>
+                               Foreground="#111827" />
 
                     <TextBlock Text="Nieuwe registratie aanvragen"
                                FontSize="13"
-                               Foreground="#6B7280"/>
+                               Foreground="#6B7280" />
                 </StackPanel>
 
                 <!-- Meldingen -->
@@ -47,11 +47,11 @@
                                         <TextBlock Text="{Binding Title}"
                                                    FontWeight="Bold"
                                                    FontSize="16"
-                                                   Foreground="#111827"/>
+                                                   Foreground="#111827" />
 
                                         <TextBlock Text="{Binding Description}"
                                                    Foreground="#6B7280"
-                                                   FontSize="13"/>
+                                                   FontSize="13" />
 
                                     </StackPanel>
 
@@ -61,8 +61,8 @@
                                             Foreground="White"
                                             CornerRadius="8"
                                             Command="{Binding ViewCommand}"
-                                            Padding="12,8"/>
-                                    
+                                            Padding="12,8" />
+
 
                                 </Grid>
 
@@ -76,7 +76,7 @@
             </StackPanel>
 
         </ScrollViewer>
-        
+
         <ContentControl Grid.Row="2" Content="{Binding Footer}" />
 
     </Grid>

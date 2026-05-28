@@ -5,14 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Frontend.Models;
-using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Protos.Auth;
-using Protos.Scan;
 using Protos.Product;
-using TryLoginResponse = Frontend.Models.TryLoginResponse;
 
 namespace Frontend.Services;
 
@@ -246,10 +243,11 @@ public class ProductEndpoint
 
         return (RequestResult.Success, response.Categories.Select(c => new CategoryModel
         {
-            Id  = c.Id,
+            Id = c.Id,
             Name = c.Name
         }).ToList());
     }
+
     private static ProductModel MapProduct(MetaProduct product)
     {
         return new ProductModel

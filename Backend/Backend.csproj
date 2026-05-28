@@ -28,7 +28,7 @@
             <Link>Protos\product.proto</Link>
         </Protobuf>
         <Protobuf Update="..\Protos\scan.proto">
-          <Link>Protos\scan.proto</Link>
+            <Link>Protos\scan.proto</Link>
         </Protobuf>
     </ItemGroup>
 
