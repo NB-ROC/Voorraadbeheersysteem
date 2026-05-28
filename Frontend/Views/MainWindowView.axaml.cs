@@ -9,13 +9,10 @@ public partial class MainWindowView : Window
     public MainWindowView()
     {
         InitializeComponent();
-        
     }
+
     private void Login_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is MainWindowViewModel vm)
-        {
-            vm.Login();
-        }
+        if (DataContext is MainWindowViewModel vm) vm.Login();
     }
 }

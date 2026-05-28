@@ -49,6 +49,7 @@ public class ProductFormViewModel : ViewModelBase
         if (existing != null)
             LoadExistingProduct(existing);
     }
+
     #region Validation
 
     private void Validate()
@@ -77,7 +78,7 @@ public class ProductFormViewModel : ViewModelBase
             Error = "Selecteer een afbeelding.";
             return;
         }
-        
+
         if ((CategoryModel == null || string.IsNullOrWhiteSpace(CategoryModel.Name)) &&
             string.IsNullOrWhiteSpace(CustomCategory))
         {
@@ -171,7 +172,7 @@ public class ProductFormViewModel : ViewModelBase
     #endregion
 
     #region Properties
-    
+
     public int Id { get; set; }
 
     public Bitmap? PreviewImage
@@ -215,7 +216,7 @@ public class ProductFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
-    
+
     public string CustomCategory
     {
         get;
@@ -224,7 +225,7 @@ public class ProductFormViewModel : ViewModelBase
 
     public ObservableCollection<CategoryModel> Categories { get; } = [];
     public ObservableCollection<RoleModel> Roles { get; } = [];
-    
+
     private async Task LoadLookupDataAsync()
     {
         (RequestResult categoryResult, List<CategoryModel> categories) =

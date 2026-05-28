@@ -43,7 +43,7 @@ public class ProductViewModel : ViewModelBase
             this.RaisePropertyChanged();
         }
     }
-    
+
     public string CategoryName => _model.Category.Name;
 
     public string Description
@@ -59,11 +59,11 @@ public class ProductViewModel : ViewModelBase
 
     public string Image
     {
-        get => _model.Image;
+        get => _model.ImageName;
         set
         {
-            if (_model.Image == value) return;
-            _model.Image = value;
+            if (_model.ImageName == value) return;
+            _model.ImageName = value;
             this.RaisePropertyChanged();
         }
     }

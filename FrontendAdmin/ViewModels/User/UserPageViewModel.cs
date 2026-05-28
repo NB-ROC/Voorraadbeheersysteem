@@ -15,6 +15,8 @@ public class UserPageViewModel : PageViewModelBase
 {
     private readonly BackendService _backend;
 
+    private int _notificationCount = 2;
+
     public UserPageViewModel(ServiceProvider services) : base(services)
     {
         _backend = services.GetService<BackendService>() ??
@@ -41,6 +43,12 @@ public class UserPageViewModel : PageViewModelBase
 
     public ReactiveCommand<Unit, Unit> NavigateNotifications { get; }
 
+    public int NotificationCount
+    {
+        get => _notificationCount;
+        set => this.RaiseAndSetIfChanged(ref _notificationCount, value);
+    }
+
     public async Task LoadUsersAsync()
     {
         (RequestResult result, List<UserModel> users) =
@@ -50,13 +58,5 @@ public class UserPageViewModel : PageViewModelBase
 
         foreach (UserModel user in users)
             Users.Add(new UserViewModel(Services, user));
-    }
-
-    private int _notificationCount = 2;
-
-    public int NotificationCount
-    {
-        get => _notificationCount;
-        set => this.RaiseAndSetIfChanged(ref _notificationCount, value);
     }
 }

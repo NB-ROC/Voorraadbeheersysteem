@@ -2,11 +2,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Backend.Database.Managers;
 using Backend.Entities;
+using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Protos.Auth;
+using Protos.User;
 
 namespace Backend.Grpc.Services;
 
@@ -30,7 +32,15 @@ public class AuthService : Auth.AuthBase
 
         return new AuthLoginResponse
         {
-            Token = GenerateToken(user, user.UserRoles.Select(userRole => userRole.Role.Name).ToList())
+            Token = GenerateToken(user, user.UserRoles.Select(userRole => userRole.Role.Name).ToList()),
+            User = new MetaUser
+            {
+                Id = user.Id,
+                CardId = ByteString.CopyFrom(user.CardId),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            }
         };
     }
 

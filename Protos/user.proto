@@ -10,6 +10,7 @@ service Users {
   rpc Create (UserCreateRequest) returns (UserCreateResponse);
   rpc Modify (UserModifyRequest) returns (UserModifyResponse);
   rpc Delete (UserDeleteRequest) returns (UserDeleteResponse);
+  rpc LenderScan (UserLenderScanRequest) returns (UserLenderScanResponse);
 }
 
 // Meta
@@ -76,4 +77,15 @@ message UserDeleteRequest {
 
 message UserDeleteResponse {
   bool success = 1;
+}
+
+// Info by card
+
+message UserLenderScanRequest {
+  bytes card_id = 1;
+}
+
+message UserLenderScanResponse {
+  optional string email = 1;
+  optional string name = 2;
 }

@@ -10,9 +10,8 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Protos.Auth;
-using Protos.Scan;
 using Protos.Product;
-using TryLoginResponse = Frontend.Models.TryLoginResponse;
+using Protos.User;
 
 namespace Frontend.Services;
 
@@ -29,12 +28,16 @@ public class BackendService
 
         AuthClient = new Auth.AuthClient(channel);
         Products = new ProductEndpoint(new Products.ProductsClient(invoker));
+        Users = new UserEndpoint(new Users.UsersClient(invoker));
     }
 
     private string Token { get; set; } = string.Empty;
+    
+    public User? LoggedInUser { get; private set; }
 
     public Auth.AuthClient AuthClient { get; }
 
+    public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
 
     public async Task<bool> LogIn(string email, string password)
@@ -57,6 +60,15 @@ public class BackendService
             return false;
 
         Token = response.Token;
+        LoggedInUser = new User
+        {
+            Id = response.User.Id,
+            CardId = response.User.CardId.ToByteArray(),
+            Email = response.User.Email,
+            FirstName = response.User.FirstName,
+            LastName = response.User.LastName,
+            Number = response.User.Number
+        };
         return true;
     }
 }
@@ -142,6 +154,172 @@ public enum RequestResult
     Denied
 }
 
+public class UserEndpoint
+{
+    private readonly Users.UsersClient _client;
+
+    public UserEndpoint(Users.UsersClient client)
+    {
+        _client = client;
+    }
+
+    public async Task<(RequestResult, List<User>)> Page(int page, int pageSize)
+    {
+        UserPageRequest request = new()
+        {
+            Page = page,
+            PageSize = pageSize
+        };
+
+        UserPageResponse? response;
+        try
+        {
+            response = await _client.PageAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null!);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Users.Select(MapUser).ToList()
+        );
+    }
+
+    public async Task<(RequestResult, User?)> Get(int id)
+    {
+        UserGetRequest request = new()
+        {
+            Id = id
+        };
+
+        UserGetResponse? response;
+        try
+        {
+            response = await _client.GetAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            MapUser(response.User)
+        );
+    }
+
+    public async Task<(RequestResult, bool)> Create(User user)
+    {
+        UserCreateRequest request = new()
+        {
+            CardId = ByteString.CopyFrom(user.CardId),
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Number = user.Number
+        };
+
+        UserCreateResponse? response;
+        try
+        {
+            response = await _client.CreateAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, bool)> Modify(User user)
+    {
+        UserModifyRequest request = new()
+        {
+            Id = user.Id,
+            CardId = ByteString.CopyFrom(user.CardId),
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Number = user.Number
+        };
+
+        UserModifyResponse? response;
+        try
+        {
+            response = await _client.ModifyAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, bool)> Delete(int id)
+    {
+        UserDeleteRequest request = new()
+        {
+            Id = id
+        };
+
+        UserDeleteResponse? response;
+        try
+        {
+            response = await _client.DeleteAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, (string email, string name)?)> LenderScan(byte[] cardId)
+    {
+        UserLenderScanRequest request = new()
+        {
+            CardId = ByteString.CopyFrom(cardId)
+        };
+
+        UserLenderScanResponse? response;
+        try
+        {
+            response = await _client.LenderScanAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null);
+        }
+
+        return (RequestResult.Success, (response.Email, response.Name));
+    }
+
+    private static User MapUser(MetaUser user)
+    {
+        return new User
+        {
+            Id = user.Id,
+            CardId = user.CardId.ToByteArray(),
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Number = user.Number
+        };
+    }
+
+    private static RequestResult GetFailCode(RpcException e)
+    {
+        return e.StatusCode == StatusCode.PermissionDenied ? RequestResult.Denied : RequestResult.Failed;
+    }
+}
+
 public class ProductEndpoint
 {
     private readonly Products.ProductsClient _client;
@@ -166,6 +344,7 @@ public class ProductEndpoint
         }
         catch (RpcException e)
         {
+            Console.WriteLine(e.Message);
             return (GetFailCode(e), null!);
         }
 
@@ -198,6 +377,86 @@ public class ProductEndpoint
             RequestResult.Success,
             MapProduct(response.Product)
         );
+    }
+
+    public async Task<(RequestResult, bool)> Create(ProductModel productModel, byte[]? imageBytes)
+    {
+        ProductCreateRequest request = new()
+        {
+            Name = productModel.Name,
+            Description = productModel.Description,
+            Category = new Category
+            {
+                Id = productModel.Category.Id,
+                Name = productModel.Category.Name
+            },
+            RoleId = productModel.RoleModel.Id,
+            Image = ByteString.CopyFrom(imageBytes)
+        };
+
+        ProductCreateResponse? response;
+        try
+        {
+            response = await _client.CreateAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, bool)> Modify(ProductModel productModel, byte[]? imageBytes)
+    {
+        ProductModifyRequest request = new()
+        {
+            Id = productModel.Id,
+            Name = productModel.Name,
+            Description = productModel.Description,
+            Category = new Category
+            {
+                Id = productModel.Category.Id,
+                Name = productModel.Category.Name
+            },
+            RoleId = productModel.RoleModel.Id,
+            Image = ByteString.CopyFrom(imageBytes)
+        };
+
+        if (imageBytes != null)
+            request.Image = ByteString.CopyFrom(imageBytes);
+
+        ProductModifyResponse? response;
+        try
+        {
+            response = await _client.ModifyAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, bool)> Delete(int id)
+    {
+        ProductDeleteRequest request = new()
+        {
+            Id = id
+        };
+
+        ProductDeleteResponse? response;
+        try
+        {
+            response = await _client.DeleteAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
     }
 
     public async Task<(RequestResult, (byte[] bytes, Bitmap bitmap)?)> Image(string name)
@@ -246,10 +505,31 @@ public class ProductEndpoint
 
         return (RequestResult.Success, response.Categories.Select(c => new CategoryModel
         {
-            Id  = c.Id,
+            Id = c.Id,
             Name = c.Name
         }).ToList());
     }
+
+    public async Task<(RequestResult, List<RoleModel>)> Role()
+    {
+        ProductRoleResponse? response;
+        try
+        {
+            response = await _client.RoleAsync(new ProductRoleRequest());
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return (RequestResult.Success, response.Roles.Select(c => new RoleModel
+        {
+            Id = c.Id,
+            Name = c.Name
+        }).ToList());
+    }
+
+
     private static ProductModel MapProduct(MetaProduct product)
     {
         return new ProductModel
@@ -262,45 +542,21 @@ public class ProductEndpoint
                 Id = product.Category.Id,
                 Name = product.Category.Name
             },
-            Image = product.Image
+            RoleModel = new RoleModel
+            {
+                Id = product.Id,
+                Name = product.Name
+            },
+            ImageName = product.Image
         };
     }
 
     private static RequestResult GetFailCode(RpcException e)
     {
-        Console.WriteLine(e.Message);
         return e.StatusCode == StatusCode.PermissionDenied
             ? RequestResult.Denied
             : RequestResult.Failed;
     }
 }
-
-// public class ScanEndpoint
-// {
-//     private Scans.ScansClient _client;
-//
-//     public ScanEndpoint(Scans.ScansClient client)
-//     {
-//         _client = client;
-//     }
-//
-//     public async Task<(RequestResult, TryLoginResponse?)> TryLogin(byte[] cardId)
-//     {
-//         Protos.Scan.TryLoginResponse? response;
-//         try
-//         {
-//             response = await _client.TryLoginAsync(new()
-//             {
-//                 CardId = ByteString.CopyFrom(cardId)
-//             });
-//         }
-//         catch (RpcException e)
-//         {
-//             return (, null);
-//         }
-//     }
-//     
-//     
-// }
 
 #endregion

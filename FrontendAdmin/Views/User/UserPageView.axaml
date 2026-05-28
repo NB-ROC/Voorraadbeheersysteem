@@ -84,7 +84,7 @@
                             <TextBlock Text="🔔"
                                        FontSize="18"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                         </Button>
 
                         <!-- Badge -->
@@ -100,7 +100,7 @@
                                        FontSize="10"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                         </Border>
                     </Grid>
                 </Grid>

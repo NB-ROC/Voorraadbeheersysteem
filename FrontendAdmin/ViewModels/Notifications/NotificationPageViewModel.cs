@@ -1,13 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using FrontendAdmin.Models;
-using FrontendAdmin.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin.ViewModels.Notifications;
 
 public class NotificationPageViewModel : PageViewModelBase
 {
-    public ObservableCollection<NotificationViewModel> Notifications { get; } = [];
     public NotificationPageViewModel(ServiceProvider services)
         : base(services)
     {
@@ -25,4 +23,6 @@ public class NotificationPageViewModel : PageViewModelBase
                 Description = "gandalf the grey heeft zich geregistreerd."
             }));
     }
+
+    public ObservableCollection<NotificationViewModel> Notifications { get; } = [];
 }

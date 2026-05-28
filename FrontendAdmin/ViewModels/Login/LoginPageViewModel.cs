@@ -12,11 +12,11 @@ public class LoginPageViewModel : PageViewModelBase
 {
     public LoginPageViewModel(ServiceProvider services) : base(services)
     {
-        var canLogin = this.WhenAnyValue(
+        IObservable<bool> canLogin = this.WhenAnyValue(
             x => x.Password,
-            (p) => !string.IsNullOrWhiteSpace(p)
-            );
-        
+            p => !string.IsNullOrWhiteSpace(p)
+        );
+
         LoginCommand = ReactiveCommand.CreateFromTask(Login, canLogin);
     }
 
@@ -44,10 +44,6 @@ public class LoginPageViewModel : PageViewModelBase
     {
         bool success = await Services.GetService<BackendService>()!.LogIn(Email, Password);
 
-        if (success)
-        {
-            Services.GetService<NavigationService>()?.NavigateTo(new DashboardPageViewModel(Services));
-        }
+        if (success) Services.GetService<NavigationService>()?.NavigateTo(new DashboardPageViewModel(Services));
     }
-    
 }

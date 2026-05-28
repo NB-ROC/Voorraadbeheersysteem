@@ -5,7 +5,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Frontend.Services;
 using Frontend.ViewModels;
-using Frontend.ViewModels.CustomerProduct;
+using Frontend.ViewModels.Login;
 using Frontend.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,21 +27,18 @@ public class App : Application
             MainWindowViewModel mainWindowViewModel = new();
             NavigationService navigationService = new(mainWindowViewModel);
             BackendService backendService = new();
-            ScannerService scannerService = new();
+            SmartCardService smartCardService = new();
 
             serviceCollection.AddSingleton(navigationService);
             serviceCollection.AddSingleton(backendService);
-            serviceCollection.AddSingleton(scannerService);
-
-            _ = backendService.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
-
+            serviceCollection.AddSingleton(smartCardService);
 
             DisableAvaloniaDataAnnotationValidation();
 
             ServiceProvider services = serviceCollection.BuildServiceProvider();
 
 
-            mainWindowViewModel.CurrentPage = new CustomerProductPageViewModel(services);
+            mainWindowViewModel.CurrentPage = new LoginScannerViewModel(services);
 
             desktop.MainWindow = new MainWindowView
             {
