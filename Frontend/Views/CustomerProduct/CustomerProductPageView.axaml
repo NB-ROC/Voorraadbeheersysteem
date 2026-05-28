@@ -5,118 +5,124 @@
              x:Class="Frontend.Views.CustomerProduct.CustomerProductPageView"
              x:DataType="cp:CustomerProductPageViewModel">
 
-    <Grid RowDefinitions="Auto,*">
 
-        <!-- HEADER -->
-        <StackPanel Margin="20,20,20,12" Spacing="4">
-            <TextBlock Text="Shop"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="#1F2937" />
+    <Grid RowDefinitions="100,*,100">
 
-            <TextBlock Text="Bekijk alle producten"
-                       FontSize="13"
-                       Foreground="#6B7280" />
-        </StackPanel>
+        <ContentControl Content="{Binding Header}" />
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
 
-        <!-- PRODUCT LIST -->
-        <ScrollViewer Grid.Row="1" Margin="20,0,20,20">
+            <!-- HEADER -->
+            <StackPanel Margin="20,20,20,12" Spacing="4">
+                <TextBlock Text="Shop"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#1F2937" />
 
-            <ListBox ItemsSource="{Binding Products}">
+                <TextBlock Text="Bekijk alle producten"
+                           FontSize="13"
+                           Foreground="#6B7280" />
+            </StackPanel>
 
-                <ListBox.ItemTemplate>
+            <!-- PRODUCT LIST -->
+            <ScrollViewer Grid.Row="1" Margin="20,0,20,20">
 
-                    <DataTemplate DataType="{x:Type product:ProductViewModel}">
+                <ListBox ItemsSource="{Binding Products}">
 
-                        <Border Background="White"
-                                BorderBrush="#E5E7EB"
-                                BorderThickness="1"
-                                CornerRadius="12"
-                                Padding="14"
-                                Margin="0,0,0,12">
+                    <ListBox.ItemTemplate>
 
-                            <Grid ColumnDefinitions="80,*,Auto"
-                                  ColumnSpacing="14">
+                        <DataTemplate DataType="{x:Type product:ProductViewModel}">
 
-                                <!-- IMAGE -->
-                                <Border Width="72"
-                                        Height="72"
-                                        Background="#F3F4F6"
-                                        CornerRadius="10">
+                            <Border Background="White"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="14"
+                                    Margin="0,0,0,12">
 
-                                    <Panel>
-                                        <!-- Loading -->
-                                        <TextBlock Text="⏳"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="22"
-                                                   Foreground="#9CA3AF"
-                                                   IsVisible="{Binding IsImageLoading}" />
+                                <Grid ColumnDefinitions="80,*,Auto"
+                                      ColumnSpacing="14">
 
-                                        <!-- Loaded -->
-                                        <Image Source="{Binding Thumbnail}"
-                                               Stretch="UniformToFill"
-                                               IsVisible="{Binding !IsImageLoading}" />
+                                    <!-- IMAGE -->
+                                    <Border Width="72"
+                                            Height="72"
+                                            Background="#F3F4F6"
+                                            CornerRadius="10">
 
-                                        <!-- Failed -->
-                                        <TextBlock Text="⚠️"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="22"
-                                                   IsVisible="{Binding ImageFailed}" />
-                                    </Panel>
-                                </Border>
+                                        <Panel>
+                                            <!-- Loading -->
+                                            <TextBlock Text="⏳"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="22"
+                                                       Foreground="#9CA3AF"
+                                                       IsVisible="{Binding IsImageLoading}" />
 
-                                <!-- INFO -->
-                                <StackPanel Grid.Column="1"
-                                            Spacing="4"
-                                            VerticalAlignment="Center">
+                                            <!-- Loaded -->
+                                            <Image Source="{Binding Thumbnail}"
+                                                   Stretch="UniformToFill"
+                                                   IsVisible="{Binding !IsImageLoading}" />
 
-                                    <TextBlock Text="{Binding CategoryName}"
-                                               FontSize="12"
-                                               Foreground="#9CA3AF" />
+                                            <!-- Failed -->
+                                            <TextBlock Text="⚠️"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="22"
+                                                       IsVisible="{Binding ImageFailed}" />
+                                        </Panel>
+                                    </Border>
 
-                                    <TextBlock Text="{Binding Name}"
-                                               FontSize="16"
-                                               FontWeight="Bold" />
+                                    <!-- INFO -->
+                                    <StackPanel Grid.Column="1"
+                                                Spacing="4"
+                                                VerticalAlignment="Center">
 
-                                    <TextBlock Text="{Binding Description}"
-                                               FontSize="13"
-                                               Foreground="#6B7280"
-                                               TextWrapping="Wrap" />
-                                </StackPanel>
+                                        <TextBlock Text="{Binding CategoryName}"
+                                                   FontSize="12"
+                                                   Foreground="#9CA3AF" />
 
-                                <!-- ACTIONS -->
-                                <StackPanel Grid.Column="2"
-                                            Spacing="8"
-                                            VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="16"
+                                                   FontWeight="Bold" />
 
-                                    <Button Content="Toevoegen aan mandje"
-                                            Background="Orange"
-                                            Foreground="White"
-                                            Padding="12,6"
-                                            CornerRadius="8" />
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="13"
+                                                   Foreground="#6B7280"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
 
-                                    <Button Content="Verwijderen"
-                                            Background="Red"
-                                            Foreground="White"
-                                            Padding="12,6"
-                                            CornerRadius="8" />
+                                    <!-- ACTIONS -->
+                                    <StackPanel Grid.Column="2"
+                                                Spacing="8"
+                                                VerticalAlignment="Center">
 
-                                </StackPanel>
+                                        <Button Content="Toevoegen aan mandje"
+                                                Background="Orange"
+                                                Foreground="White"
+                                                Padding="12,6"
+                                                CornerRadius="8" />
 
-                            </Grid>
+                                        <Button Content="Verwijderen"
+                                                Background="Red"
+                                                Foreground="White"
+                                                Padding="12,6"
+                                                CornerRadius="8" />
 
-                        </Border>
+                                    </StackPanel>
 
-                    </DataTemplate>
+                                </Grid>
 
-                </ListBox.ItemTemplate>
+                            </Border>
 
-            </ListBox>
+                        </DataTemplate>
 
-        </ScrollViewer>
+                    </ListBox.ItemTemplate>
 
+                </ListBox>
+
+            </ScrollViewer>
+
+        </Grid>
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
     </Grid>
 
 </UserControl>

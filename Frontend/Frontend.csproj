@@ -75,18 +75,45 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Dashboard\DashboardPageView.axaml.cs">
-          <DependentUpon>DashboardPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>DashboardPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Dashboard\DashboardPageView.axaml.cs">
-          <DependentUpon>DashboardPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>DashboardPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Loan\LoanPageView.axaml.cs">
+            <DependentUpon>LoanPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Loan\LoanPageView.axaml.cs">
+            <DependentUpon>LoanPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\User\UserFormView.axaml.cs">
+            <DependentUpon>UserFormView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\User\UserPageView.axaml.cs">
+            <DependentUpon>UserPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\User\UserFormView.axaml.cs">
+            <DependentUpon>UserFormView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\User\UserPageView.axaml.cs">
+            <DependentUpon>UserPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
         <AdditionalFiles Include="Views\Components\FooterView.axaml"/>
         <AdditionalFiles Include="Views\Components\HeaderView.axaml"/>
-        <AdditionalFiles Include="Views\Dashboard\DashboardPageView.axaml" />
+        <AdditionalFiles Include="Views\Dashboard\DashboardPageView.axaml"/>
+        <AdditionalFiles Include="Views\Loan\LoanPageView.axaml"/>
+        <AdditionalFiles Include="Views\User\UserFormView.axaml"/>
+        <AdditionalFiles Include="Views\User\UserPageView.axaml"/>
     </ItemGroup>
 </Project>

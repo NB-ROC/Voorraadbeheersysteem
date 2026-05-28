@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.Models;
 
-public class User
+public class UserModel
 {
     public const int IdLength = 7;
     public const int StaffNumberLength = 6;

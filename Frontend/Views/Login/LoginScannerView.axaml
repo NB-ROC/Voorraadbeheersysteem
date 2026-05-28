@@ -11,6 +11,6 @@
         <ContentControl Content="{Binding Header}" />
 
         <TextBlock Grid.Row="1" Text="Scan u uitlenerspas om in te loggen" HorizontalAlignment="Center"
-                 VerticalAlignment="Center" FontSize="60" />
+                   VerticalAlignment="Center" FontSize="60" />
     </Grid>
 </UserControl>

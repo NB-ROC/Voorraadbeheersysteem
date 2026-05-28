@@ -22,8 +22,8 @@ public class HeaderViewModel : ViewModelBase
         smartCardService.ReadersAvailableChanged += OnReadersAvailableChanged;
 
 
-        User? loggedInUser = services.GetRequiredService<BackendService>().LoggedInUser;
-        
+        UserModel? loggedInUser = services.GetRequiredService<BackendService>().LoggedInUser;
+
         Greet = loggedInUser == null
             ? ""
             : "Welkom, " + loggedInUser.FirstName + " " + loggedInUser.LastName;
