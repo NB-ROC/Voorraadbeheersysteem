@@ -32,10 +32,10 @@ public class BackendService
     }
 
     private string Token { get; set; } = string.Empty;
-    
-    public User? LoggedInUser { get; private set; }
 
-    public Auth.AuthClient AuthClient { get; }
+    public UserModel? LoggedInUser { get; private set; }
+
+    private Auth.AuthClient AuthClient { get; }
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
@@ -51,7 +51,7 @@ public class BackendService
                 Password = password
             });
         }
-        catch (RpcException e)
+        catch (RpcException)
         {
             return false;
         }
@@ -60,7 +60,7 @@ public class BackendService
             return false;
 
         Token = response.Token;
-        LoggedInUser = new User
+        LoggedInUser = new UserModel
         {
             Id = response.User.Id,
             CardId = response.User.CardId.ToByteArray(),
@@ -163,7 +163,7 @@ public class UserEndpoint
         _client = client;
     }
 
-    public async Task<(RequestResult, List<User>)> Page(int page, int pageSize)
+    public async Task<(RequestResult, List<UserModel>)> Page(int page, int pageSize)
     {
         UserPageRequest request = new()
         {
@@ -188,7 +188,7 @@ public class UserEndpoint
         );
     }
 
-    public async Task<(RequestResult, User?)> Get(int id)
+    public async Task<(RequestResult, UserModel?)> Get(int id)
     {
         UserGetRequest request = new()
         {
@@ -212,16 +212,19 @@ public class UserEndpoint
         );
     }
 
-    public async Task<(RequestResult, bool)> Create(User user)
+    public async Task<(RequestResult, bool)> Create(UserModel userModel)
     {
         UserCreateRequest request = new()
         {
-            CardId = ByteString.CopyFrom(user.CardId),
-            Email = user.Email,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Number = user.Number
+            CardId = ByteString.CopyFrom(userModel.CardId),
+            Email = userModel.Email,
+            FirstName = userModel.FirstName,
+            LastName = userModel.LastName,
+            Number = userModel.Number
         };
+
+        request.RoleIds.Add(userModel.Roles.Select(r => r.Id));
+
 
         UserCreateResponse? response;
         try
@@ -236,17 +239,19 @@ public class UserEndpoint
         return (RequestResult.Success, response.Success);
     }
 
-    public async Task<(RequestResult, bool)> Modify(User user)
+    public async Task<(RequestResult, bool)> Modify(UserModel userModel)
     {
         UserModifyRequest request = new()
         {
-            Id = user.Id,
-            CardId = ByteString.CopyFrom(user.CardId),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Number = user.Number
+            Id = userModel.Id,
+            CardId = ByteString.CopyFrom(userModel.CardId),
+            FirstName = userModel.FirstName,
+            LastName = userModel.LastName,
+            Email = userModel.Email,
+            Number = userModel.Number
         };
+
+        request.RoleIds.Add(userModel.Roles.Select(r => r.Id));
 
         UserModifyResponse? response;
         try
@@ -301,16 +306,47 @@ public class UserEndpoint
         return (RequestResult.Success, (response.Email, response.Name));
     }
 
-    private static User MapUser(MetaUser user)
+    public async Task<(RequestResult, List<UserModel>)> LenderPage(int page, int pageSize)
     {
-        return new User
+        UserLenderPageRequest request = new()
+        {
+            Page = page,
+            PageSize = pageSize
+        };
+
+        UserLenderPageResponse? response;
+        try
+        {
+            response = await _client.LenderPageAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null!);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Users.Select(MapUser).ToList()
+        );
+    }
+
+
+    private static UserModel MapUser(MetaUser user)
+    {
+        return new UserModel
         {
             Id = user.Id,
             CardId = user.CardId.ToByteArray(),
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Number = user.Number
+            Number = user.Number,
+            Roles = user.Roles.Select(r => new RoleModel
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList()
         };
     }
 
@@ -549,6 +585,25 @@ public class ProductEndpoint
             },
             ImageName = product.Image
         };
+    }
+
+    public async Task<(RequestResult, List<RoleModel>)> LenderRole()
+    {
+        ProductLenderRoleResponse? response;
+        try
+        {
+            response = await _client.LenderRoleAsync(new ProductLenderRoleRequest());
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return (RequestResult.Success, response.Roles.Select(c => new RoleModel
+        {
+            Id = c.Id,
+            Name = c.Name
+        }).ToList());
     }
 
     private static RequestResult GetFailCode(RpcException e)

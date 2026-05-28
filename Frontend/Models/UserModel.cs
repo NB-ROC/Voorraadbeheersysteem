@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.Models;
 
-public class User
+public class UserModel
 {
     public const int IdLength = 7;
     public const int StaffNumberLength = 6;
@@ -21,4 +22,6 @@ public class User
     [MaxLength(NameLength)] public string LastName { get; set; } = null!;
 
     public int Number { get; set; }
+
+    public List<RoleModel> Roles { get; set; } = null!;
 }

@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loan="clr-namespace:Frontend.ViewModels.Loan"
+             x:Class="Frontend.Views.Loan.LoanPageView"
+             x:DataType="{x:Type loan:LoanPageViewModel}">
+
+    <Grid RowDefinitions="100,*,100">
+
+        <ContentControl Content="{Binding Header}" />
+
+        <DockPanel Grid.Row="1" Background="White" Margin="10">
+            <!-- titel -->
+            <TextBlock DockPanel.Dock="Top"
+                       Text="Mijn Leningen"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10" />
+            <!-- Zoekbalken -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox Width="250"
+                         Watermark="Zoek op product of datum"
+                         Text="{Binding ProductQuery, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,10,0" />
+
+                <TextBox Width="250"
+                         Watermark="Zoek op gebruiker"
+                         Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- filters -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+                <Button Content="Actief"
+                        Command="{Binding FilterStatusCommand}"
+                        CommandParameter="Active"
+                        Background="#2e7d32"
+                        Foreground="White" />
+
+                <Button Content="Te laat"
+                        Command="{Binding FilterStatusCommand}"
+                        CommandParameter="Overdue"
+                        Background="#d32f2f"
+                        Foreground="White" />
+
+                <Button Content="Ingeleverd"
+                        Command="{Binding FilterStatusCommand}"
+                        CommandParameter="Returned"
+                        Background="#0277bd"
+                        Foreground="White" />
+
+                <Button Content="Reset"
+                        Command="{Binding ResetCommand}"
+                        Background="#777777"
+                        Foreground="White" />
+            </StackPanel>
+            <!-- Leningen -->
+            <ScrollViewer>
+                <ItemsControl x:Name="LoanList" ItemsSource="{Binding FilteredLoans}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="loan:LoanViewModel">
+                            <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="10">
+                                <Grid ColumnDefinitions="80,*,100,Auto">
+                                    <Image Source="{Binding Image}" Width="70" Height="70" Grid.Column="0" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="{Binding ProductName}" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock FontSize="12" Foreground="#555">
+                                            <Run Text="Borrower:" />
+                                            <Run Text="{Binding BorrowerNumber}" />
+                                        </TextBlock>
+                                        <TextBlock FontSize="12" Foreground="#555">
+                                            <Run Text="Loan date:" />
+                                            <Run Text="{Binding LoanDate}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ReturnDate}" Grid.Column="2"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               FontSize="12" Foreground="#555" />
+                                    <Border Background="{Binding StatusColor}" CornerRadius="4" Padding="5"
+                                            Grid.Column="3" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Status}" Foreground="White" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </DockPanel>
+
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+
+
+    </Grid>
+
+
+</UserControl>

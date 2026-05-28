@@ -1,0 +1,24 @@
+using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
+
+namespace Frontend.ViewModels.User;
+
+public class RoleSelectionViewModel : ViewModelBase
+{
+    public RoleSelectionViewModel(ServiceProvider services, int id, string name, bool isSelected) : base(services)
+    {
+        Id = id;
+        IsSelected = isSelected;
+        Name = name;
+    }
+
+    public int Id { get; init; }
+
+    public string Name { get; init; }
+
+    public bool IsSelected
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+}

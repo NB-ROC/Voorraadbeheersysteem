@@ -253,6 +253,7 @@ public sealed class SmartCardService : IDisposable
     private void OnCardInserted(object sender, CardStatusEventArgs e)
     {
         string? readerName = e.ReaderName;
+        Console.WriteLine("[SmartCardService] Card inserted: " + readerName);
 
         Task.Run(() =>
         {
