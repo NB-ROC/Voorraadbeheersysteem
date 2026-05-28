@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace FrontendAdmin.Views.User;
+namespace Frontend.Views.User;
 
 public partial class UserFormView : UserControl
 {

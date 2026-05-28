@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace Frontend.ViewModels.User;
 
-public class UserFormViewModel : ViewModelBase
+public class UserFormViewModel : PageViewModelBase
 {
     private readonly BackendService _backend;
 

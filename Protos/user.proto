@@ -11,6 +11,7 @@ service Users {
   rpc Modify (UserModifyRequest) returns (UserModifyResponse);
   rpc Delete (UserDeleteRequest) returns (UserDeleteResponse);
   rpc LenderScan (UserLenderScanRequest) returns (UserLenderScanResponse);
+  rpc LenderPage (UserLenderPageRequest) returns (UserLenderPageResponse);
 }
 
 // Meta
@@ -88,4 +89,15 @@ message UserLenderScanRequest {
 message UserLenderScanResponse {
   optional string email = 1;
   optional string name = 2;
+}
+
+// LenderPage
+
+message UserLenderPageRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message UserLenderPageResponse {
+  repeated MetaUser users = 1;
 }

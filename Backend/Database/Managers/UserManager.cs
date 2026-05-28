@@ -98,4 +98,15 @@ public class UserManager
 
         return (users[0].Email, users[0].FirstName + " " + users[0].LastName);
     }
+    
+    public async Task<List<User>> LenderPage(int page, int pageSize)
+    {
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .Where(u => u.UserRoles.Any(ur => ur.Role.Name == "Student" || ur.Role.Name == "Personnel" ||  ur.Role.Name == "Guest"))
+            .OrderBy(user => user.Number)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
 }

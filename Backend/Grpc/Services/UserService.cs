@@ -110,6 +110,17 @@ public class UserService : Users.UsersBase
 
         return response;
     }
+    
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Lender)}")]
+    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request, ServerCallContext context)
+    {
+        List<User> users = await _manager.LenderPage(request.Page, request.PageSize);
+
+        return new UserLenderPageResponse
+        {
+            Users = { users.Select(MapMeta) }
+        };;
+    }
 
     private static MetaUser MapMeta(User user)
     {

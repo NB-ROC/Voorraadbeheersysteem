@@ -300,6 +300,32 @@ public class UserEndpoint
 
         return (RequestResult.Success, (response.Email, response.Name));
     }
+    
+    public async Task<(RequestResult, List<UserModel>)> LenderPage(int page, int pageSize)
+    {
+        UserLenderPageRequest request = new()
+        {
+            Page = page,
+            PageSize = pageSize
+        };
+
+        UserLenderPageResponse? response;
+        try
+        {
+            response = await _client.LenderPageAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null!);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Users.Select(MapUser).ToList()
+        );
+    }
+
 
     private static UserModel MapUser(MetaUser user)
     {

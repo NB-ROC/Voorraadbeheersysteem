@@ -43,7 +43,7 @@ public class UserPageViewModel : PageViewModelBase
     public async Task LoadUsersAsync()
     {
         (RequestResult result, List<UserModel> users) =
-            await _backend.Users.Page(1, 20);
+            await _backend.Users.LenderPage(1, 20);
 
         Users.Clear();
 
