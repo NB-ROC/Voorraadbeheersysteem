@@ -67,6 +67,7 @@ internal class Program
         app.MapGrpcService<UserService>();
         app.MapGrpcService<ProductService>();
         app.MapGrpcService<AuthService>();
+        app.MapGrpcService<ScanService>(); 
 
         app.Run();
 

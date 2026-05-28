@@ -30,6 +30,10 @@ public class CustomerProductPageViewModel : PageViewModelBase
     {
         _services = services;
         _backend = services.GetRequiredService<BackendService>();
+        _services.GetRequiredService<ScannerService>().SetCallback((bytes =>
+        {
+            Console.WriteLine(string.Join(",", bytes));
+        }));
 
         _ = LoadProducts();
     }

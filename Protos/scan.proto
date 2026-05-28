@@ -21,4 +21,11 @@ message TryLoginRequest {
 message TryLoginResponse {
   LoginResult result = 1;
   string token = 2;
+
+  string first_name = 3;
+  string last_name = 4;
+
+  bool is_lender = 5;
+
+  repeated string roles = 6;
 }
