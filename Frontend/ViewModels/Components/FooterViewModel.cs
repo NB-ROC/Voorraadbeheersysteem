@@ -1,6 +1,8 @@
 using System;
 using System.Reactive;
 using Frontend.Services;
+using Frontend.ViewModels.CustomerProduct;
+using Frontend.ViewModels.Dashboard;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
@@ -12,8 +14,8 @@ public class FooterViewModel : ViewModelBase
     {
         NavigationService navigation = services.GetService<NavigationService>() ?? throw new NullReferenceException();
 
-        // NavigateDashboard = ReactiveCommand.Create(() => navigation.NavigateTo(new DashboardPageViewModel(services)));
-        // NavigateProducts = ReactiveCommand.Create(() => navigation.NavigateTo(new ProductPageViewModel(services)));
+        NavigateDashboard = ReactiveCommand.Create(() => navigation.NavigateTo(new DashboardPageViewModel(services)));
+        NavigateProducts = ReactiveCommand.Create(() => navigation.NavigateTo(new CustomerProductPageViewModel(services)));
         // NavigateLoans = ReactiveCommand.Create(() => navigation.NavigateTo(new LoanPageViewModel(services)));
         // NavigateUsers = ReactiveCommand.Create(() => navigation.NavigateTo(new UserPageViewModel(services)));
     }

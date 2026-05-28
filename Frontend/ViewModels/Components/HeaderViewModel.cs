@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using Frontend.Models;
 using Frontend.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -19,6 +20,19 @@ public class HeaderViewModel : ViewModelBase
             : "Er zijn geen scanners aanwezig :(";
 
         smartCardService.ReadersAvailableChanged += OnReadersAvailableChanged;
+
+
+        User? loggedInUser = services.GetRequiredService<BackendService>().LoggedInUser;
+        
+        Greet = loggedInUser == null
+            ? ""
+            : "Welkom, " + loggedInUser.FirstName + " " + loggedInUser.LastName;
+    }
+
+    public string Greet
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
     public IBrush StatusColor

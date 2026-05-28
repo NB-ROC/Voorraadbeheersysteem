@@ -32,6 +32,8 @@ public class BackendService
     }
 
     private string Token { get; set; } = string.Empty;
+    
+    public User? LoggedInUser { get; private set; }
 
     public Auth.AuthClient AuthClient { get; }
 
@@ -58,6 +60,15 @@ public class BackendService
             return false;
 
         Token = response.Token;
+        LoggedInUser = new User
+        {
+            Id = response.User.Id,
+            CardId = response.User.CardId.ToByteArray(),
+            Email = response.User.Email,
+            FirstName = response.User.FirstName,
+            LastName = response.User.LastName,
+            Number = response.User.Number
+        };
         return true;
     }
 }
@@ -152,7 +163,7 @@ public class UserEndpoint
         _client = client;
     }
 
-    public async Task<(RequestResult, List<UserModel>)> Page(int page, int pageSize)
+    public async Task<(RequestResult, List<User>)> Page(int page, int pageSize)
     {
         UserPageRequest request = new()
         {
@@ -177,7 +188,7 @@ public class UserEndpoint
         );
     }
 
-    public async Task<(RequestResult, UserModel?)> Get(int id)
+    public async Task<(RequestResult, User?)> Get(int id)
     {
         UserGetRequest request = new()
         {
@@ -201,7 +212,7 @@ public class UserEndpoint
         );
     }
 
-    public async Task<(RequestResult, bool)> Create(UserModel user)
+    public async Task<(RequestResult, bool)> Create(User user)
     {
         UserCreateRequest request = new()
         {
@@ -225,7 +236,7 @@ public class UserEndpoint
         return (RequestResult.Success, response.Success);
     }
 
-    public async Task<(RequestResult, bool)> Modify(UserModel user)
+    public async Task<(RequestResult, bool)> Modify(User user)
     {
         UserModifyRequest request = new()
         {
@@ -270,9 +281,29 @@ public class UserEndpoint
         return (RequestResult.Success, response.Success);
     }
 
-    private static UserModel MapUser(MetaUser user)
+    public async Task<(RequestResult, (string email, string name)?)> LenderScan(byte[] cardId)
     {
-        return new UserModel
+        UserLenderScanRequest request = new()
+        {
+            CardId = ByteString.CopyFrom(cardId)
+        };
+
+        UserLenderScanResponse? response;
+        try
+        {
+            response = await _client.LenderScanAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null);
+        }
+
+        return (RequestResult.Success, (response.Email, response.Name));
+    }
+
+    private static User MapUser(MetaUser user)
+    {
+        return new User
         {
             Id = user.Id,
             CardId = user.CardId.ToByteArray(),
@@ -497,6 +528,7 @@ public class ProductEndpoint
             Name = c.Name
         }).ToList());
     }
+
 
     private static ProductModel MapProduct(MetaProduct product)
     {

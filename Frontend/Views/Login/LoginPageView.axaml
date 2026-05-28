@@ -20,24 +20,23 @@
 
                 <!-- Title -->
                 <StackPanel Spacing="6">
-                    <TextBlock Text="Login"
+                    <TextBlock Text="Log in"
                                FontSize="32"
                                FontWeight="Bold"
                                Foreground="#2A2A2A" />
-                    <TextBlock Text="to get started."
+                    <TextBlock Text="om verder te gaan"
                                FontSize="18"
                                Foreground="#7A7A7A" />
                 </StackPanel>
 
                 <!-- Name -->
                 <StackPanel Spacing="8">
-                    <TextBlock Text="Name"
-                               
+                    <TextBlock Text="Naam"
+
                                Foreground="#2A2A2A"
                                FontSize="15" />
                     <TextBox Text="{Binding Name}"
                              IsReadOnly="True"
-                             Watermark="Enter your email"
                              BorderBrush="#5A1E81"
                              BorderThickness="2"
                              CornerRadius="10"
@@ -47,12 +46,12 @@
 
                 <!-- Password -->
                 <StackPanel Spacing="8">
-                    <TextBlock Text="Password"
+                    <TextBlock Text="Wachtwoord"
                                Foreground="#2A2A2A"
                                FontSize="15" />
                     <TextBox Text="{Binding Password}"
                              PasswordChar="●"
-                             Watermark="Enter your password"
+                             Watermark="Vul hier je wachtwoord in"
                              BorderBrush="#5A1E81"
                              BorderThickness="2"
                              CornerRadius="10"
@@ -61,7 +60,7 @@
                 </StackPanel>
 
                 <!-- Continue Button -->
-                <Button Content="Continue"
+                <Button Content="Inloggen"
                         Command="{Binding LoginCommand}"
                         Background="#0077C8"
                         Foreground="White"

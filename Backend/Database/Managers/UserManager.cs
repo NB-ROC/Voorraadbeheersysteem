@@ -83,7 +83,7 @@ public class UserManager
 
     public async Task<(string email, string name)?> LenderScan(byte[] cardId)
     {
-        User[] users = (await _context.Users
+        User[] users = await _context.Users
             .Include(u => u.UserRoles)
             .Where(u => u.UserRoles.Any(ur =>
                     ur.Role.Name == "Lender" ||
@@ -92,10 +92,10 @@ public class UserManager
                 )
             )
             .Where(u => u.CardId == cardId)
-            .ToArrayAsync());
-        
+            .ToArrayAsync();
+
         if (users.Length == 0) return null;
-        
+
         return (users[0].Email, users[0].FirstName + " " + users[0].LastName);
     }
 }

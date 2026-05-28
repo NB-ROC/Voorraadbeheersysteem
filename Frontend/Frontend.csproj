@@ -71,7 +71,15 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Login\LoginPageView.axaml.cs">
-          <DependentUpon>LoginPageView.axaml</DependentUpon>
+            <DependentUpon>LoginPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Dashboard\DashboardPageView.axaml.cs">
+          <DependentUpon>DashboardPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Dashboard\DashboardPageView.axaml.cs">
+          <DependentUpon>DashboardPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
@@ -79,5 +87,6 @@
     <ItemGroup>
         <AdditionalFiles Include="Views\Components\FooterView.axaml"/>
         <AdditionalFiles Include="Views\Components\HeaderView.axaml"/>
+        <AdditionalFiles Include="Views\Dashboard\DashboardPageView.axaml" />
     </ItemGroup>
 </Project>

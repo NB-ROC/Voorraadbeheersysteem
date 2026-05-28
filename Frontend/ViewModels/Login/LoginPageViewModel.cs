@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using Frontend.Services;
+using Frontend.ViewModels.Dashboard;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
@@ -9,8 +10,8 @@ namespace Frontend.ViewModels.Login;
 
 public class LoginPageViewModel : PageViewModelBase
 {
-    private string _email;
-    
+    private readonly string _email;
+
     public LoginPageViewModel(ServiceProvider services, string name, string email) : base(services)
     {
         IObservable<bool> canLogin = this.WhenAnyValue(
@@ -46,6 +47,6 @@ public class LoginPageViewModel : PageViewModelBase
     {
         bool success = await Services.GetService<BackendService>()!.LogIn(_email, Password);
 
-        // if (success) Services.GetService<NavigationService>()?.NavigateTo(new DashboardPageViewModel(Services));
+        if (success) Services.GetService<NavigationService>()?.NavigateTo(new DashboardPageViewModel(Services));
     }
 }
