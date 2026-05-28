@@ -24,7 +24,7 @@
             <!-- Toolbar -->
             <Border Grid.Row="1"
                     Margin="20,0,20,16"
-                    Background="White"
+                    Background="#FAFAFA"
                     CornerRadius="12"
                     Padding="14"
                     BorderBrush="#E5E7EB"
@@ -33,7 +33,7 @@
                       ColumnSpacing="10">
 
                     <!-- Zoekbalk -->
-                    <Border Grid.Column="0"
+                    <Border Grid.Column="0"  BoxShadow="0 4 10 #33000000"
                             Background="#F9FAFB"
                             BorderBrush="#D1D5DB"
                             BorderThickness="1"
@@ -46,6 +46,7 @@
                     </Border>
 
                     <!-- Filter knop -->
+                    
                     <Button Grid.Column="1"
                             Content="Filters"
                             Height="38"
@@ -63,8 +64,8 @@
                             Content="Gebruiker toevoegen"
                             Height="38"
                             MinWidth="150"
-                            Background="#4F46E5"
-                            Foreground="White"
+                            Background="#6E6EB4"
+                            Foreground="#FAFAFA"
                             BorderThickness="0"
                             CornerRadius="8"
                             HorizontalContentAlignment="Center"
@@ -113,9 +114,9 @@
                         <DataTemplate DataType="{x:Type user:UserViewModel}">
                             <StackPanel Spacing="12">
 
-                                <Border Background="White"
-                                        BorderBrush="#E5E7EB"
-                                        BorderThickness="1"
+                                <Border Background="#FAFAFA"
+                                        BorderBrush="#6E6EB4"
+                                        BorderThickness="0,0,0,2"
                                         CornerRadius="12"
                                         Padding="14">
                                     <Grid ColumnDefinitions="80,*,Auto"
@@ -143,7 +144,7 @@
                                                    VerticalAlignment="Center">
                                             <Button Content="Bewerk"
                                                     Background="Orange"
-                                                    Foreground="White"
+                                                    Foreground="#FAFAFA"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"
@@ -151,7 +152,7 @@
                                                     Command="{Binding EditCommand}" />
                                             <Button Content="Verwijder"
                                                     Background="Red"
-                                                    Foreground="White"
+                                                    Foreground="#FAFAFA"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"

@@ -8,7 +8,7 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <DockPanel Grid.Row="1" Background="White" Margin="10">
+        <DockPanel Grid.Row="1" Background="#FAFAFA" Margin="10">
             <!-- titel -->
             <TextBlock DockPanel.Dock="Top"
                        Text="Mijn Leningen"
@@ -17,14 +17,17 @@
                        Margin="0,0,0,10" />
             <!-- Zoekbalken -->
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBox Width="250"
-                         Watermark="Zoek op product of datum"
-                         Text="{Binding ProductQuery, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0,0,10,0" />
-
-                <TextBox Width="250"
-                         Watermark="Zoek op gebruiker"
-                         Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
+                <Border BoxShadow="0 4 10 #33000000">
+                    <TextBox Width="250"
+                             Watermark="🔍 Zoek op product of datum"
+                             Text="{Binding ProductQuery, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,10,0" />
+                </Border>
+                <Border BoxShadow="0 4 10 #33000000">
+                    <TextBox Width="250" Watermark="🔍 Zoek op gebruiker"
+                             Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
+                </Border>
+                
             </StackPanel>
 
             <!-- filters -->
@@ -32,42 +35,42 @@
                 <Button Content="Actief"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Active"
-                        Background="#2e7d32"
-                        Foreground="White" />
+                        Background="#6E6EB4"
+                        Foreground="#FAFAFA" />
 
                 <Button Content="Te laat"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Overdue"
-                        Background="#d32f2f"
-                        Foreground="White" />
+                        Background="#6E6EB4"
+                        Foreground="#FAFAFA" />
 
                 <Button Content="Ingeleverd"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Returned"
-                        Background="#0277bd"
-                        Foreground="White" />
+                        Background="#6E6EB4"
+                        Foreground="#FAFAFA" />
 
                 <Button Content="Reset"
                         Command="{Binding ResetCommand}"
-                        Background="#777777"
-                        Foreground="White" />
+                        Background="#6E6EB4"
+                        Foreground="#FAFAFA" />
             </StackPanel>
             <!-- Leningen -->
             <ScrollViewer>
                 <ItemsControl x:Name="LoanList" ItemsSource="{Binding FilteredLoans}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="loan:LoanViewModel">
-                            <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="10">
+                        <DataTemplate x:DataType="loan:LoanViewModel" >
+                            <Border BorderBrush="#6E6EB4" BorderThickness="0,0,0,1" Padding="10">
                                 <Grid ColumnDefinitions="80,*,100,Auto">
                                     <Image Source="{Binding Image}" Width="70" Height="70" Grid.Column="0" />
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
                                         <TextBlock Text="{Binding ProductName}" FontWeight="Bold" FontSize="14" />
                                         <TextBlock FontSize="12" Foreground="#555">
-                                            <Run Text="Borrower:" />
+                                            <Run Text="Lener:" />
                                             <Run Text="{Binding BorrowerNumber}" />
                                         </TextBlock>
                                         <TextBlock FontSize="12" Foreground="#555">
-                                            <Run Text="Loan date:" />
+                                            <Run Text="Leen datum:" />
                                             <Run Text="{Binding LoanDate}" />
                                         </TextBlock>
                                     </StackPanel>
@@ -76,7 +79,7 @@
                                                FontSize="12" Foreground="#555" />
                                     <Border Background="{Binding StatusColor}" CornerRadius="4" Padding="5"
                                             Grid.Column="3" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Status}" Foreground="White" />
+                                        <TextBlock Text="{Binding Status}" Foreground="#FAFAFA" />
                                     </Border>
                                 </Grid>
                             </Border>
