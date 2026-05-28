@@ -14,10 +14,9 @@ public class ProductModel
     [MaxLength(CategoryLength)] public string Name { get; set; } = null!;
 
     public CategoryModel Category { get; set; } = null!;
+    public RoleModel RoleModel { get; set; } = null!;
 
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
 
-    [MaxLength(ImageLength)] public string Image { get; set; } = null!;
-
-    public int Status { get; set; }
+    [MaxLength(ImageLength)] public string ImageName { get; set; } = null!;
 }
