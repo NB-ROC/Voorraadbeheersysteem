@@ -34,6 +34,7 @@
         <PackageReference Include="PCSC.Iso7816" Version="7.0.1"/>
         <PackageReference Include="PCSC.Reactive" Version="7.0.1"/>
         <PackageReference Include="ReactiveUI.Avalonia" Version="11.4.12"/>
+        <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.9.5"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -53,5 +54,30 @@
             <DependentUpon>ProductPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Components\FooterView.axaml.cs">
+            <DependentUpon>FooterView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Components\HeaderView.axaml.cs">
+            <DependentUpon>HeaderView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Components\FooterView.axaml.cs">
+            <DependentUpon>FooterView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Components\HeaderView.axaml.cs">
+            <DependentUpon>HeaderView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Login\LoginPageView.axaml.cs">
+          <DependentUpon>LoginPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="Views\Components\FooterView.axaml"/>
+        <AdditionalFiles Include="Views\Components\HeaderView.axaml"/>
     </ItemGroup>
 </Project>

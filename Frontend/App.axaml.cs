@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -6,7 +5,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Frontend.Services;
 using Frontend.ViewModels;
-using Frontend.ViewModels.CustomerProduct;
+using Frontend.ViewModels.Login;
 using Frontend.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,15 +33,12 @@ public class App : Application
             serviceCollection.AddSingleton(backendService);
             serviceCollection.AddSingleton(smartCardService);
 
-            _ = backendService.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
-
-
             DisableAvaloniaDataAnnotationValidation();
 
             ServiceProvider services = serviceCollection.BuildServiceProvider();
 
 
-            mainWindowViewModel.CurrentPage = new CustomerProductPageViewModel(services);
+            mainWindowViewModel.CurrentPage = new LoginScannerViewModel(services);
 
             desktop.MainWindow = new MainWindowView
             {

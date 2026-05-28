@@ -94,6 +94,22 @@ public class UserService : Users.UsersBase
         };
     }
 
+    [AllowAnonymous]
+    public override async Task<UserLenderScanResponse> LenderScan(UserLenderScanRequest request, ServerCallContext context)
+    {
+        (string email, string name)? tuple = await _manager.LenderScan(request.CardId.ToByteArray());
+
+        UserLenderScanResponse response = new();
+
+        if (tuple != null)
+        {
+            response.Email = tuple.Value.email;
+            response.Name = tuple.Value.name;
+        }
+
+        return response;
+    }
+
     private static MetaUser MapMeta(User user)
     {
         return new MetaUser

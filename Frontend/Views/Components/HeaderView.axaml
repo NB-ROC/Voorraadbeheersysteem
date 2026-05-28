@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:components="clr-namespace:Frontend.ViewModels.Components"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Frontend.Views.Components.HeaderView"
+             x:DataType="components:HeaderViewModel">
+        <Grid Background="#6a69ad" ColumnDefinitions="*, 450">
+            <TextBlock Text="Welkom [Naam gebruiker]"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Padding="40,0,0,0"
+                       Foreground="White"
+                       FontSize="18" />
+
+            <StackPanel Orientation="Horizontal" Height="80" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel
+                    Width="80"
+                    Height="80"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Grid Width="80" Height="80">
+
+                        <!-- Circle -->
+                        <Ellipse Stroke="{Binding StatusColor}"
+                                 StrokeThickness="2"
+                                 Margin="1" />
+
+                        <!-- Centered Content -->
+                        <StackPanel HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Spacing="2">
+
+                            <!-- NFC Waves -->
+                            <Canvas Width="40"
+                                    Height="40">
+
+                                <!-- Outer wave -->
+                                <Path Data="M 6 24 A 14 14 0 0 1 34 24"
+                                      Stroke="{Binding StatusColor}"
+                                      StrokeThickness="3"
+                                      Fill="Transparent" />
+
+                                <!-- Middle wave -->
+                                <Path Data="M 11 24 A 9 9 0 0 1 29 24"
+                                      Stroke="{Binding StatusColor}"
+                                      StrokeThickness="2.2"
+                                      Fill="Transparent" />
+
+                                <!-- Inner wave -->
+                                <Path Data="M 16 24 A 4 4 0 0 1 24 24"
+                                      Stroke="{Binding StatusColor}"
+                                      StrokeThickness="1.6"
+                                      Fill="Transparent" />
+
+                                <!-- Center dot -->
+                                <Ellipse Width="4"
+                                         Height="4"
+                                         Fill="{Binding StatusColor}"
+                                         Canvas.Left="18"
+                                         Canvas.Top="22" />
+                            </Canvas>
+
+                            <!-- Text -->
+                            <TextBlock Text="NFC"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding StatusColor}"
+                                       HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <TextBlock FontSize="20" Foreground="{Binding StatusColor}" Margin="15,0,0,0" VerticalAlignment="Center" Text="{Binding NfcText}" />
+            </StackPanel>
+        </Grid>
+</UserControl>
