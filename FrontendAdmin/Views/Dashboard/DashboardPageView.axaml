@@ -12,8 +12,7 @@
         <DockPanel Background="#FAFAFA" Grid.Row="1">
             <Border Height="250" DockPanel.Dock="Top" Padding="15">
                 <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
-                    <Border Background="#FAFAFA" Margin="0,0,16,0" BorderBrush="#6E6EB4"
-                            BorderThickness="3" CornerRadius="20">
+                    <Border Background="#FFFFFF" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="#6E6EB4" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
@@ -21,8 +20,7 @@
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>
-                    <Border Background="#F5F5FA" Margin="0,0,16,0" BorderBrush="Orange"
-                            BorderThickness="3" CornerRadius="20">
+                    <Border Background="#FFFFFF" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="orange" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
@@ -30,16 +28,14 @@
                                        FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="#F5F5FA" Margin="0,0,16,0" BorderBrush="red"
-                            BorderThickness="3" CornerRadius="20">
+                    <Border Background="#FFFFFF" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="red" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
                             <TextBlock Text="Te laat" Foreground="red" HorizontalAlignment="Center" FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="#F5F5FA" Margin="0,0,16,0" BorderBrush="Green"
-                            BorderThickness="3" CornerRadius="20">
+                    <Border Background="#FFFFFF" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="Green" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
@@ -49,54 +45,60 @@
                     </Border>
                 </UniformGrid>
             </Border>
-            <Border DockPanel.Dock="Top" Padding="10,0,10,10">
+            <Border DockPanel.Dock="Top" Padding="10,20,10,10">
                 <StackPanel Spacing="20">
-                    <Button HorizontalAlignment="Stretch" Height="70" BorderBrush="#6E6EB4" BorderThickness="3" CornerRadius="12"
-                            Background="#F5F5FA">
-                        <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
-                            <Border Width="44" Height="44" CornerRadius="22" Background="#EDEDF7">
-                                <TextBlock Text="☰" Foreground="#6E6EB4" FontSize="22"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="producten overzicht" Foreground="#6E6EB4"
-                                           FontSize="15" FontWeight="SemiBold" />
-                                <TextBlock Text="Bekijk en beheer alle beschikbare producten" Foreground="#888"
-                                           FontSize="13" />
+                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                        <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
+                                Background="#FFFFFF">
+                            <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                <Border Width="44" Height="44" CornerRadius="22" Background="#EDEDF7">
+                                    <TextBlock Text="☰" Foreground="#6E6EB4" FontSize="22"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="producten overzicht" Foreground="#6E6EB4"
+                                               FontSize="15" FontWeight="SemiBold" />
+                                    <TextBlock Text="Bekijk en beheer alle beschikbare producten" Foreground="#888"
+                                               FontSize="13" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Button>
-
-                    <Button HorizontalAlignment="Stretch" Height="70" BorderBrush="#6E6EB4" BorderThickness="3" CornerRadius="12"
-                            Background="#F5F5FA">
-                        <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
-                            <Border Width="44" Height="44" CornerRadius="22" Background="#EDEDF7">
-                                <TextBlock Text="📋" Foreground="#6E6EB4" FontSize="22"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Leningen overzicht" Foreground="#6E6EB4"
-                                           FontSize="15" FontWeight="SemiBold" />
-                                <TextBlock Text="Bekijk al je leningen" Foreground="#888"
-                                           FontSize="13" />
+                        </Button>
+                    </Border>
+                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                        <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
+                                Background="#FFFFFF">
+                            <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                <Border Width="44" Height="44" CornerRadius="22" Background="#EDEDF7">
+                                    <TextBlock Text="📋" Foreground="#6E6EB4" FontSize="22"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Leningen overzicht" Foreground="#6E6EB4"
+                                               FontSize="15" FontWeight="SemiBold" />
+                                    <TextBlock Text="Bekijk al je leningen" Foreground="#888"
+                                               FontSize="13" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Button>
-                    <Button HorizontalAlignment="Stretch" Height="70" BorderBrush="#6E6EB4" BorderThickness="3" CornerRadius="12"
-                            Background="#F5F5FA">
-                        <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
-                            <Border Width="44" Height="44" CornerRadius="22" Background="#EDEDF7">
-                                <TextBlock Text="👤" Foreground="#6E6EB4" FontSize="22"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Gebruikers overzicht" Foreground="#6E6EB4"
-                                           FontSize="15" FontWeight="SemiBold" />
-                                <TextBlock Text="Bekijk en beheer alle gebruikers" Foreground="#888"
-                                           FontSize="13" />
+                        </Button>
+                    </Border>
+                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                        <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
+                                Background="#FFFFFF">
+                            <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                <Border Width="44" Height="44" CornerRadius="22" Background="#EDEDF7">
+                                    <TextBlock Text="👤" Foreground="#6E6EB4" FontSize="22"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Gebruikers overzicht" Foreground="#6E6EB4"
+                                               FontSize="15" FontWeight="SemiBold" />
+                                    <TextBlock Text="Bekijk en beheer alle gebruikers" Foreground="#888"
+                                               FontSize="13" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Button>
+                        </Button>
+                    </Border>
+                    
                 </StackPanel>
             </Border>
         </DockPanel>
