@@ -60,7 +60,11 @@ internal class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            db.Database.EnsureCreated();
+        }
 
         await AppDbContext.SeedAsync(app.Services);
 

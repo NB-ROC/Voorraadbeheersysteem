@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backend.Entities.Relations;
 
 namespace Backend.Entities;
 
@@ -17,8 +18,7 @@ public class Product
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
 
-    public int RoleId { get; set; }
-    public Role Role { get; set; } = null!;
+    public ICollection<ProductRole> ProductRoles { get; set; } = new List<ProductRole>();
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }

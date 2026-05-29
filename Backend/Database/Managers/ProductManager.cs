@@ -1,4 +1,5 @@
 using Backend.Entities;
+using Backend.Entities.Relations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Managers;
@@ -15,6 +16,8 @@ public class ProductManager
     public async Task<List<Product>> Page(int page, int pageSize)
     {
         return await _context.Products
+            .Include(p => p.ProductRoles)
+            .ThenInclude(pr => pr.Role)
             .Include(p => p.Category)
             .OrderBy(product => product.Id)
             .Skip((page - 1) * pageSize)
@@ -65,6 +68,36 @@ public class ProductManager
             return false;
         }
     }
+    
+    public async Task<bool> SetRoles(int productId, IEnumerable<RoleType> roleIds)
+    {
+        // Remove existing roles for this user
+        List<ProductRole> existing = await _context.ProductRoles
+            .Where(ur => ur.ProductId == productId)
+            .ToListAsync();
+
+        _context.ProductRoles.RemoveRange(existing);
+
+        // Add the new set
+        foreach (RoleType roleId in roleIds)
+            _context.ProductRoles.Add(new ProductRole
+            {
+                ProductId = productId,
+                RoleId = roleId
+            });
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 
     public async Task<bool> Delete(int id)
     {

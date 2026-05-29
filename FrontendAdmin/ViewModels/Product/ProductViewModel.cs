@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
@@ -52,11 +53,11 @@ public class ProductViewModel : ViewModelBase
 
     public CategoryModel CategoryModel
     {
-        get => _model.CategoryModel;
+        get => _model.Category;
         set
         {
-            if (_model.CategoryModel.Equals(value)) return;
-            _model.CategoryModel = value;
+            if (_model.Category.Equals(value)) return;
+            _model.Category = value;
             this.RaisePropertyChanged();
         }
     }
@@ -74,13 +75,13 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
-    public RoleModel RoleModel
+    public List<RoleModel> Roles
     {
-        get => _model.RoleModel;
+        get => _model.Roles;
         set
         {
-            if (_model.RoleModel == value) return;
-            _model.RoleModel = value;
+            if (_model.Roles == value) return;
+            _model.Roles = value;
             this.RaisePropertyChanged();
         }
     }

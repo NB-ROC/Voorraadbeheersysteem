@@ -105,9 +105,7 @@ public class UserService : Users.UsersBase
         bool modified = await _manager.Modify(user);
         if (!modified)
             return new UserModifyResponse { Success = false };
-
-        // Only update roles if the caller sent at least one (empty list = no change).
-        // If you want empty list to mean "clear all roles", remove this guard.
+        
         if (request.RoleIds.Count > 0)
         {
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
