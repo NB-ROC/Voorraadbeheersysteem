@@ -52,10 +52,6 @@
                 </ItemsControl>
             </StackPanel>
 
-            <CheckBox Content="Geblokkeerd"
-                      IsChecked="{Binding IsBlocked}"
-                      Margin="0,0,0,10" />
-
             <TextBlock Foreground="Red"
                        Text="{Binding Error}"
                        Margin="0,0,0,10" />
