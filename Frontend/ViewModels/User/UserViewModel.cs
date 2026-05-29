@@ -46,6 +46,8 @@ public class UserViewModel : ViewModelBase
     }
 
     public byte[] CardId => _model.CardId;
+    
+    public string Name => FirstName + " " + LastName;
 
     public string FirstName
     {

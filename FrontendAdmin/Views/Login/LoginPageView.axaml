@@ -22,11 +22,11 @@
 
                 <!-- Title -->
                 <StackPanel Spacing="6">
-                    <TextBlock Text="Login"
+                    <TextBlock Text="Log in"
                                FontSize="32"
                                FontWeight="Bold"
                                Foreground="#6E6EB4"/>
-                    <TextBlock Text="to get started."
+                    <TextBlock Text="om verder te gaan"
                                FontSize="18"
                                Foreground="#4b4b4d"/>
                 </StackPanel>
@@ -37,7 +37,7 @@
                                Foreground="#4b4b4d"
                                FontSize="15"/>
                     <TextBox Text="{Binding Email}"
-                             Watermark="Enter your email"
+                             Watermark="Vul hier uw email in"
                              BorderBrush="#4b4b4d"
                              BorderThickness="2"
                              CornerRadius="10"
@@ -47,12 +47,12 @@
 
                 <!-- Password -->
                 <StackPanel Spacing="8">
-                    <TextBlock Text="Password"
+                    <TextBlock Text="Wachtwoord"
                                Foreground="#4b4b4d"
                                FontSize="15"/>
                     <TextBox Text="{Binding Password}"
                              PasswordChar="*"
-                             Watermark="Enter your password"
+                             Watermark="Vul hier uw wachtwoord in"
                              BorderBrush="#4b4b4d"
                              BorderThickness="2"
                              CornerRadius="10"
@@ -61,7 +61,7 @@
                 </StackPanel>
 
                 <!-- Continue Button -->
-                <Button Content="Continue"
+                <Button Content="Inloggen"
                         Command="{Binding LoginCommand}"
                         Background="#6E6EB4"
                         Foreground="#FAFAFA"

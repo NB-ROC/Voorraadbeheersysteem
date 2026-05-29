@@ -95,7 +95,7 @@
                                             <TextBlock Text="{Binding Number}"
                                                        Foreground="#9CA3AF"
                                                        FontSize="12" />
-                                            <TextBlock Text="{Binding FirstName}"
+                                            <TextBlock Text="{Binding Name}"
                                                        Foreground="#111827"
                                                        FontWeight="Bold"
                                                        FontSize="16" />
