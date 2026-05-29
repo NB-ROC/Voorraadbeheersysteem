@@ -97,19 +97,18 @@ public class AppDbContext : DbContext
             .HasForeignKey(ur => ur.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // ProductRole → Product
-        modelBuilder.Entity<ProductRole>()
-            .HasOne(pr => pr.Product)
-            .WithMany()
-            .HasForeignKey(pr => pr.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // ProductRole → Role
-        modelBuilder.Entity<ProductRole>()
-            .HasOne(pr => pr.Role)
-            .WithMany()
-            .HasForeignKey(pr => pr.RoleId)
-            .OnDelete(DeleteBehavior.Cascade);
+        // // ProductRole → Product
+        // modelBuilder.Entity<ProductRole>()
+        //     .HasOne(pr => pr.Product)
+        //     .WithMany()
+        //     .HasForeignKey(pr => pr.ProductId)
+        //     .OnDelete(DeleteBehavior.Cascade);
+        //
+        // modelBuilder.Entity<ProductRole>()
+        //     .HasOne(pr => pr.Role)
+        //     .WithMany()
+        //     .HasForeignKey(pr => pr.RoleId)
+        //     .OnDelete(DeleteBehavior.Cascade);
 
         // Default roles
         modelBuilder.Entity<Role>()

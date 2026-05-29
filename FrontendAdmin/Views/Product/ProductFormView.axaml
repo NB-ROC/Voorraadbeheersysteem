@@ -39,19 +39,18 @@
                 <TextBox Text="{Binding CustomCategory}"
                          Watermark="Nieuwe categorie..." />
             </StackPanel>
-            <StackPanel Spacing="5">
-                <TextBlock FontWeight="Bold" Text="Rol:" />
+            
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock FontWeight="Bold" Text="Rollen:" />
 
-                <ComboBox ItemsSource="{Binding Roles}"
-                          SelectedItem="{Binding RoleModel}">
-
-                    <ComboBox.ItemTemplate>
+                <ItemsControl ItemsSource="{Binding Roles}">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <CheckBox Content="{Binding Name}"
+                                      IsChecked="{Binding IsSelected}" />
                         </DataTemplate>
-                    </ComboBox.ItemTemplate>
-
-                </ComboBox>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
 
             <StackPanel Spacing="5">

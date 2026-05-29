@@ -74,15 +74,22 @@ public class ProductService : Products.ProductsBase
                 Id = request.Category.Id,
                 Name = request.Category.Name
             },
-            RoleId = request.RoleId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Image = imageName
         };
 
+        bool success = await _manager.Create(product);
+        
+        if (request.RoleIds.Count > 0)
+        {
+            IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
+            await _manager.SetRoles(product.Id, roles);
+        }
+
         return new ProductCreateResponse
         {
-            Success = await _manager.Create(product)
+            Success = success
         };
     }
 
@@ -99,7 +106,6 @@ public class ProductService : Products.ProductsBase
                 Id = request.Category.Id,
                 Name = request.Category.Name
             };
-        if (request.HasRoleId) product.RoleId = request.RoleId;
 
         product.UpdatedAt = DateTime.UtcNow;
 
@@ -111,9 +117,17 @@ public class ProductService : Products.ProductsBase
                 ImagePath
             );
 
+        bool success = await _manager.Modify(product);
+        
+        if (request.RoleIds.Count > 0)
+        {
+            IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
+            await _manager.SetRoles(product.Id, roles);
+        }
+
         return new ProductModifyResponse
         {
-            Success = await _manager.Modify(product)
+            Success = success
         };
     }
 
@@ -183,7 +197,7 @@ public class ProductService : Products.ProductsBase
 
     private static MetaProduct MapMeta(Product product)
     {
-        return new MetaProduct
+        var meta = new MetaProduct
         {
             Id = product.Id,
             Name = product.Name,
@@ -195,5 +209,13 @@ public class ProductService : Products.ProductsBase
             },
             Image = product.Image
         };
+        
+        meta.Roles.AddRange(product.ProductRoles.Select(ur => new Role
+        {
+            Id = (int)ur.Role.Id,
+            Name = ur.Role.Name
+        }));
+
+        return meta;
     }
 }

@@ -32,7 +32,7 @@ public class UserManager
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
-// Replaces all roles for a user atomically.
+    // Replaces all roles for a user atomically.
     public async Task<bool> SetRoles(int userId, IEnumerable<RoleType> roleIds)
     {
         // Remove existing roles for this user

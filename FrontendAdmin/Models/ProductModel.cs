@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FrontendAdmin.Models;
@@ -13,9 +14,9 @@ public class ProductModel
 
     [MaxLength(CategoryLength)] public string Name { get; set; } = null!;
 
-    public CategoryModel CategoryModel { get; set; } = null!;
-    public RoleModel RoleModel { get; set; } = null!;
+    public CategoryModel Category { get; set; } = null!;
 
+    public List<RoleModel> Roles { get; set; } = null!;
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
 
     [MaxLength(ImageLength)] public string ImageName { get; set; } = null!;
