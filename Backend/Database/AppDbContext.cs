@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     public DbSet<ProductRole> ProductRoles => Set<ProductRole>();
+    public DbSet<Notification> Notifications { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
