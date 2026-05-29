@@ -68,7 +68,8 @@ internal class Program
         app.MapGrpcService<ProductService>();
         app.MapGrpcService<AuthService>();
         app.MapGrpcService<ScanService>();
-
+        app.MapGrpcService<NotificationService>();
+        
         app.Run();
 
         #endregion

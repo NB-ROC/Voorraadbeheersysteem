@@ -12,6 +12,7 @@ using Grpc.Net.Client;
 using Protos.Auth;
 using Protos.Product;
 using Protos.User;
+using Protos.Notification;
 
 namespace FrontendAdmin.Services;
 
@@ -29,6 +30,7 @@ public class BackendService
         AuthClient = new Auth.AuthClient(channel);
         Products = new ProductEndpoint(new Products.ProductsClient(invoker));
         Users = new UserEndpoint(new Users.UsersClient(invoker));
+        Notifications = new NotificationEndpoint(new Notifications.NotificationsClient(invoker));
     }
 
     private string Token { get; set; } = string.Empty;
@@ -37,7 +39,8 @@ public class BackendService
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
-
+    
+    public NotificationEndpoint Notifications { get; }
     public async Task<bool> LogIn(string email, string password)
     {
         AuthLoginResponse? response;
@@ -526,5 +529,45 @@ public class ProductEndpoint
             : RequestResult.Failed;
     }
 }
+public class NotificationEndpoint
+{
+    private readonly Notifications.NotificationsClient _client;
 
+    public NotificationEndpoint(Notifications.NotificationsClient client)
+    {
+        _client = client;
+    }
+
+    public async Task<(RequestResult, List<NotificationModel>)> Page()
+    {
+        NotificationPageResponse? response;
+
+        try
+        {
+            response = await _client.PageAsync(
+                new NotificationPageRequest());
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Notifications.Select(n => new NotificationModel
+            {
+                Title = n.Title,
+                Description = n.Description
+            }).ToList()
+        );
+    }
+
+    private static RequestResult GetFailCode(RpcException e)
+    {
+        return e.StatusCode == StatusCode.PermissionDenied
+            ? RequestResult.Denied
+            : RequestResult.Failed;
+    }
+}
 #endregion

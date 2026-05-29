@@ -1,0 +1,31 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Protos.Notification";
+
+package notification;
+
+service Notifications {
+  rpc Page (NotificationPageRequest) returns (NotificationPageResponse);
+  rpc Create (NotificationCreateRequest) returns (NotificationCreateResponse);
+}
+
+message MetaNotification {
+  string title = 1;
+  string description = 2;
+}
+
+message NotificationPageRequest {
+}
+
+message NotificationPageResponse {
+  repeated MetaNotification notifications = 1;
+}
+
+message NotificationCreateRequest {
+  string title = 1;
+  string description = 2;
+}
+
+message NotificationCreateResponse {
+  bool success = 1;
+}

@@ -30,7 +30,7 @@ public class App : Application
 
             serviceCollection.AddSingleton(navigationService);
             serviceCollection.AddSingleton(backendService);
-
+            
             DisableAvaloniaDataAnnotationValidation();
 
             ServiceProvider services = serviceCollection.BuildServiceProvider();

@@ -14,8 +14,7 @@ namespace FrontendAdmin.ViewModels.User;
 public class UserPageViewModel : PageViewModelBase
 {
     private readonly BackendService _backend;
-
-    private int _notificationCount = 2;
+    private int _notificationCount;
 
     public UserPageViewModel(ServiceProvider services) : base(services)
     {
@@ -33,7 +32,7 @@ public class UserPageViewModel : PageViewModelBase
             Services.GetService<NavigationService>()?
                 .NavigateTo(new NotificationPageViewModel(Services));
         });
-
+        _ = LoadNotificationsAsync();
         _ = LoadUsersAsync();
     }
 
@@ -58,5 +57,15 @@ public class UserPageViewModel : PageViewModelBase
 
         foreach (UserModel user in users)
             Users.Add(new UserViewModel(Services, user));
+    }
+    private async Task LoadNotificationsAsync()
+    {
+        (RequestResult result, List<NotificationModel> notifications) =
+            await _backend.Notifications.Page();
+
+        if (result != RequestResult.Success)
+            return;
+
+        NotificationCount = notifications.Count;
     }
 }

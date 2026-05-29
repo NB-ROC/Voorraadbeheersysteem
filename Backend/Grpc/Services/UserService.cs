@@ -1,3 +1,4 @@
+using Backend.Database;
 using Backend.Database.Managers;
 using Backend.Entities;
 using Backend.Grpc.Validation;
@@ -13,11 +14,13 @@ public class UserService : Users.UsersBase
 {
     private readonly UserManager _manager;
     private readonly UserValidator _validator;
+    private readonly AppDbContext _context;
 
-    public UserService(UserManager manager)
+    public UserService(UserManager manager, AppDbContext context)
     {
         _manager = manager;
         _validator = new UserValidator(manager);
+        _context = context;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
@@ -66,7 +69,18 @@ public class UserService : Users.UsersBase
         bool created = await _manager.Create(user);
         if (!created)
             return new UserCreateResponse { Success = false };
+        
+        Notification notification = new()
+        {
+            Title = "Nieuwe registratie",
+            Description = $"{user.FirstName} {user.LastName} heeft zich geregistreerd.",
+            CreatedAt = DateTime.UtcNow
+        };
 
+        _context.Notifications.Add(notification);
+
+        await _context.SaveChangesAsync();
+        
         if (request.RoleIds.Count > 0)
         {
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
