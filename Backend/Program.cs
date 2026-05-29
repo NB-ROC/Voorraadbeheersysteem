@@ -25,9 +25,9 @@ internal class Program
         builder.Services.AddGrpc();
 
         // TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
-        // builder.Services.AddDbContext<AppDbContext>(options =>
-        //     options.UseInMemoryDatabase("testing"));
-        builder.Services.AddDbContext<AppDbContext>();
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseInMemoryDatabase("testing"));
+        // builder.Services.AddDbContext<AppDbContext>();
 
         builder.Services.AddDbContext<AppDbContext>();
         builder.Services.AddScoped<UserManager>();
@@ -60,7 +60,11 @@ internal class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            db.Database.EnsureCreated();
+        }
 
         await AppDbContext.SeedAsync(app.Services);
 

@@ -34,9 +34,12 @@ public class ProductFormViewModel : ViewModelBase
                 x => x.Name,
                 x => x.CategoryModel,
                 x => x.Description,
-                x => x.ImageBytes
+                x => x.ImageBytes,
+                x => x.CustomCategory
             )
             .Subscribe(_ => Validate());
+        this.WhenAnyValue(x => x.CategoryModel)
+            .Subscribe(_ => this.RaisePropertyChanged(nameof(IsCustomCategory)));
 
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
 
@@ -77,10 +80,9 @@ public class ProductFormViewModel : ViewModelBase
             return;
         }
 
-        if ((CategoryModel == null || string.IsNullOrWhiteSpace(CategoryModel.Name)) &&
-            string.IsNullOrWhiteSpace(CustomCategory))
+        if (IsCustomCategory && string.IsNullOrWhiteSpace(CustomCategory))
         {
-            Error = "Categorie is verplicht.";
+            Error = "Voer een naam in voor de nieuwe categorie.";
             return;
         }
 
@@ -103,12 +105,14 @@ public class ProductFormViewModel : ViewModelBase
         {
             Id = Id,
             Name = Name,
-            Category = !string.IsNullOrWhiteSpace(CustomCategory)
+            Category = CategoryModel?.Id == NewCategoryOption.Id
                 ? new CategoryModel { Id = -1, Name = CustomCategory }
                 : CategoryModel!,
             Roles = SelectedRoleIds.Select(id => new RoleModel { Id = id }).ToList(),
             Description = Description
         };
+        
+        
 
         (RequestResult result, bool success) =
             await (_existing == null
@@ -216,6 +220,8 @@ public class ProductFormViewModel : ViewModelBase
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
+    
+    public static readonly CategoryModel NewCategoryOption = new() { Id = -2, Name = "＋ Nieuwe categorie..." };
 
     public ObservableCollection<CategoryModel> Categories { get; } = [];
 
@@ -247,6 +253,8 @@ public class ProductFormViewModel : ViewModelBase
                 Categories.Add(category);
         }
 
+        Categories.Add(NewCategoryOption);
+
         Roles.Add(new RoleSelectionViewModel(Services, 3, "Student", false));
         Roles.Add(new RoleSelectionViewModel(Services, 4, "Personnel", false));
         Roles.Add(new RoleSelectionViewModel(Services, 5, "Guest", false));
@@ -257,6 +265,9 @@ public class ProductFormViewModel : ViewModelBase
             LoadExistingProduct(existing);
         }
     }
+    
+    public bool IsCustomCategory =>
+        CategoryModel?.Id == NewCategoryOption.Id;
 
     #endregion
 
@@ -266,12 +277,15 @@ public class ProductFormViewModel : ViewModelBase
     {
         Id = existing.Id;
         Name = existing.Name;
-        CategoryModel = existing.CategoryModel;
+
+        CategoryModel = Categories.FirstOrDefault(c => c.Id == existing.CategoryModel.Id)
+                        ?? NewCategoryOption;
+
         Description = existing.Description;
 
         if (!string.IsNullOrWhiteSpace(existing.ImageName))
             _ = LoadExistingImageAsync(existing.ImageName);
-        
+
         foreach (RoleSelectionViewModel role in Roles)
             role.IsSelected = existing.Roles.Select(r => r.Id).Contains(role.Id);
     }
