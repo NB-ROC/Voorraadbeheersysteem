@@ -57,8 +57,6 @@ public class LoanPageViewModel : PageViewModelBase
 
         FilterStatusCommand = ReactiveCommand.Create<string>(FilterByStatus);
         ResetCommand = ReactiveCommand.Create(ResetFilters);
-
-        ApplyFilters();
     }
 
     public ObservableCollection<LoanViewModel> FilteredLoans { get; } = new();
