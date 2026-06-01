@@ -30,6 +30,9 @@
         <Protobuf Update="..\Protos\scan.proto">
             <Link>Protos\scan.proto</Link>
         </Protobuf>
+        <Protobuf Update="..\Protos\audit-log.proto">
+          <Link>Protos\auditlog.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
     <ItemGroup>

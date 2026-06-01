@@ -17,11 +17,13 @@ public class ProductService : Products.ProductsBase
 
     private readonly ProductManager _manager;
     private readonly ProductValidator _validator;
+    private readonly AuditLogService _auditLog;
 
-    public ProductService(ProductManager manager)
+    public ProductService(ProductManager manager, AuditLogService auditLog)
     {
         _manager = manager;
         _validator = new ProductValidator(manager);
+        _auditLog = auditLog;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
@@ -86,7 +88,16 @@ public class ProductService : Products.ProductsBase
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
             await _manager.SetRoles(product.Id, roles);
         }
-
+        if (success)
+        {
+            await _auditLog.Log(
+                GetActorId(context),
+                "CREATE",
+                "Product",
+                product.Id.ToString(),
+                $"Product '{product.Name}' aangemaakt"
+            );
+        }
         return new ProductCreateResponse
         {
             Success = success
@@ -124,7 +135,16 @@ public class ProductService : Products.ProductsBase
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
             await _manager.SetRoles(product.Id, roles);
         }
-
+        if (success)
+        {
+            await _auditLog.Log(
+                GetActorId(context),
+                "CREATE",
+                "Product",
+                product.Id.ToString(),
+                $"Product '{product.Name}' aangemaakt"
+            );
+        }
         return new ProductModifyResponse
         {
             Success = success
@@ -141,6 +161,19 @@ public class ProductService : Products.ProductsBase
         return new ProductDeleteResponse
         {
             Success = await _manager.Delete(request.Id)
+        };
+        
+        bool success = await _manager.Delete(request.Id);
+
+        if (success)
+        {
+            await _auditLog.Log(GetActorId(context), "DELETE", "Product",
+                request.Id.ToString(), $"Product verwijderd (id {request.Id})");
+        }
+
+        return new ProductDeleteResponse
+        {
+            Success = success
         };
     }
 
