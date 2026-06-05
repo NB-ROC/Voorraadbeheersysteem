@@ -31,19 +31,19 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
                 <Button Content="Actief"
                         Command="{Binding FilterStatusCommand}"
-                        CommandParameter="Active"
+                        CommandParameter="Actief"
                         Background="#2e7d32"
                         Foreground="White" />
 
                 <Button Content="Te laat"
                         Command="{Binding FilterStatusCommand}"
-                        CommandParameter="Overdue"
+                        CommandParameter="Te laat"
                         Background="#d32f2f"
                         Foreground="White" />
 
                 <Button Content="Ingeleverd"
                         Command="{Binding FilterStatusCommand}"
-                        CommandParameter="Returned"
+                        CommandParameter="Ingeleverd"
                         Background="#0277bd"
                         Foreground="White" />
 
