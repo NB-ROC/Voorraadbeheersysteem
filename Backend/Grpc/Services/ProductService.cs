@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Backend.Database.Managers;
 using Backend.Entities;
 using Backend.Grpc.Helpers;
@@ -17,13 +18,13 @@ public class ProductService : Products.ProductsBase
 
     private readonly ProductManager _manager;
     private readonly ProductValidator _validator;
-    private readonly AuditLogService _auditLog;
+    private readonly AuditLogManager _auditLogManager;
 
-    public ProductService(ProductManager manager, AuditLogService auditLog)
+    public ProductService(ProductManager manager, AuditLogManager auditLogManager)
     {
         _manager = manager;
         _validator = new ProductValidator(manager);
-        _auditLog = auditLog;
+        _auditLogManager = auditLogManager;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
@@ -90,7 +91,7 @@ public class ProductService : Products.ProductsBase
         }
         if (success)
         {
-            await _auditLog.Log(
+            await _auditLogManager.Log(
                 GetActorId(context),
                 "CREATE",
                 "Product",
@@ -137,7 +138,7 @@ public class ProductService : Products.ProductsBase
         }
         if (success)
         {
-            await _auditLog.Log(
+            await _auditLogManager.Log(
                 GetActorId(context),
                 "CREATE",
                 "Product",
@@ -167,7 +168,7 @@ public class ProductService : Products.ProductsBase
 
         if (success)
         {
-            await _auditLog.Log(GetActorId(context), "DELETE", "Product",
+            await _auditLogManager.Log(GetActorId(context), "DELETE", "Product",
                 request.Id.ToString(), $"Product verwijderd (id {request.Id})");
         }
 
@@ -250,5 +251,12 @@ public class ProductService : Products.ProductsBase
         }));
 
         return meta;
+    }
+    private static int GetActorId(ServerCallContext context)
+    {
+        return int.Parse(
+            context.GetHttpContext().User
+                .FindFirst(ClaimTypes.NameIdentifier)!
+                .Value);
     }
 }

@@ -3,6 +3,7 @@ using Backend.Database.Managers;
 using Backend.Entities;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
+using Protos.AuditLog;
 
 namespace Backend.Grpc.Services;
 
@@ -19,13 +20,13 @@ public class AuditLogService : AuditLogs.AuditLogsBase
         var response = new AuditLogPageResponse { Total = logs.Count };
         response.Logs.AddRange(logs.Select(l => new MetaAuditLog
         {
-            /*Id = l.Id,
-            Timestamp = l.Timestamp.ToString("o"),
+            Id = l.Id,
+            Timestamp = l.TimeStamp.ToString("o"),
             ActorName = l.Actor.FirstName + " " + l.Actor.LastName,
             Action = l.Action,
             EntityType = l.EntityType,
             EntityId = l.EntityId,
-            Description = l.Description*/
+            Description = l.Description
         }));
         return response;
     }
