@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using FrontendAdmin.Models;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using ReactiveUI.Avalonia;
 
 namespace FrontendAdmin.ViewModels.Loan;
 
@@ -20,17 +21,17 @@ public class LoanPageViewModel : PageViewModelBase
             BorrowerNumber = "123456",
             LoanDate = "01-04-2026",
             ReturnDate = "15-04-2026",
-            Status = "Active",
+            Status = "Actief",
             Image = "avares://FrontendAdmin/Assets/laptop.png"
         }),
 
         new(new LoanModel
         {
-            ProductName = "Book",
+            ProductName = "Boek",
             BorrowerNumber = "6767676",
             LoanDate = "20-03-2026",
             ReturnDate = "25-03-2026",
-            Status = "Overdue",
+            Status = "Te laat",
             Image = "avares://FrontendAdmin/Assets/boek.jpg"
         }),
 
@@ -40,7 +41,7 @@ public class LoanPageViewModel : PageViewModelBase
             BorrowerNumber = "345678",
             LoanDate = "01-02-2026",
             ReturnDate = "10-02-2026",
-            Status = "Returned",
+            Status = "Ingeleverd",
             Image = "avares://FrontendAdmin/Assets/tablet.png"
         })
     ];
