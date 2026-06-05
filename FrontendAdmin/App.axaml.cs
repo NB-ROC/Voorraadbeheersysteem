@@ -20,28 +20,32 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            ServiceCollection serviceCollection = new();
+        DisableAvaloniaDataAnnotationValidation();
 
-            MainWindowViewModel mainWindowViewModel = new();
-            NavigationService navigationService = new(mainWindowViewModel);
-            BackendService backendService = new();
-
-            serviceCollection.AddSingleton(navigationService);
-            serviceCollection.AddSingleton(backendService);
+        ServiceCollection serviceCollection = new();
             
-            DisableAvaloniaDataAnnotationValidation();
+        serviceCollection.AddCommonServices();
+        serviceCollection.AddPageServices();
 
-            ServiceProvider services = serviceCollection.BuildServiceProvider();
-
-
-            mainWindowViewModel.CurrentPage = new LoginPageViewModel(services);
-
-            desktop.MainWindow = new MainWindowView
-            {
-                DataContext = mainWindowViewModel
-            };
+        ServiceProvider services = serviceCollection.BuildServiceProvider();
+        MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
+        main.CurrentPage = services.GetRequiredService<LoginPageViewModel>();
+        
+        switch (ApplicationLifetime)
+        {
+            case IClassicDesktopStyleApplicationLifetime desktop:
+                desktop.MainWindow = new MainWindowView
+                {
+                    DataContext = main
+                };
+                break;
+            case ISingleViewApplicationLifetime single:
+                single.MainView = new MainWindowView
+                {
+                    DataContext = main
+                };
+                break;
+            
         }
 
         base.OnFrameworkInitializationCompleted();

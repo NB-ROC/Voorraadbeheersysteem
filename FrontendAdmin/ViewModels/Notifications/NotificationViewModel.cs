@@ -10,15 +10,13 @@ public class NotificationViewModel : ViewModelBase
 {
     private readonly NotificationModel _model;
 
-    public NotificationViewModel(ServiceProvider services, NotificationModel model)
-        : base(services)
+    public NotificationViewModel(INavigationService navigation, NotificationModel model)
     {
         _model = model;
 
         ViewCommand = ReactiveCommand.Create(() =>
         {
-            Services.GetService<NavigationService>()?
-                .NavigateTo(new NotificationDetailViewModel(Services, this));
+            // TODO: Go to detail page
         });
     }
 

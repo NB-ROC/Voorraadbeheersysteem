@@ -1,16 +1,19 @@
+using System.Threading.Tasks;
 using FrontendAdmin.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin.ViewModels;
 
-public class PageViewModelBase : ViewModelBase
+public abstract class PageViewModelBase : ViewModelBase
 {
-    public PageViewModelBase(ServiceProvider services) : base(services)
+    public PageViewModelBase(HeaderViewModel header, FooterViewModel footer)
     {
-        Header = new HeaderViewModel(services);
-        Footer = new FooterViewModel(services);
+        Header = header;
+        Footer = footer;
     }
 
     public HeaderViewModel Header { get; set; }
     public FooterViewModel Footer { get; set; }
+
+    public abstract Task LoadAsync();
 }

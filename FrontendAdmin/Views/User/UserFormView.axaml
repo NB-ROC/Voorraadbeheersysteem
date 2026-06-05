@@ -2,52 +2,51 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:models="clr-namespace:FrontendAdmin.Models"
              xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
-             x:DataType="{x:Type user:UserFormViewModel}"
              x:Class="FrontendAdmin.Views.User.UserFormView">
 
-    <StackPanel Margin="20">
-
-        <StackPanel>
-            <TextBlock Text="Voornaam:" />
-            <TextBox MaxLength="{x:Static models:UserModel.NameLength}"
-                     Text="{Binding FirstName}" Margin="0,0,0,10" />
-        </StackPanel>
-
-        <StackPanel>
-            <TextBlock Text="Achternaam:" />
-            <TextBox MaxLength="{x:Static models:UserModel.NameLength}"
-                     Text="{Binding LastName}" Margin="0,0,0,10" />
-        </StackPanel>
-
-        <StackPanel>
-            <TextBlock Text="Email:" />
-            <TextBox MaxLength="{x:Static models:UserModel.EmailLength}"
-                     Text="{Binding Email}" Margin="0,0,0,10" />
-        </StackPanel>
-
-        <StackPanel>
-            <TextBlock Text="Nummer:" />
-            <NumericUpDown Minimum="0"
-                           FormatString="0"
-                           Value="{Binding Number}"
-                           Margin="0,0,0,10" />
-        </StackPanel>
-
-        <StackPanel>
-            <TextBlock Text="Rol ID:" />
-            <TextBox Text="{Binding RoleId}" Margin="0,0,0,10" />
-        </StackPanel>
-
-        <CheckBox Content="Geblokkeerd"
-                  IsChecked="{Binding IsBlocked}"
-                  Margin="0,0,0,10" />
-
-        <TextBlock Foreground="Red"
-                   Text="{Binding Error}"
-                   Margin="0,0,0,10" />
-
-        <Button Content="Opslaan"
-                Command="{Binding SaveCommand}" />
-
-    </StackPanel>
+    <!-- <StackPanel Margin="20"> -->
+    <!-- -->
+    <!--     <StackPanel> -->
+    <!--         <TextBlock Text="Voornaam:" /> -->
+    <!--         <TextBox MaxLength="{x:Static models:UserModel.NameLength}" -->
+    <!--                  Text="{Binding FirstName}" Margin="0,0,0,10" /> -->
+    <!--     </StackPanel> -->
+    <!-- -->
+    <!--     <StackPanel> -->
+    <!--         <TextBlock Text="Achternaam:" /> -->
+    <!--         <TextBox MaxLength="{x:Static models:UserModel.NameLength}" -->
+    <!--                  Text="{Binding LastName}" Margin="0,0,0,10" /> -->
+    <!--     </StackPanel> -->
+    <!-- -->
+    <!--     <StackPanel> -->
+    <!--         <TextBlock Text="Email:" /> -->
+    <!--         <TextBox MaxLength="{x:Static models:UserModel.EmailLength}" -->
+    <!--                  Text="{Binding Email}" Margin="0,0,0,10" /> -->
+    <!--     </StackPanel> -->
+    <!-- -->
+    <!--     <StackPanel> -->
+    <!--         <TextBlock Text="Nummer:" /> -->
+    <!--         <NumericUpDown Minimum="0" -->
+    <!--                        FormatString="0" -->
+    <!--                        Value="{Binding Number}" -->
+    <!--                        Margin="0,0,0,10" /> -->
+    <!--     </StackPanel> -->
+    <!-- -->
+    <!--     <StackPanel> -->
+    <!--         <TextBlock Text="Rol ID:" /> -->
+    <!--         <TextBox Text="{Binding RoleId}" Margin="0,0,0,10" /> -->
+    <!--     </StackPanel> -->
+    <!-- -->
+    <!--     <CheckBox Content="Geblokkeerd" -->
+    <!--               IsChecked="{Binding IsBlocked}" -->
+    <!--               Margin="0,0,0,10" /> -->
+    <!-- -->
+    <!--     <TextBlock Foreground="Red" -->
+    <!--                Text="{Binding Error}" -->
+    <!--                Margin="0,0,0,10" /> -->
+    <!-- -->
+    <!--     <Button Content="Opslaan" -->
+    <!--             Command="{Binding SaveCommand}" /> -->
+    <!-- -->
+    <!-- </StackPanel> -->
 </UserControl>

@@ -29,6 +29,7 @@ internal class Program
             options.UseInMemoryDatabase("testing"));
         // builder.Services.AddDbContext<AppDbContext>();
 
+
         builder.Services.AddDbContext<AppDbContext>();
         builder.Services.AddScoped<UserManager>();
         builder.Services.AddScoped<ProductManager>();

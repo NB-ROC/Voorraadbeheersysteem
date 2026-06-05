@@ -5,7 +5,7 @@ namespace FrontendAdmin.ViewModels.Product;
 
 public class RoleSelectionViewModel : ViewModelBase
 {
-    public RoleSelectionViewModel(ServiceProvider services, int id, string name, bool isSelected) : base(services)
+    public RoleSelectionViewModel(int id, string name, bool isSelected)
     {
         Id = id;
         IsSelected = isSelected;

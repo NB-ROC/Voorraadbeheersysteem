@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FrontendAdmin.Models;
+using FrontendAdmin.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
@@ -49,7 +51,7 @@ public class LoanPageViewModel : PageViewModelBase
 
     private string _productQuery = "";
 
-    public LoanPageViewModel(ServiceProvider services) : base(services)
+    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
     {
         this.WhenAnyValue(x => x.ProductQuery, x => x.BorrowerQuery)
             .Throttle(TimeSpan.FromMilliseconds(300))
@@ -117,5 +119,10 @@ public class LoanPageViewModel : PageViewModelBase
 
         foreach (LoanViewModel loan in loans)
             FilteredLoans.Add(loan);
+    }
+
+    public override Task LoadAsync()
+    {
+        return Task.CompletedTask;
     }
 }

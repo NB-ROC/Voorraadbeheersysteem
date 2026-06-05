@@ -16,11 +16,21 @@ using Protos.Notification;
 
 namespace FrontendAdmin.Services;
 
-public class BackendService
+public interface IApiService
+{
+    public UserModel? LoggedInUser { get; }
+    public UserEndpoint Users { get; }
+    public ProductEndpoint Products { get; }
+    public NotificationEndpoint Notifications { get; }
+    
+    public Task<bool> LogIn(string email, string password);
+}
+
+public class ApiService : IApiService
 {
     private const string GrpcChannelIp = "http://127.0.0.1:8080";
 
-    public BackendService()
+    public ApiService()
     {
         GrpcChannel channel = GrpcChannel.ForAddress(GrpcChannelIp);
         TokenInjector injector = new(() => Token);
