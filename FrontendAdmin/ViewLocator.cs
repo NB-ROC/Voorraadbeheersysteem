@@ -16,7 +16,7 @@ public class ViewLocator : IDataTemplate
 {
     public Control Build(object? data)
     {
-        string name = data?.GetType().FullName!.Replace("ViewModel", "View")?? "_";
+        string name = data?.GetType().FullName!.Replace("ViewModel", "View") ?? "_";
         Type? type = Type.GetType(name);
 
         if (type != null)

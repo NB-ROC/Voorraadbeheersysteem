@@ -36,7 +36,7 @@
     <ItemGroup>
         <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Client"/>
         <Protobuf Update="..\Protos\notification.proto">
-          <Link>Protos\notification.proto</Link>
+            <Link>Protos\notification.proto</Link>
         </Protobuf>
     </ItemGroup>
 

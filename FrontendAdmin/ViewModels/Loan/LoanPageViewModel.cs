@@ -7,7 +7,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using FrontendAdmin.ViewModels.Components;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Loan;

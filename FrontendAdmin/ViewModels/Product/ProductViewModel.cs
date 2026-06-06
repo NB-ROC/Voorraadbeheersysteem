@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
@@ -15,13 +14,15 @@ public class ProductViewModel : ViewModelBase
     private readonly IApiService _api;
     private readonly ProductModel _model;
 
-    public ProductViewModel(IApiService api, ProductModel model, Action<ProductViewModel> editAction, Action<ProductViewModel> deleteAction)
+    public ProductViewModel(IApiService api, ProductModel model,
+        Func<ProductModel, Task> editAction,
+        Func<ProductViewModel, Task> deleteAction)
     {
         _api = api;
         _model = model;
-        
-        EditCommand = ReactiveCommand.Create(() => editAction(this));
-        DeleteCommand = ReactiveCommand.Create(() => deleteAction(this));
+
+        EditCommand = ReactiveCommand.CreateFromTask(() => editAction(_model));
+        DeleteCommand = ReactiveCommand.CreateFromTask(() => deleteAction(this));
     }
 
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
@@ -42,11 +43,11 @@ public class ProductViewModel : ViewModelBase
 
     public CategoryModel CategoryModel
     {
-        get => _model.Category;
+        get => _model.CategoryModel;
         set
         {
-            if (_model.Category.Equals(value)) return;
-            _model.Category = value;
+            if (_model.CategoryModel.Equals(value)) return;
+            _model.CategoryModel = value;
             this.RaisePropertyChanged();
         }
     }

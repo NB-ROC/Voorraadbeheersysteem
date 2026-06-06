@@ -1,7 +1,5 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:models="clr-namespace:FrontendAdmin.Models"
-             xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
              x:Class="FrontendAdmin.Views.User.UserFormView">
 
     <!-- <StackPanel Margin="20"> -->

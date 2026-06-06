@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;

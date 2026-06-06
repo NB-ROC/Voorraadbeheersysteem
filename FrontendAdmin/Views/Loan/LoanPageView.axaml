@@ -27,7 +27,7 @@
                     <TextBox Width="250" Watermark="🔍 Zoek op gebruiker"
                              Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
                 </Border>
-                
+
             </StackPanel>
 
             <!-- filters -->
@@ -59,7 +59,7 @@
             <ScrollViewer>
                 <ItemsControl x:Name="LoanList" ItemsSource="{Binding FilteredLoans}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="loan:LoanViewModel" >
+                        <DataTemplate x:DataType="loan:LoanViewModel">
                             <Border BorderBrush="#6E6EB4" BorderThickness="0,0,0,1" Padding="10">
                                 <Grid ColumnDefinitions="80,*,100,Auto">
                                     <Image Source="{Binding Image}" Width="70" Height="70" Grid.Column="0" />

@@ -8,6 +8,7 @@ using FrontendAdmin.ViewModels.Notifications;
 using FrontendAdmin.ViewModels.Product;
 using FrontendAdmin.ViewModels.User;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace FrontendAdmin.Services;
 
@@ -20,23 +21,34 @@ public static class ServiceExtensions
             collection
                 .AddSingleton<MainWindowViewModel>()
                 .AddSingleton<IApiService, ApiService>()
-                
+
                 // This is the function implementation that gets passed into the NavigationService
-                .AddSingleton<Func<Type, PageViewModelBase>>(provider => type => (PageViewModelBase)provider.GetRequiredService(type))
+                .AddSingleton<Func<Type, ViewModelBase?>>(provider =>
+                    type => provider.GetRequiredService(type) as ViewModelBase)
                 .AddSingleton<INavigationService, NavigationService>();
         }
 
         public void AddPageServices()
         {
+            collection.TryAddSingleton<HeaderViewModel>();
+            collection.TryAddSingleton<FooterViewModel>();
+
             collection
-                .AddSingleton<HeaderViewModel>()
-                .AddSingleton<FooterViewModel>()
                 .AddSingleton<LoginPageViewModel>()
                 .AddSingleton<DashboardPageViewModel>()
                 .AddSingleton<UserPageViewModel>()
                 .AddSingleton<NotificationPageViewModel>()
                 .AddSingleton<LoanPageViewModel>()
                 .AddSingleton<ProductPageViewModel>();
+        }
+
+        public void AddFormServices()
+        {
+            collection.TryAddSingleton<HeaderViewModel>();
+            collection.TryAddSingleton<FooterViewModel>();
+
+            collection
+                .AddSingleton<ProductFormViewModel>();
         }
     }
 }

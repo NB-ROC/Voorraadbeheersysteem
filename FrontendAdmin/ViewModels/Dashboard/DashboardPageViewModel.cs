@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using FrontendAdmin.ViewModels.Components;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin.ViewModels.Dashboard;
 

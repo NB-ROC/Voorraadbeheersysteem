@@ -20,17 +20,16 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        DisableAvaloniaDataAnnotationValidation();
-
         ServiceCollection serviceCollection = new();
-            
+
         serviceCollection.AddCommonServices();
         serviceCollection.AddPageServices();
+        serviceCollection.AddFormServices();
 
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
         main.CurrentPage = services.GetRequiredService<LoginPageViewModel>();
-        
+
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
@@ -45,20 +44,8 @@ public class App : Application
                     DataContext = main
                 };
                 break;
-            
         }
 
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-        // remove each entry found
-        foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
-            BindingPlugins.DataValidators.Remove(plugin);
     }
 }

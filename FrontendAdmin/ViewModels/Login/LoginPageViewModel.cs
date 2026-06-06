@@ -13,7 +13,8 @@ public class LoginPageViewModel : PageViewModelBase
     private readonly IApiService _api;
     private readonly INavigationService _navigation;
 
-    public LoginPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api, INavigationService navigation) : base(header, footer)
+    public LoginPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api,
+        INavigationService navigation) : base(header, footer)
     {
         _api = api;
         _navigation = navigation;
@@ -29,13 +30,13 @@ public class LoginPageViewModel : PageViewModelBase
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    } = "Placeholder1";
 
     public string Email
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    } = "testmail@roc-nijmegen.nl";
 
     public string ErrorMessage
     {

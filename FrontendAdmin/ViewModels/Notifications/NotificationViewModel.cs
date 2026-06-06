@@ -1,7 +1,6 @@
 ﻿using System.Reactive;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Notifications;

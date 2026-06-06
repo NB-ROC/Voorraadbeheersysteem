@@ -11,8 +11,9 @@ public class NotificationPageViewModel : PageViewModelBase
 {
     private readonly IApiService _api;
     private readonly INavigationService _navigation;
-    
-    public NotificationPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api, INavigationService navigationService) : base(header, footer)
+
+    public NotificationPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api,
+        INavigationService navigationService) : base(header, footer)
     {
         _api = api;
         _navigation = navigationService;
@@ -23,7 +24,6 @@ public class NotificationPageViewModel : PageViewModelBase
 
     public override async Task LoadAsync()
     {
-
         (RequestResult result, List<NotificationModel> notifications)
             = await _api.Notifications.Page();
 
@@ -33,8 +33,6 @@ public class NotificationPageViewModel : PageViewModelBase
         Notifications.Clear();
 
         foreach (NotificationModel notification in notifications)
-        {
             Notifications.Add(new NotificationViewModel(_navigation, notification));
-        }
     }
 }

@@ -1,8 +1,6 @@
 using System;
 using System.Reactive;
-using System.Threading.Tasks;
 using FrontendAdmin.Models;
-using FrontendAdmin.Services;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;

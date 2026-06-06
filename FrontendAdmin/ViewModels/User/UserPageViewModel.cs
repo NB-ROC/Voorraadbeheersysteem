@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
@@ -6,8 +5,6 @@ using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels.Components;
-using FrontendAdmin.ViewModels.Notifications;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
@@ -16,7 +13,8 @@ public class UserPageViewModel : PageViewModelBase
 {
     private readonly IApiService _api;
 
-    public UserPageViewModel(IApiService api, INavigationService navigation, HeaderViewModel header, FooterViewModel footer) : base(header, footer)
+    public UserPageViewModel(IApiService api, INavigationService navigation, HeaderViewModel header,
+        FooterViewModel footer) : base(header, footer)
     {
         _api = api;
 
@@ -59,7 +57,7 @@ public class UserPageViewModel : PageViewModelBase
         foreach (UserModel user in users)
             Users.Add(new UserViewModel(user, EditUser, DeleteUser));
     }
-    
+
     private void EditUser(UserViewModel user)
     {
         // TODO: Implement navigation to forms
@@ -69,7 +67,7 @@ public class UserPageViewModel : PageViewModelBase
     {
         // TODO: Implement navigation to forms
     }
-    
+
     private async Task LoadNotificationsAsync()
     {
         (RequestResult result, List<NotificationModel> notifications) =

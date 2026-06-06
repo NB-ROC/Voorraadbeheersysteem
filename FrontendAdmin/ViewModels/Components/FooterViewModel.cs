@@ -1,11 +1,9 @@
-using System;
 using System.Reactive;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
 using FrontendAdmin.ViewModels.Product;
 using FrontendAdmin.ViewModels.User;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Components;
