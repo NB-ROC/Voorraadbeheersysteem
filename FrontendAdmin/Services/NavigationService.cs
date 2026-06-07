@@ -9,8 +9,8 @@ public interface INavigationService
     public Task NavigateTo<TViewModel>() where TViewModel : PageViewModelBase;
 
     public Task NavigateTo<TViewModel, TModel>(TModel? model = null)
-        where TModel : class
-        where TViewModel : FormViewModelBase<TModel>;
+        where TViewModel : FormViewModelBase<TModel>
+        where TModel : class;
 }
 
 public class NavigationService : INavigationService

@@ -1,174 +1,201 @@
-// using System;
-// using System.Linq;
-// using System.Net.Mail;
-// using System.Threading.Tasks;
-// using System.Windows.Input;
-// using FrontendAdmin.Models;
-// using FrontendAdmin.Services;
-// using Microsoft.Extensions.DependencyInjection;
-// using ReactiveUI;
-//
-// namespace FrontendAdmin.ViewModels.User;
-//
-// public class UserFormViewModel : ViewModelBase
-// {
-//     private readonly ApiService _api;
-//
-//     public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
-//         base(services)
-//     {
-//         _api = services.GetService<ApiService>() ??
-//                    throw new NullReferenceException("Backend service not initialised");
-//         if (existing == null)
-//             CardId = Enumerable.Range(0, 7)
-//                 .Select(_ => (byte)Random.Shared.Next(256))
-//                 .ToArray();
-//         CardId = Enumerable.Range(0, 7).Select(_ => (byte)Random.Shared.Next(256)).ToArray();
-//         this.WhenAnyValue(
-//             x => x.FirstName,
-//             x => x.LastName,
-//             x => x.Email,
-//             x => x.Number
-//         ).Subscribe(_ => Validate());
-//
-//         SaveCommand =
-//             ReactiveCommand.CreateFromTask(SaveProductAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
-//
-//         // If editing existing product, prefill values
-//         if (existing != null) LoadExistingProduct(existing);
-//
-//         return;
-//
-//         async Task SaveProductAsync()
-//         {
-//             UserModel model = new()
-//             {
-//                 Id = Id,
-//                 CardId = CardId,
-//                 FirstName = FirstName,
-//                 LastName = LastName,
-//                 Email = Email,
-//                 Number = Number
-//             };
-//
-//             (RequestResult result, bool success) = await (existing == null
-//                 ? _api.Users.Create(model)
-//                 : _api.Users.Modify(model));
-//
-//             if (result == RequestResult.Success && success)
-//                 Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
-//         }
-//     }
-//
-//     #region Properties
-//
-//     public int Id { get; set; }
-//
-//     public byte[] CardId
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     }
-//
-//     public string FirstName
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     } = string.Empty;
-//
-//     public string LastName
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     } = string.Empty;
-//
-//     public int RoleId
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     }
-//
-//     public bool IsBlocked
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     }
-//
-//     public string Email
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     } = string.Empty;
-//
-//     public int Number
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     } = 0;
-//
-//
-//     public string Error
-//     {
-//         get;
-//         set => this.RaiseAndSetIfChanged(ref field, value);
-//     } = string.Empty;
-//
-//     public ICommand SaveCommand { get; }
-//
-//     #endregion
-//
-//     #region Private Methods
-//
-//     private void Validate()
-//     {
-//         Error = CardId is not { Length: UserModel.IdLength }
-//             ? "Ongeldig ID."
-//             : string.IsNullOrWhiteSpace(FirstName)
-//                 ? "Voornaam is verplicht."
-//                 : string.IsNullOrWhiteSpace(LastName)
-//                     ? "Achternaam is verplicht."
-//                     : string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email)
-//                         ? "Ongeldig e-mailadres."
-//                         : RoleId <= 0
-//                             ? "Rol is verplicht."
-//                             : Number <= 0
-//                                 ? "Ongeldig nummer."
-//                                 : string.Empty;
-//     }
-//
-//     private static bool IsValidEmail(string email)
-//     {
-//         try
-//         {
-//             _ = new MailAddress(email);
-//             return true;
-//         }
-//         catch
-//         {
-//             return false;
-//         }
-//     }
-//
-//     private static int GetNumberLength(uint? num)
-//     {
-//         return num switch
-//         {
-//             null => -1,
-//             0 => 1,
-//             _ => (int)Math.Floor(Math.Log10((double)num)) + 1
-//         };
-//     }
-//
-//     private void LoadExistingProduct(UserViewModel existing)
-//     {
-//         Id = existing.Id;
-//         CardId = existing.CardId;
-//         FirstName = existing.FirstName;
-//         LastName = existing.LastName;
-//         Email = existing.Email;
-//         Number = existing.Number;
-//     }
-//
-//     #endregion
-// }
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Net.Mail;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia;
+using FrontendAdmin.Models;
+using FrontendAdmin.Services;
+using FrontendAdmin.ViewModels.Components;
+using FrontendAdmin.ViewModels.Product;
+using ReactiveUI;
+
+namespace FrontendAdmin.ViewModels.User;
+
+public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
+{
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
+    private CompositeDisposable _disposables;
+
+    public UserFormViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api, INavigationService navigation)
+        : base(header, footer)
+    {
+        _api = api;
+        _navigation = navigation;
+        _disposables = new CompositeDisposable();
+    }
+
+    #region Properties
+
+    private int? _id;
+
+    public string FirstName
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public string LastName
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public int RoleId
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public string Email
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    public int Number
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = 0;
+    
+    private int[] SelectedRoleIds =>
+        Roles
+            .Where(x => x.IsSelected)
+            .Select(x => x.Id)
+            .ToArray();
+
+    #endregion
+
+    #region UI
+
+    public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
+    
+    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError) 
+        ? new Thickness(0) 
+        : new Thickness(1);
+    
+    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError) 
+        ? new Thickness(1) 
+        : new Thickness(0);
+
+    #endregion
+
+    #region Saving
+
+    public ICommand SaveCommand { get; }
+    
+
+    #endregion
+
+    #region Validation
+    
+    public string RolesError
+    {
+        get;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref field, value); 
+            this.RaisePropertyChanged(nameof(RolesErrorBorderThickness));
+            this.RaisePropertyChanged(nameof(RolesErrorBorderMargin));
+        }
+    } = string.Empty;
+
+    public string this[string column]
+    {
+        get
+        {
+            Console.WriteLine("Implement");
+            return string.Empty;
+        }
+    }
+
+    public string Error
+    {
+        get;
+        private set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        try
+        {
+            _ = new MailAddress(email);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    
+    #endregion
+
+    #region Loading
+
+    public override async Task LoadAsync(UserModel? existing)
+    {
+        ResetFields();
+        await LoadRolesAsync();
+        if (existing != null) LoadUser(existing);
+        
+        LoadSubscriptions();
+    }
+    
+    private void LoadSubscriptions()
+    {
+        _disposables.Dispose();
+        _disposables = new CompositeDisposable();
+        
+        foreach (RoleSelectionViewModel role in Roles)
+            role.WhenAnyValue(x => x.IsSelected)
+                .Subscribe(_ => RolesError = Roles.Any(x => x.IsSelected)
+                    ? string.Empty
+                    : "Minstens één rol is verplicht.")
+                .DisposeWith(_disposables);
+    }
+
+    private void LoadUser(UserModel user)
+    {
+        _id = user.Id;
+        FirstName = user.FirstName;
+        LastName = user.LastName;
+        Email = user.Email;
+        Number = user.Number;
+        
+        foreach (RoleSelectionViewModel role in Roles)
+            role.IsSelected = user.Roles.Any(urm => urm.Id == role.Id);
+    }
+
+    private async Task LoadRolesAsync()
+    {
+        Roles.Clear();
+
+        (RequestResult result, List<RoleModel> roles) = await _api.Products.Role();
+
+        foreach (RoleModel role in roles)
+            Roles.Add(new RoleSelectionViewModel(role.Id, role.Name, false));
+    }
+
+    private void ResetFields()
+    {
+        _id = null;
+        FirstName = string.Empty;
+        LastName = string.Empty;
+        Email = string.Empty;
+        Number = 0;
+        
+        foreach (RoleSelectionViewModel role in Roles)
+            role.IsSelected = false;
+    }
+
+    #endregion
+
+}
 

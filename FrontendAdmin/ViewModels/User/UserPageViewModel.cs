@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels.Components;
+using FrontendAdmin.ViewModels.Notifications;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
@@ -12,20 +13,22 @@ namespace FrontendAdmin.ViewModels.User;
 public class UserPageViewModel : PageViewModelBase
 {
     private readonly IApiService _api;
+    private readonly INavigationService _navigation;
 
     public UserPageViewModel(IApiService api, INavigationService navigation, HeaderViewModel header,
         FooterViewModel footer) : base(header, footer)
     {
         _api = api;
+        _navigation = navigation;
 
-        NavigateUserForm = ReactiveCommand.Create(() =>
+        NavigateUserForm = ReactiveCommand.CreateFromTask(async () =>
         {
-            // TODO: Navigate to forms
+            await _navigation.NavigateTo<UserFormViewModel, UserModel>();
         });
 
-        NavigateNotifications = ReactiveCommand.Create(() =>
+        NavigateNotifications = ReactiveCommand.CreateFromTask(async () =>
         {
-            // TODO: Navigate to forms
+            await _navigation.NavigateTo<NotificationPageViewModel>();
         });
     }
 
@@ -58,7 +61,7 @@ public class UserPageViewModel : PageViewModelBase
             Users.Add(new UserViewModel(user, EditUser, DeleteUser));
     }
 
-    private void EditUser(UserViewModel user)
+    private void EditUser(UserModel user)
     {
         // TODO: Implement navigation to forms
     }

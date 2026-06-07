@@ -1,6 +1,6 @@
 using ReactiveUI;
 
-namespace FrontendAdmin.ViewModels.Product;
+namespace FrontendAdmin.ViewModels.Components;
 
 public class RoleSelectionViewModel : ViewModelBase
 {

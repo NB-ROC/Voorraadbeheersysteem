@@ -9,11 +9,11 @@ public class UserViewModel : ViewModelBase
 {
     private readonly UserModel _model;
 
-    public UserViewModel(UserModel model, Action<UserViewModel> editAction, Action<UserViewModel> deleteAction)
+    public UserViewModel(UserModel model, Action<UserModel> editAction, Action<UserViewModel> deleteAction)
     {
         _model = model;
 
-        EditCommand = ReactiveCommand.Create(() => editAction(this));
+        EditCommand = ReactiveCommand.Create(() => editAction(_model));
         DeleteCommand = ReactiveCommand.Create(() => deleteAction(this));
     }
 

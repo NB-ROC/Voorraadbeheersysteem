@@ -15,7 +15,7 @@ public class NotificationViewModel : ViewModelBase
 
         ViewCommand = ReactiveCommand.Create(() =>
         {
-            // TODO: Go to detail page
+            navigation.NavigateTo<NotificationDetailViewModel, NotificationModel>(_model);
         });
     }
 

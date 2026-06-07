@@ -13,7 +13,6 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using DynamicData;
@@ -238,7 +237,7 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
     public string RolesError
     {
         get;
-        set
+        private set
         {
             this.RaiseAndSetIfChanged(ref field, value); 
             this.RaisePropertyChanged(nameof(RolesErrorBorderThickness));

@@ -48,7 +48,9 @@ public static class ServiceExtensions
             collection.TryAddSingleton<FooterViewModel>();
 
             collection
-                .AddSingleton<ProductFormViewModel>();
+                .AddSingleton<ProductFormViewModel>()
+                .AddSingleton<NotificationDetailViewModel>()
+                .AddSingleton<UserFormViewModel>();
         }
     }
 }

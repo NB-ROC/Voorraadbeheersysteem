@@ -1,50 +1,52 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="FrontendAdmin.Views.Notifications.NotificationDetailView">
+             xmlns:notifications="clr-namespace:FrontendAdmin.ViewModels.Notifications"
+             x:Class="FrontendAdmin.Views.Notifications.NotificationDetailView"
+             x:DataType="notifications:NotificationDetailViewModel">
 
-    <!-- <Grid RowDefinitions="60,*,60"> -->
-    <!-- -->
-    <!--     <ContentControl Content="{Binding Header}" /> -->
-    <!-- -->
-    <!--     <StackPanel Grid.Row="1" -->
-    <!--                 Margin="20" -->
-    <!--                 Spacing="16"> -->
-    <!-- -->
-    <!--         ~1~ Terug knop @1@ -->
-    <!--         <Button Content="← Terug" -->
-    <!--                 Width="100" -->
-    <!--                 HorizontalAlignment="Left" -->
-    <!--                 Background="#E5E7EB" -->
-    <!--                 Foreground="#111827" -->
-    <!--                 CornerRadius="8" -->
-    <!--                 Padding="12,8" -->
-    <!--                 Command="{Binding BackCommand}" /> -->
-    <!-- -->
-    <!--         <TextBlock Text="{Binding Title}" -->
-    <!--                    FontSize="28" -->
-    <!--                    FontWeight="Bold" -->
-    <!--                    Foreground="#111827" /> -->
-    <!-- -->
-    <!--         <Border Background="White" -->
-    <!--                 Padding="16" -->
-    <!--                 CornerRadius="12" -->
-    <!--                 BorderBrush="#E5E7EB" -->
-    <!--                 BorderThickness="1"> -->
-    <!-- -->
-    <!--             <StackPanel Spacing="12"> -->
-    <!-- -->
-    <!--                 <TextBlock Text="{Binding Description}" -->
-    <!--                            FontSize="14" -->
-    <!--                            Foreground="#374151" -->
-    <!--                            TextWrapping="Wrap" /> -->
-    <!--             </StackPanel> -->
-    <!-- -->
-    <!--         </Border> -->
-    <!-- -->
-    <!--     </StackPanel> -->
-    <!-- -->
-    <!--     <ContentControl Grid.Row="2" Content="{Binding Footer}" /> -->
-    <!-- -->
-    <!-- </Grid> -->
+    <Grid RowDefinitions="60,*,60">
+    
+        <ContentControl Content="{Binding Header}" />
+    
+        <StackPanel Grid.Row="1"
+                    Margin="20"
+                    Spacing="16">
+    
+            <!-- Terug knop -->
+            <Button Content="← Terug"
+                    Width="100"
+                    HorizontalAlignment="Left"
+                    Background="#E5E7EB"
+                    Foreground="#111827"
+                    CornerRadius="8"
+                    Padding="12,8"
+                    Command="{Binding BackCommand}" />
+    
+            <TextBlock Text="{Binding Title}"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#111827" />
+    
+            <Border Background="White"
+                    Padding="16"
+                    CornerRadius="12"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="1">
+    
+                <StackPanel Spacing="12">
+    
+                    <TextBlock Text="{Binding Description}"
+                               FontSize="14"
+                               Foreground="#374151"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+    
+            </Border>
+    
+        </StackPanel>
+    
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+    
+    </Grid>
 
 </UserControl>
