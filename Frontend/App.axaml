@@ -17,6 +17,11 @@
             </Style>
         </Styles>
     </Application.Styles>
+    
+    <Application.Resources>
+        <SolidColorBrush x:Key="Purple">#6E6EB4</SolidColorBrush>
+        <SolidColorBrush x:Key="White">#FAFAFA</SolidColorBrush>
+    </Application.Resources>
 
     <Application.Styles>
         <FluentTheme />
