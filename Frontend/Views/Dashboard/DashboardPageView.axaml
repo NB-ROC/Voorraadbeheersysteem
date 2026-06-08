@@ -11,7 +11,7 @@
         <DockPanel Background="White" Grid.Row="1">
             <Border Height="250" DockPanel.Dock="Top" Padding="15">
                 <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
-                    <Border Background="#6a69ad" Margin="0,0,8,0">
+                    <Border Background="{StaticResource  Purple}" Margin="0,0,8,0">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="White" HorizontalAlignment="Center" FontSize="40"
                                        FontWeight="Bold" />
