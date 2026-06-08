@@ -14,7 +14,7 @@ public class User
 
     public int Id { get; set; }
 
-    public byte[] CardId { get; set; } = new byte[IdLength];
+    public byte[]? CardId { get; set; } = new byte[IdLength];
 
     public int Number { get; set; }
 

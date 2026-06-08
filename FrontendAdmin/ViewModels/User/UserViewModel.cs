@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using ReactiveUI;
 
@@ -9,12 +10,12 @@ public class UserViewModel : ViewModelBase
 {
     private readonly UserModel _model;
 
-    public UserViewModel(UserModel model, Action<UserModel> editAction, Action<UserViewModel> deleteAction)
+    public UserViewModel(UserModel model, Func<UserModel, Task> editAction, Func<UserViewModel, Task> deleteAction)
     {
         _model = model;
 
-        EditCommand = ReactiveCommand.Create(() => editAction(_model));
-        DeleteCommand = ReactiveCommand.Create(() => deleteAction(this));
+        EditCommand = ReactiveCommand.CreateFromTask(() => editAction(_model));
+        DeleteCommand = ReactiveCommand.CreateFromTask(() => deleteAction(this));
     }
 
     public ReactiveCommand<Unit, Unit> EditCommand { get; }

@@ -21,10 +21,8 @@ public class ProductPageViewModel : PageViewModelBase
         _api = api;
         _navigation = navigationService;
 
-        NavigateProductForm = ReactiveCommand.Create(() =>
-        {
-            _navigation.NavigateTo<ProductFormViewModel, ProductModel>();
-        });
+        NavigateProductForm = ReactiveCommand.CreateFromTask(async () =>
+            await _navigation.NavigateTo<ProductFormViewModel, ProductModel>());
     }
 
 
@@ -40,7 +38,7 @@ public class ProductPageViewModel : PageViewModelBase
     private async Task DeleteProduct(ProductViewModel product)
     {
         (RequestResult, bool) valueTuple = await _api.Products.Delete(product.Id);
-        
+
         if (valueTuple is { Item1: RequestResult.Success, Item2: true }) Products.Remove(product);
     }
 

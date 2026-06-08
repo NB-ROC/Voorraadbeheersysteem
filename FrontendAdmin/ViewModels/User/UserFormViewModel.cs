@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
 using System.Reactive.Disposables;
@@ -12,7 +13,6 @@ using Avalonia;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels.Components;
-using FrontendAdmin.ViewModels.Product;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
@@ -23,48 +23,51 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     private readonly INavigationService _navigation;
     private CompositeDisposable _disposables;
 
-    public UserFormViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api, INavigationService navigation)
+    public UserFormViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api,
+        INavigationService navigation)
         : base(header, footer)
     {
         _api = api;
         _navigation = navigation;
         _disposables = new CompositeDisposable();
+
+        SaveCommand = ReactiveCommand.CreateFromTask(SaveUserAsync);
     }
 
     #region Properties
 
     private int? _id;
 
+    [Required(ErrorMessage = "Voornaam is verplicht")]
     public string FirstName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
+    [Required(ErrorMessage = "Achternaam is verplicht")]
     public string LastName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public int RoleId
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
+    [Required(ErrorMessage = "E-Mail adres is verplicht")]
+    [EmailAddress(ErrorMessage = "E-Mail adres moet valide zijn")]
     public string Email
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public int Number
+    [Required(ErrorMessage = "Persoonsnummer is verplicht")]
+    [Range(100000, 9999999, ErrorMessage = "Persoonsnummer is verplicht")]
+    public int? Number
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = 0;
-    
+
     private int[] SelectedRoleIds =>
         Roles
             .Where(x => x.IsSelected)
@@ -76,13 +79,13 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     #region UI
 
     public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
-    
-    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError) 
-        ? new Thickness(0) 
+
+    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(0)
         : new Thickness(1);
-    
-    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError) 
-        ? new Thickness(1) 
+
+    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(1)
         : new Thickness(0);
 
     #endregion
@@ -90,28 +93,63 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     #region Saving
 
     public ICommand SaveCommand { get; }
-    
+
+    public async Task SaveUserAsync()
+    {
+        if (Number == null) return;
+
+        UserModel user = new()
+        {
+            Id = _id ?? -1,
+            FirstName = FirstName,
+            LastName = LastName,
+            Number = Number ??
+                     throw new NullReferenceException(
+                         "This error should not be able to instantiate and is only here to let the code compile."),
+            Email = Email,
+            Roles = SelectedRoleIds.Select(role => new RoleModel
+            {
+                Id = role
+            }).ToList()
+        };
+
+        (RequestResult result, bool success) = await (_id == null
+            ? _api.Users.Create(user)
+            : _api.Users.Modify(user));
+
+        if (result == RequestResult.Success && success) await _navigation.NavigateTo<UserPageViewModel>();
+    }
 
     #endregion
 
     #region Validation
-    
+
     public string RolesError
     {
         get;
         private set
         {
-            this.RaiseAndSetIfChanged(ref field, value); 
+            this.RaiseAndSetIfChanged(ref field, value);
             this.RaisePropertyChanged(nameof(RolesErrorBorderThickness));
             this.RaisePropertyChanged(nameof(RolesErrorBorderMargin));
         }
     } = string.Empty;
 
-    public string this[string column]
+    public string this[string columnName]
     {
         get
         {
-            Console.WriteLine("Implement");
+            ValidationContext context = new(this) { MemberName = columnName };
+            List<ValidationResult> results = [];
+            object? value = GetType().GetProperty(columnName)?.GetValue(this);
+            Console.WriteLine(columnName);
+
+            if (!Validator.TryValidateProperty(value, context, results))
+            {
+                string? message = results.First().ErrorMessage;
+                if (!string.IsNullOrEmpty(message)) return message;
+            }
+
             return string.Empty;
         }
     }
@@ -120,9 +158,9 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     {
         get;
         private set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    } = string.Empty;
 
-    private static bool IsValidEmail(string email)
+    private static bool IsFormValid(string email)
     {
         try
         {
@@ -134,7 +172,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
             return false;
         }
     }
-    
+
     #endregion
 
     #region Loading
@@ -144,15 +182,15 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         ResetFields();
         await LoadRolesAsync();
         if (existing != null) LoadUser(existing);
-        
+
         LoadSubscriptions();
     }
-    
+
     private void LoadSubscriptions()
     {
         _disposables.Dispose();
         _disposables = new CompositeDisposable();
-        
+
         foreach (RoleSelectionViewModel role in Roles)
             role.WhenAnyValue(x => x.IsSelected)
                 .Subscribe(_ => RolesError = Roles.Any(x => x.IsSelected)
@@ -168,7 +206,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         LastName = user.LastName;
         Email = user.Email;
         Number = user.Number;
-        
+
         foreach (RoleSelectionViewModel role in Roles)
             role.IsSelected = user.Roles.Any(urm => urm.Id == role.Id);
     }
@@ -190,12 +228,10 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         LastName = string.Empty;
         Email = string.Empty;
         Number = 0;
-        
+
         foreach (RoleSelectionViewModel role in Roles)
             role.IsSelected = false;
     }
 
     #endregion
-
 }
-

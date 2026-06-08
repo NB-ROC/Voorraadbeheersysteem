@@ -21,15 +21,10 @@ public class UserPageViewModel : PageViewModelBase
         _api = api;
         _navigation = navigation;
 
-        NavigateUserForm = ReactiveCommand.CreateFromTask(async () =>
-        {
-            await _navigation.NavigateTo<UserFormViewModel, UserModel>();
-        });
+        NavigateUserForm =
+            ReactiveCommand.CreateFromTask(async () => await _navigation.NavigateTo<UserFormViewModel, UserModel>());
 
-        NavigateNotifications = ReactiveCommand.CreateFromTask(async () =>
-        {
-            await _navigation.NavigateTo<NotificationPageViewModel>();
-        });
+        NavigateNotifications = ReactiveCommand.CreateFromTask(_navigation.NavigateTo<NotificationPageViewModel>);
     }
 
     public ObservableCollection<UserViewModel> Users { get; } = [];
@@ -61,14 +56,16 @@ public class UserPageViewModel : PageViewModelBase
             Users.Add(new UserViewModel(user, EditUser, DeleteUser));
     }
 
-    private void EditUser(UserModel user)
+    private async Task EditUser(UserModel user)
     {
-        // TODO: Implement navigation to forms
+        await _navigation.NavigateTo<UserFormViewModel, UserModel>(user);
     }
 
-    private void DeleteUser(UserViewModel user)
+    private async Task DeleteUser(UserViewModel user)
     {
-        // TODO: Implement navigation to forms
+        (RequestResult result, bool success) = await _api.Users.Delete(user.Id);
+
+        if (result == RequestResult.Success && success) Users.Remove(user);
     }
 
     private async Task LoadNotificationsAsync()

@@ -14,7 +14,7 @@ public class UserModel
 
     public int Id { get; set; }
 
-    public byte[] CardId { get; set; } = new byte[IdLength];
+    public byte[]? CardId { get; set; } = new byte[IdLength];
 
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;
 

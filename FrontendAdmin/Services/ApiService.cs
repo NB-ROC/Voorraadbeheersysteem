@@ -192,7 +192,7 @@ public class UserEndpoint
         }
         catch (RpcException e)
         {
-            return (GetFailCode(e), null!);
+            return (GetFailCode(e), []);
         }
 
         return
@@ -351,7 +351,7 @@ public class UserEndpoint
         return new UserModel
         {
             Id = user.Id,
-            CardId = user.CardId.ToByteArray(),
+            CardId = user.HasCardId ? user.CardId.ToByteArray() : null,
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,

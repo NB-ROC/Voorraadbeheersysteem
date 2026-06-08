@@ -26,9 +26,9 @@ namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorInfo
 {
-    private CompositeDisposable _disposables = new();
     private readonly IApiService _api;
     private readonly INavigationService _navigation;
+    private CompositeDisposable _disposables = new();
 
     public ProductFormViewModel(IApiService api, INavigationService navigation, HeaderViewModel header,
         FooterViewModel footer)
@@ -37,21 +37,21 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
         _api = api;
         _navigation = navigation;
 
-        
+
         this.WhenAnyValue(x => x.CategoryModel)
             .Subscribe(_ => this.RaisePropertyChanged(nameof(IsCustomCategory)));
         this.WhenAnyValue(x => x.ImageBytes)
-            .Subscribe(_ => ImageError = ImageBytes == null 
-                ? "Selecteer een afbeelding." 
+            .Subscribe(_ => ImageError = ImageBytes == null
+                ? "Selecteer een afbeelding."
                 : string.Empty);
-        
+
         IObservable<bool> canSave = this.WhenAnyValue(
                 x => x.Name,
                 x => x.CategoryModel,
                 x => x.CustomCategory,
                 x => x.Description,
                 x => x.ImageBytes,
-                (name, category, custom, desc, image) => true) // recompute trigger
+                (name, category, custom, desc, image) => true)
             .CombineLatest(
                 Roles.ToObservableChangeSet()
                     .AutoRefresh(r => r.IsSelected)
@@ -59,63 +59,17 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
                     .Select(roles => roles.Any(r => r.IsSelected)),
                 (_, anyRole) => anyRole)
             .Select(_ => IsFormValid);
-        
+
         SaveCommand = ReactiveCommand.CreateFromTask(SaveProductAsync, canSave);
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
     }
 
-    #region Properties
-    
-        private int? _id;
-
-        private byte[]? ImageBytes
-        {
-            get;
-            set => this.RaiseAndSetIfChanged(ref field, value);
-        }
-    
-        [Required(ErrorMessage = "Naam is verplicht.")]
-        public string Name
-        {
-            get;
-            set => this.RaiseAndSetIfChanged(ref field, value);
-        } = string.Empty;
-    
-        [Required(ErrorMessage = "Je moet een categorie kiezen")]
-        public CategoryModel? CategoryModel
-        {
-            get;
-            set => this.RaiseAndSetIfChanged(ref field, value);
-        } = null!;
-    
-        [Required(ErrorMessage = "Beschrijving is verplicht.")]
-        public string Description
-        {
-            get;
-            set => this.RaiseAndSetIfChanged(ref field, value);
-        } = string.Empty;
-
-        [Required(ErrorMessage = "Naam voor de nieuwe categorie is verplicht")]
-        public string CustomCategory
-        {
-            get;
-            set => this.RaiseAndSetIfChanged(ref field, value);
-        } = string.Empty;
-
-        private int[] SelectedRoleIds =>
-            Roles
-                .Where(x => x.IsSelected)
-                .Select(x => x.Id)
-                .ToArray();
-
-        #endregion
-    
     #region Save
 
     private async Task SaveProductAsync()
     {
         if (CategoryModel == null) return;
-        
+
         ProductModel model = new()
         {
             Id = _id ?? -1,
@@ -187,11 +141,57 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
     }
 
     #endregion
-    
+
+    #region Properties
+
+    private int? _id;
+
+    private byte[]? ImageBytes
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    [Required(ErrorMessage = "Naam is verplicht.")]
+    public string Name
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    [Required(ErrorMessage = "Je moet een categorie kiezen")]
+    public CategoryModel? CategoryModel
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = null!;
+
+    [Required(ErrorMessage = "Beschrijving is verplicht.")]
+    public string Description
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    [Required(ErrorMessage = "Naam voor de nieuwe categorie is verplicht")]
+    public string CustomCategory
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    private int[] SelectedRoleIds =>
+        Roles
+            .Where(x => x.IsSelected)
+            .Select(x => x.Id)
+            .ToArray();
+
+    #endregion
+
     #region UI
 
     private static readonly CategoryModel NewCategoryOption = new() { Id = -1, Name = "＋ Nieuwe categorie..." };
-    
+
     public Bitmap? PreviewImage
     {
         get;
@@ -202,20 +202,20 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
 
     public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
 
-    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError) 
-        ? new Thickness(0) 
+    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(0)
         : new Thickness(1);
-    
-    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError) 
-        ? new Thickness(1) 
+
+    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(1)
         : new Thickness(0);
-    
-    public Thickness ImageErrorBorderThickness => string.IsNullOrWhiteSpace(ImageError) 
-        ? new Thickness(0) 
+
+    public Thickness ImageErrorBorderThickness => string.IsNullOrWhiteSpace(ImageError)
+        ? new Thickness(0)
         : new Thickness(1);
-    
-    public Thickness ImageErrorBorderMargin => string.IsNullOrWhiteSpace(ImageError) 
-        ? new Thickness(1) 
+
+    public Thickness ImageErrorBorderMargin => string.IsNullOrWhiteSpace(ImageError)
+        ? new Thickness(1)
         : new Thickness(0);
 
     public ICommand SaveCommand { get; }
@@ -227,19 +227,19 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
     #endregion
 
     #region Validation
-    
+
     public string Error
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
-    
+
     public string RolesError
     {
         get;
         private set
         {
-            this.RaiseAndSetIfChanged(ref field, value); 
+            this.RaiseAndSetIfChanged(ref field, value);
             this.RaisePropertyChanged(nameof(RolesErrorBorderThickness));
             this.RaisePropertyChanged(nameof(RolesErrorBorderMargin));
         }
@@ -263,47 +263,23 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
             ValidationContext context = new(this) { MemberName = columnName };
             List<ValidationResult> results = [];
             object? value = GetType().GetProperty(columnName)?.GetValue(this);
-            
+
             if (!Validator.TryValidateProperty(value, context, results))
             {
                 string? message = results.First().ErrorMessage;
                 if (!string.IsNullOrEmpty(message)) return message;
             }
 
-            // 2. Run complex business rules & conditional logic
-            switch (columnName)
-            {
-                case nameof(CategoryModel):
-                    if (string.IsNullOrWhiteSpace(CategoryModel?.Name))
-                        return "Categorie is verplicht.";
-                    break;
-
-                case nameof(PreviewImage): // Validate image presence through its UI proxy
-                    if (ImageBytes == null || ImageBytes.Length == 0)
-                        return "Selecteer een afbeelding.";
-                    break;
-
-                case nameof(CustomCategory):
-                    if (IsCustomCategory && string.IsNullOrWhiteSpace(CustomCategory))
-                        return "Voer een naam in voor de nieuwe categorie.";
-                    break;
-
-                case nameof(Roles):
-                    if (!Roles.Any(x => x.IsSelected))
-                        return "Minstens één rol is verplicht.";
-                    break;
-            }
-
             return string.Empty;
         }
     }
-    
+
     private bool IsFormValid =>
-        !string.IsNullOrWhiteSpace(Name)                               &&
-        CategoryModel != null                                          &&
+        !string.IsNullOrWhiteSpace(Name) &&
+        CategoryModel != null &&
         (!IsCustomCategory || !string.IsNullOrWhiteSpace(CustomCategory)) &&
-        !string.IsNullOrWhiteSpace(Description)                        &&
-        ImageBytes != null && ImageBytes.Length > 0                    &&
+        !string.IsNullOrWhiteSpace(Description) &&
+        ImageBytes is { Length: > 0 } &&
         Roles.Any(x => x.IsSelected);
 
     #endregion
@@ -319,7 +295,7 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
             await LoadExistingProduct(existing);
         else
             ResetFields();
-        
+
         LoadSubscriptions();
 
         CustomCategory = string.Empty;
@@ -378,12 +354,12 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
         ImageBytes = image.Value.bytes;
         PreviewImage = image.Value.bitmap;
     }
-    
+
     private void LoadSubscriptions()
     {
         _disposables.Dispose();
         _disposables = new CompositeDisposable();
-        
+
         foreach (RoleSelectionViewModel role in Roles)
             role.WhenAnyValue(x => x.IsSelected)
                 .Subscribe(_ => RolesError = Roles.Any(x => x.IsSelected)

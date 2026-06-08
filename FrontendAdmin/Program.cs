@@ -23,6 +23,7 @@ internal sealed class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
-            .UseReactiveUI(config => { });
+            .UseReactiveUI(config => { })
+            .WithDataAnnotationsValidation();
     }
 }

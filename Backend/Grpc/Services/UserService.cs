@@ -57,7 +57,7 @@ public class UserService : Users.UsersBase
 
         User user = new()
         {
-            CardId = request.CardId.ToByteArray(),
+            CardId = request.HasCardId ? request.CardId.ToByteArray() : null,
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
@@ -115,27 +115,6 @@ public class UserService : Users.UsersBase
         return new UserModifyResponse { Success = true };
     }
 
-    private static MetaUser MapMeta(User user)
-    {
-        MetaUser meta = new()
-        {
-            Id = user.Id,
-            CardId = ByteString.CopyFrom(user.CardId),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Number = user.Number
-        };
-
-        meta.Roles.AddRange(user.UserRoles.Select(ur => new Role
-        {
-            Id = (int)ur.Role.Id,
-            Name = ur.Role.Name
-        }));
-
-        return meta;
-    }
-
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
     {
@@ -143,6 +122,19 @@ public class UserService : Users.UsersBase
         {
             Success = await _manager.Delete(request.Id)
         };
+    }
+
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Lender)}")]
+    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request,
+        ServerCallContext context)
+    {
+        List<User> users = await _manager.LenderPage(request.Page, request.PageSize);
+
+        return new UserLenderPageResponse
+        {
+            Users = { users.Select(MapMeta) }
+        };
+        ;
     }
 
     [AllowAnonymous]
@@ -162,16 +154,24 @@ public class UserService : Users.UsersBase
         return response;
     }
 
-    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Lender)}")]
-    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request,
-        ServerCallContext context)
+    private static MetaUser MapMeta(User user)
     {
-        List<User> users = await _manager.LenderPage(request.Page, request.PageSize);
-
-        return new UserLenderPageResponse
+        MetaUser meta = new()
         {
-            Users = { users.Select(MapMeta) }
+            Id = user.Id,
+            CardId = user.CardId == null ? null : ByteString.CopyFrom(user.CardId),
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Number = user.Number
         };
-        ;
+
+        meta.Roles.AddRange(user.UserRoles.Select(ur => new Role
+        {
+            Id = (int)ur.Role.Id,
+            Name = ur.Role.Name
+        }));
+
+        return meta;
     }
 }
