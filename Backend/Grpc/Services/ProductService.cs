@@ -140,10 +140,10 @@ public class ProductService : Products.ProductsBase
         {
             await _auditLogManager.Log(
                 GetActorId(context),
-                "CREATE",
+                "UPDATE",
                 "Product",
                 product.Id.ToString(),
-                $"Product '{product.Name}' aangemaakt"
+                $"Product '{product.Name}' aangepast"
             );
         }
         return new ProductModifyResponse
@@ -153,23 +153,25 @@ public class ProductService : Products.ProductsBase
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
-    public override async Task<ProductDeleteResponse> Delete(ProductDeleteRequest request, ServerCallContext context)
+    public override async Task<ProductDeleteResponse> Delete(
+        ProductDeleteRequest request,
+        ServerCallContext context)
     {
         string image = await _validator.ValidateDelete(request);
 
         StorageHelper.DeleteFile(Path.Combine(ImagePath, image));
 
-        return new ProductDeleteResponse
-        {
-            Success = await _manager.Delete(request.Id)
-        };
-        
         bool success = await _manager.Delete(request.Id);
 
         if (success)
         {
-            await _auditLogManager.Log(GetActorId(context), "DELETE", "Product",
-                request.Id.ToString(), $"Product verwijderd (id {request.Id})");
+            await _auditLogManager.Log(
+                GetActorId(context),
+                "DELETE",
+                "Product",
+                request.Id.ToString(),
+                $"Product verwijderd (id {request.Id})"
+            );
         }
 
         return new ProductDeleteResponse
