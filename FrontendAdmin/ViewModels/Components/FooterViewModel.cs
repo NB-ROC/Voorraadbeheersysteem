@@ -1,6 +1,7 @@
 using System;
 using System.Reactive;
 using FrontendAdmin.Services;
+using FrontendAdmin.ViewModels.AuditLog;
 using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
 using FrontendAdmin.ViewModels.Product;
@@ -20,10 +21,12 @@ public class FooterViewModel : ViewModelBase
         NavigateProducts = ReactiveCommand.Create(() => navigation.NavigateTo(new ProductPageViewModel(services)));
         NavigateLoans = ReactiveCommand.Create(() => navigation.NavigateTo(new LoanPageViewModel(services)));
         NavigateUsers = ReactiveCommand.Create(() => navigation.NavigateTo(new UserPageViewModel(services)));
+        NavigateAuditLog = ReactiveCommand.Create(() => navigation.NavigateTo(new AuditLogPageViewModel(services)));
     }
 
     public ReactiveCommand<Unit, Unit> NavigateDashboard { get; }
     public ReactiveCommand<Unit, Unit> NavigateProducts { get; }
     public ReactiveCommand<Unit, Unit> NavigateLoans { get; }
     public ReactiveCommand<Unit, Unit> NavigateUsers { get; }
+    public ReactiveCommand<Unit, Unit> NavigateAuditLog { get; }
 }

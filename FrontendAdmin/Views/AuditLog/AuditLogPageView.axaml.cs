@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace FrontendAdmin.Views.AuditLogs;
+namespace FrontendAdmin.Views.AuditLog;
 
 public partial class AuditLogPageView : UserControl
 {
