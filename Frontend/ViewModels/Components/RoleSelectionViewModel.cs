@@ -1,11 +1,10 @@
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
-namespace Frontend.ViewModels.User;
+namespace Frontend.ViewModels.Components;
 
 public class RoleSelectionViewModel : ViewModelBase
 {
-    public RoleSelectionViewModel(ServiceProvider services, int id, string name, bool isSelected) : base(services)
+    public RoleSelectionViewModel(int id, string name, bool isSelected)
     {
         Id = id;
         IsSelected = isSelected;

@@ -20,6 +20,7 @@ public static class ServiceExtensions
             collection
                 .AddSingleton<MainWindowViewModel>()
                 .AddSingleton<IApiService, ApiService>()
+                .AddSingleton<ISmartCardService, SmartCardService>()
 
                 // This is the function implementation that gets passed into the NavigationService
                 .AddSingleton<Func<Type, ViewModelBase?>>(provider =>

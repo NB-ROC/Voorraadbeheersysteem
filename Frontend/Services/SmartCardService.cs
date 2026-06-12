@@ -10,6 +10,18 @@ using PCSC.Monitoring;
 
 namespace Frontend.Services;
 
+public interface ISmartCardService : IDisposable
+{
+    bool HasAvailableReader { get; }
+
+    event Action<bool>? ReadersAvailableChanged;
+
+    void SetCardDetectedCallback(Action<byte[]> callback);
+
+    void Start();
+    void Stop();
+}
+
 /// <summary>
 ///     A reactive, hot-pluggable smart card service that monitors all connected PC/SC
 ///     readers simultaneously and invokes a user-supplied callback with the card UID
@@ -26,7 +38,7 @@ namespace Frontend.Services;
 ///     svc.Stop();
 ///     svc.Dispose();
 /// </summary>
-public sealed class SmartCardService : IDisposable
+public sealed class SmartCardService : ISmartCardService
 {
     // -------------------------------------------------------------------------
     // APDU that asks the reader for the card UID (Get Data – UID)

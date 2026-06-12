@@ -8,21 +8,15 @@ namespace Frontend.ViewModels.Components;
 
 public class HeaderViewModel : ViewModelBase
 {
-    public HeaderViewModel(ServiceProvider services) : base(services)
+    public HeaderViewModel(ISmartCardService smartCard, IApiService api)
     {
-        SmartCardService smartCardService = services.GetRequiredService<SmartCardService>();
 
-        StatusColor = smartCardService.HasAvailableReader
-            ? Brushes.Chartreuse
-            : Brushes.Orange;
-        NfcText = smartCardService.HasAvailableReader
-            ? "Er zijn scanners aanwezig!"
-            : "Er zijn geen scanners aanwezig :(";
+        OnReadersAvailableChanged(smartCard.HasAvailableReader);
 
-        smartCardService.ReadersAvailableChanged += OnReadersAvailableChanged;
+        smartCard.ReadersAvailableChanged += OnReadersAvailableChanged;
 
 
-        UserModel? loggedInUser = services.GetRequiredService<ApiService>().LoggedInUser;
+        UserModel? loggedInUser = api.LoggedInUser;
 
         Greet = loggedInUser == null
             ? ""
@@ -39,13 +33,13 @@ public class HeaderViewModel : ViewModelBase
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    } = Brushes.Red;
 
     public string NfcText
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    } = string.Empty;
 
     private void OnReadersAvailableChanged(bool available)
     {

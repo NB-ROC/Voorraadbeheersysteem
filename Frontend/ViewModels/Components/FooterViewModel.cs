@@ -12,15 +12,13 @@ namespace Frontend.ViewModels.Components;
 
 public class FooterViewModel : ViewModelBase
 {
-    public FooterViewModel(ServiceProvider services) : base(services)
+    public FooterViewModel(INavigationService navigation)
     {
-        NavigationService navigation = services.GetService<NavigationService>() ?? throw new NullReferenceException();
 
-        NavigateDashboard = ReactiveCommand.Create(() => navigation.NavigateTo(new DashboardPageViewModel(services)));
-        NavigateProducts =
-            ReactiveCommand.Create(() => navigation.NavigateTo(new CustomerProductPageViewModel(services)));
-        NavigateLoans = ReactiveCommand.Create(() => navigation.NavigateTo(new LoanPageViewModel(services)));
-        NavigateUsers = ReactiveCommand.Create(() => navigation.NavigateTo(new UserPageViewModel(services)));
+        NavigateDashboard = ReactiveCommand.CreateFromTask(navigation.NavigateTo<DashboardPageViewModel>);
+        NavigateProducts = ReactiveCommand.CreateFromTask(navigation.NavigateTo<CustomerProductPageViewModel>);
+        NavigateLoans = ReactiveCommand.CreateFromTask(navigation.NavigateTo<LoanPageViewModel>);
+        NavigateUsers = ReactiveCommand.CreateFromTask(navigation.NavigateTo<UserPageViewModel>);
     }
 
     public ReactiveCommand<Unit, Unit> NavigateDashboard { get; }

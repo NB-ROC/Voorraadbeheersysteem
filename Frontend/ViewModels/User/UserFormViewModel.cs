@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Frontend.Models;
 using Frontend.Services;
+using Frontend.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
