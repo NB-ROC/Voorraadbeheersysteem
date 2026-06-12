@@ -1,7 +1,13 @@
-﻿using FrontendAdmin.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using FrontendAdmin.Models;
 using FrontendAdmin.Services;
+using FrontendAdmin.ViewModels.Loan;
 using Microsoft.Extensions.DependencyInjection;
- 
+using ReactiveUI;
+
 namespace FrontendAdmin.ViewModels.AuditLog;
  
 public class AuditLogViewModel : ViewModelBase
