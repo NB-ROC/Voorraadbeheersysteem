@@ -4,72 +4,102 @@
              x:Class="Frontend.Views.Dashboard.DashboardPageView"
              x:DataType="{x:Type  dashboard:DashboardPageViewModel}">
 
-    <Grid RowDefinitions="100,*,100">
+    <Grid RowDefinitions="60,*,60">
 
         <ContentControl Content="{Binding Header}" />
 
         <DockPanel Background="{StaticResource White}" Grid.Row="1">
             <Border Height="250" DockPanel.Dock="Top" Padding="15">
                 <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
-                    <Border Background="{StaticResource  Purple}" Margin="0,0,8,0">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="{StaticResource Purple}" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Actieve Leningen" Foreground="{StaticResource White}" HorizontalAlignment="Center"
+                            <TextBlock Text="Actieve Leningen" Foreground="{StaticResource Purple}" HorizontalAlignment="Center"
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource  Purple}" Margin="0,0,8,0">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="orange" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Bijna te laat" Foreground="{StaticResource White}" HorizontalAlignment="Center"
+                            <TextBlock Text="Bijna te laat" Foreground="orange" HorizontalAlignment="Center"
                                        FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource  Purple}" Margin="0,0,8,0">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="red" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Te laat" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="22" />
+                            <TextBlock Text="Te laat" Foreground="red" HorizontalAlignment="Center" FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource  Purple}">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="40"
+                            <TextBlock Text="0" Foreground="Green" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Beschikbare Products" Foreground="{StaticResource White}" HorizontalAlignment="Center"
+                            <TextBlock Text="Beschikbare Products" Foreground="Green" HorizontalAlignment="Center"
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>
                 </UniformGrid>
             </Border>
-
-            <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="15,5,15,0">
-                <Button HorizontalAlignment="Stretch"
-                        Height="60"
-                        Background="{StaticResource  Purple}"
-                        CornerRadius="4"
-                        Click="OnNieuwProductClick">
-                    <TextBlock Text="＋  Nieuw product reserveren"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Foreground="{StaticResource White}"
-                               FontSize="14" />
-                </Button>
-                <Button HorizontalAlignment="Stretch"
-                        Height="60"
-                        Background="{StaticResource  Purple}"
-                        CornerRadius="4"
-                        Click="OnLeningClick">
-                    <TextBlock Text="≡  Mijn leningen bekijken"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Foreground="{StaticResource White}"
-                               FontSize="14" />
-                </Button>
-            </StackPanel>
-            <Grid />
+            <Border DockPanel.Dock="Top" Padding="10,20,10,10">
+                <StackPanel Spacing="20">
+                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                        <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
+                                Background="{StaticResource DarkerWhite}">
+                            <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                <Border Width="44" Height="44" CornerRadius="22" Background="{StaticResource White}">
+                                    <TextBlock Text="☰" Foreground="{StaticResource Purple}" FontSize="22"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="producten overzicht" Foreground="{StaticResource Purple}"
+                                               FontSize="15" FontWeight="SemiBold" />
+                                    <TextBlock Text="Bekijk en beheer alle beschikbare producten" Foreground="#888"
+                                               FontSize="13" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                        <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
+                                Background="{StaticResource DarkerWhite}">
+                            <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                <Border Width="44" Height="44" CornerRadius="22" Background="{StaticResource White}">
+                                    <TextBlock Text="📋" Foreground="{StaticResource Purple}" FontSize="22"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Leningen overzicht" Foreground="{StaticResource Purple}"
+                                               FontSize="15" FontWeight="SemiBold" />
+                                    <TextBlock Text="Bekijk al je leningen" Foreground="#888"
+                                               FontSize="13" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                        <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
+                                Background="{StaticResource DarkerWhite}">
+                            <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                <Border Width="44" Height="44" CornerRadius="22" Background="{StaticResource White}">
+                                    <TextBlock Text="👤" Foreground="{StaticResource Purple}" FontSize="22"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Gebruikers overzicht" Foreground="{StaticResource Purple}"
+                                               FontSize="15" FontWeight="SemiBold" />
+                                    <TextBlock Text="Bekijk en beheer alle gebruikers" Foreground="#888"
+                                               FontSize="13" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                    
+                </StackPanel>
+            </Border>
         </DockPanel>
 
         <ContentControl Grid.Row="2" Content="{Binding Footer}" />

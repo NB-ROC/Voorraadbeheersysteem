@@ -21,6 +21,7 @@
     <Application.Resources>
         <SolidColorBrush x:Key="Purple">#6E6EB4</SolidColorBrush>
         <SolidColorBrush x:Key="White">#FAFAFA</SolidColorBrush>
+        <SolidColorBrush x:Key="DarkerWhite">#FFFFFF</SolidColorBrush>
     </Application.Resources>
 
     <Application.Styles>
