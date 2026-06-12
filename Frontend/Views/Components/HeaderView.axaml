@@ -6,12 +6,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Frontend.Views.Components.HeaderView"
              x:DataType="components:HeaderViewModel">
-    <Grid Background="#6a69ad" ColumnDefinitions="*, 450">
+    <Grid Background="{StaticResource Purple}" ColumnDefinitions="*, 450">
         <TextBlock Text="{Binding Greet}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    Padding="40,0,0,0"
-                   Foreground="White"
+                   Foreground="{StaticResource White}"
                    FontSize="18" />
 
         <StackPanel Orientation="Horizontal" Height="80" Grid.Column="1" VerticalAlignment="Center"
