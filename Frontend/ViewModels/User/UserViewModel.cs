@@ -11,23 +11,19 @@ namespace Frontend.ViewModels.User;
 
 public class UserViewModel : ViewModelBase
 {
-    private readonly ApiService _api;
     private readonly UserModel _model;
 
-    public UserViewModel(ServiceProvider services, UserModel model) : base(services)
+    public UserViewModel(UserModel model, Func<UserModel, Task> editAction, Func<UserViewModel, Task> deleteAction)
     {
         _model = model;
-        _api = services.GetService<ApiService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
 
-        EditCommand = ReactiveCommand.Create(() =>
+        EditCommand = ReactiveCommand.CreateFromTask(async () =>
         {
-            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services, this));
+            await editAction(_model);
         });
         DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
         {
-            await DeleteAsync();
-            Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
+            await deleteAction(this);
         });
     }
 
@@ -102,11 +98,5 @@ public class UserViewModel : ViewModelBase
             _model.Roles = value;
             this.RaisePropertyChanged();
         }
-    }
-
-
-    private async Task DeleteAsync()
-    {
-        await _api.Users.Delete(Id);
     }
 }

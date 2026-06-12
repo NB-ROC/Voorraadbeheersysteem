@@ -7,9 +7,12 @@ using System.Linq;
 using System.Net.Mail;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using DynamicData;
+using DynamicData.Binding;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels.Components;
@@ -30,8 +33,22 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         _api = api;
         _navigation = navigation;
         _disposables = new CompositeDisposable();
+        
+        IObservable<bool> canSave = this.WhenAnyValue(
+                x => x.FirstName,
+                x => x.LastName,
+                x => x.Number,
+                x => x.Email,
+                (name, category, custom, desc) => true)
+            .CombineLatest(
+                Roles.ToObservableChangeSet()
+                    .AutoRefresh(r => r.IsSelected)
+                    .ToCollection()
+                    .Select(roles => roles.Any(r => r.IsSelected)),
+                (_, anyRole) => anyRole)
+            .Select(_ => IsFormValid);
 
-        SaveCommand = ReactiveCommand.CreateFromTask(SaveUserAsync);
+        SaveCommand = ReactiveCommand.CreateFromTask(SaveUserAsync, canSave);
     }
 
     #region Properties
@@ -94,9 +111,9 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
 
     public ICommand SaveCommand { get; }
 
-    public async Task SaveUserAsync()
+    private async Task SaveUserAsync()
     {
-        if (Number == null) return;
+        if (!Number.HasValue) return;
 
         UserModel user = new()
         {
@@ -160,11 +177,19 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         private set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    private static bool IsFormValid(string email)
+    
+    private bool IsFormValid =>
+        !string.IsNullOrWhiteSpace(FirstName) &&
+        !string.IsNullOrWhiteSpace(LastName) &&
+        Number is > 99999 and < 10000000 &&
+        IsValidEmail() &&
+        Roles.Any(x => x.IsSelected);
+    
+    private bool IsValidEmail()
     {
         try
         {
-            _ = new MailAddress(email);
+            _ = new MailAddress(Email);
             return true;
         }
         catch

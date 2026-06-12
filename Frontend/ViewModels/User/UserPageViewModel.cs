@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Services;
+using Frontend.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
@@ -12,22 +13,16 @@ namespace Frontend.ViewModels.User;
 
 public class UserPageViewModel : PageViewModelBase
 {
-    private readonly ApiService _api;
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
 
-    private int _notificationCount = 2;
-
-    public UserPageViewModel(ServiceProvider services) : base(services)
+    public UserPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api, INavigationService navigation) :  base(header, footer)
     {
-        _api = services.GetService<ApiService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
+        _api = api;
+        _navigation = navigation;
 
-        NavigateUserForm = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?
-                .NavigateTo(new UserFormViewModel(Services));
-        });
+        NavigateUserForm = ReactiveCommand.CreateFromTask(async () => await _navigation.NavigateTo<UserFormViewModel, UserModel>());
 
-        _ = LoadUsersAsync();
     }
 
     public ObservableCollection<UserViewModel> Users { get; } = [];
@@ -36,11 +31,28 @@ public class UserPageViewModel : PageViewModelBase
 
     public int NotificationCount
     {
-        get => _notificationCount;
-        set => this.RaiseAndSetIfChanged(ref _notificationCount, value);
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = 2;
+
+    public override async Task LoadAsync()
+    {
+        await LoadUsersAsync();
     }
 
-    public async Task LoadUsersAsync()
+    private async Task EditAction(UserModel user)
+    {
+        await _navigation.NavigateTo<UserFormViewModel, UserModel>(user);
+    }
+
+    private async Task DeleteAction(UserViewModel user)
+    {
+        (RequestResult result, bool success) = await _api.Users.Delete(user.Id);
+        
+        if (result == RequestResult.Success && success) Users.Remove(user);
+    }
+
+    private async Task LoadUsersAsync()
     {
         (RequestResult result, List<UserModel> users) =
             await _api.Users.LenderPage(1, 20);
@@ -48,6 +60,6 @@ public class UserPageViewModel : PageViewModelBase
         Users.Clear();
 
         foreach (UserModel user in users)
-            Users.Add(new UserViewModel(Services, user));
+            Users.Add(new UserViewModel(user, EditAction, DeleteAction));
     }
 }

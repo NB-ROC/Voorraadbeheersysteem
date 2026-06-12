@@ -9,8 +9,9 @@
         <ContentControl Content="{Binding Header}" />
         <StackPanel Grid.Row="1" Margin="20">
 
-            <StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <TextBlock FontSize="16" Text="{Binding CardIdText}" Margin="0,0,0,15" />
+                <Button Content="Reset kaart" Command="{Binding ResetCardIdCommand}" IsVisible="{Binding ResetCardVisible}"/>
             </StackPanel>
 
             <StackPanel>
