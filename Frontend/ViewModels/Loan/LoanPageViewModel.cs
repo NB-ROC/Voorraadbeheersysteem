@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Frontend.Models;
+using Frontend.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
@@ -12,44 +14,12 @@ namespace Frontend.ViewModels.Loan;
 
 public class LoanPageViewModel : PageViewModelBase
 {
-    private readonly ObservableCollection<LoanViewModel> _allLoans =
-    [
-        new(new LoanModel
-        {
-            ProductName = "Laptop",
-            BorrowerNumber = "123456",
-            LoanDate = "01-04-2026",
-            ReturnDate = "15-04-2026",
-            Status = "Active",
-            Image = "avares://FrontendAdmin/Assets/laptop.png"
-        }),
+    public ObservableCollection<LoanViewModel> AllLoans
+    {
+        get;
+    } = [];
 
-        new(new LoanModel
-        {
-            ProductName = "Book",
-            BorrowerNumber = "6767676",
-            LoanDate = "20-03-2026",
-            ReturnDate = "25-03-2026",
-            Status = "Overdue",
-            Image = "avares://FrontendAdmin/Assets/boek.jpg"
-        }),
-
-        new(new LoanModel
-        {
-            ProductName = "Tablet",
-            BorrowerNumber = "345678",
-            LoanDate = "01-02-2026",
-            ReturnDate = "10-02-2026",
-            Status = "Returned",
-            Image = "avares://FrontendAdmin/Assets/tablet.png"
-        })
-    ];
-
-    private string _borrowerQuery = "";
-
-    private string _productQuery = "";
-
-    public LoanPageViewModel(ServiceProvider services) : base(services)
+    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
     {
         this.WhenAnyValue(x => x.ProductQuery, x => x.BorrowerQuery)
             .Throttle(TimeSpan.FromMilliseconds(300))
@@ -65,15 +35,15 @@ public class LoanPageViewModel : PageViewModelBase
 
     public string ProductQuery
     {
-        get => _productQuery;
-        set => this.RaiseAndSetIfChanged(ref _productQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
 
     public string BorrowerQuery
     {
-        get => _borrowerQuery;
-        set => this.RaiseAndSetIfChanged(ref _borrowerQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
 
     public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
     public ReactiveCommand<Unit, Unit> ResetCommand { get; }
@@ -81,12 +51,11 @@ public class LoanPageViewModel : PageViewModelBase
     private void ApplyFilters()
     {
         string productQuery = ProductQuery.ToLower();
-        string borrowerQuery = BorrowerQuery.ToLower();
 
-        IEnumerable<LoanViewModel> filtered = _allLoans.Where(l =>
-            (l.ProductName.ToLower().Contains(productQuery) ||
-             l.LoanDate.ToLower().Contains(productQuery)) &&
-            l.BorrowerNumber.ToLower().Contains(borrowerQuery));
+        IEnumerable<LoanViewModel> filtered = AllLoans.Where(l =>
+            (l.ProductName.Contains(productQuery, StringComparison.OrdinalIgnoreCase) ||
+             l.LoanDate.Contains(productQuery, StringComparison.OrdinalIgnoreCase)) &&
+            l.BorrowerNumber.Contains(productQuery, StringComparison.OrdinalIgnoreCase));
 
         UpdateFilteredLoans(filtered);
     }
@@ -96,13 +65,21 @@ public class LoanPageViewModel : PageViewModelBase
         string productQuery = ProductQuery.ToLower();
         string borrowerQuery = BorrowerQuery.ToLower();
 
-        IEnumerable<LoanViewModel> filtered = _allLoans.Where(l =>
+        IEnumerable<LoanViewModel> filtered = AllLoans.Where(l =>
             l.Status == status &&
-            (l.ProductName.ToLower().Contains(productQuery) ||
-             l.LoanDate.ToLower().Contains(productQuery)) &&
-            l.BorrowerNumber.ToLower().Contains(borrowerQuery));
+            (l.ProductName.Contains(productQuery, StringComparison.OrdinalIgnoreCase) ||
+             l.LoanDate.Contains(productQuery, StringComparison.OrdinalIgnoreCase)) &&
+            l.BorrowerNumber.Contains(borrowerQuery, StringComparison.OrdinalIgnoreCase));
 
         UpdateFilteredLoans(filtered);
+    }
+
+    private void UpdateFilteredLoans(IEnumerable<LoanViewModel> loans)
+    {
+        FilteredLoans.Clear();
+
+        foreach (LoanViewModel loan in loans)
+            FilteredLoans.Add(loan);
     }
 
     private void ResetFilters()
@@ -113,11 +90,51 @@ public class LoanPageViewModel : PageViewModelBase
         ApplyFilters();
     }
 
-    private void UpdateFilteredLoans(IEnumerable<LoanViewModel> loans)
+    public override async Task LoadAsync()
     {
-        FilteredLoans.Clear();
+        await LoadLoans();
+        ResetFilters();
+    }
 
+    private async Task LoadLoans()
+    {
+        AllLoans.Clear();
+
+        List<LoanViewModel> loans =
+        [
+            new(new LoanModel
+            {
+                ProductName = "Laptop",
+                BorrowerNumber = "123456",
+                LoanDate = "01-04-2026",
+                ReturnDate = "15-04-2026",
+                Status = "Active",
+                Image = "avares://FrontendAdmin/Assets/laptop.png"
+            }),
+
+            new(new LoanModel
+            {
+                ProductName = "Book",
+                BorrowerNumber = "6767676",
+                LoanDate = "20-03-2026",
+                ReturnDate = "25-03-2026",
+                Status = "Overdue",
+                Image = "avares://FrontendAdmin/Assets/boek.jpg"
+            }),
+
+            new(new LoanModel
+            {
+                ProductName = "Tablet",
+                BorrowerNumber = "345678",
+                LoanDate = "01-02-2026",
+                ReturnDate = "10-02-2026",
+                Status = "Returned",
+                Image = "avares://FrontendAdmin/Assets/tablet.png"
+            })
+            
+        ];
+        
         foreach (LoanViewModel loan in loans)
-            FilteredLoans.Add(loan);
+            AllLoans.Add(loan);
     }
 }
