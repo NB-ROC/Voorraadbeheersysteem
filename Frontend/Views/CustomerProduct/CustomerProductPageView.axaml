@@ -15,12 +15,11 @@
             <StackPanel Margin="20,20,20,12" Spacing="4">
                 <TextBlock Text="Shop"
                            FontSize="28"
-                           FontWeight="Bold"
-                           Foreground="#1F2937" />
+                           FontWeight="Bold"/>
 
                 <TextBlock Text="Bekijk alle producten"
                            FontSize="13"
-                           Foreground="#6B7280" />
+                           Foreground="{StaticResource Gray}" />
             </StackPanel>
 
             <!-- PRODUCT LIST -->
@@ -32,8 +31,8 @@
 
                         <DataTemplate DataType="{x:Type product:ProductViewModel}">
 
-                            <Border Background="White"
-                                    BorderBrush="#E5E7EB"
+                            <Border Background="{StaticResource White}"
+                                    BorderBrush="{StaticResource DarkerWhite}"
                                     BorderThickness="1"
                                     CornerRadius="12"
                                     Padding="14"
@@ -45,7 +44,7 @@
                                     <!-- IMAGE -->
                                     <Border Width="72"
                                             Height="72"
-                                            Background="#F3F4F6"
+                                            Background="{StaticResource DarkerWhite}"
                                             CornerRadius="10">
 
                                         <Panel>
@@ -54,7 +53,7 @@
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        FontSize="22"
-                                                       Foreground="#9CA3AF"
+                                                       Foreground="{StaticResource Gray}"
                                                        IsVisible="{Binding IsImageLoading}" />
 
                                             <!-- Loaded -->
@@ -78,7 +77,7 @@
 
                                         <TextBlock Text="{Binding CategoryName}"
                                                    FontSize="12"
-                                                   Foreground="#9CA3AF" />
+                                                   Foreground="{StaticResource Gray}" />
 
                                         <TextBlock Text="{Binding Name}"
                                                    FontSize="16"
@@ -86,7 +85,7 @@
 
                                         <TextBlock Text="{Binding Description}"
                                                    FontSize="13"
-                                                   Foreground="#6B7280"
+                                                   Foreground="{StaticResource Gray}"
                                                    TextWrapping="Wrap" />
                                     </StackPanel>
 
@@ -97,13 +96,13 @@
 
                                         <Button Content="Toevoegen aan mandje"
                                                 Background="Orange"
-                                                Foreground="White"
+                                                Foreground="{StaticResource White}"
                                                 Padding="12,6"
                                                 CornerRadius="8" />
 
                                         <Button Content="Verwijderen"
                                                 Background="Red"
-                                                Foreground="White"
+                                                Foreground="{StaticResource White}"
                                                 Padding="12,6"
                                                 CornerRadius="8" />
 
