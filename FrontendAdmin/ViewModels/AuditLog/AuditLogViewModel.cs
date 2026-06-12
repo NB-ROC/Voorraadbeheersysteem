@@ -7,7 +7,7 @@ namespace FrontendAdmin.ViewModels.AuditLog;
 public class AuditLogViewModel : ViewModelBase
 {
     private readonly AuditLogModel _model;
- 
+
     public AuditLogViewModel(
         ServiceProvider services,
         AuditLogModel model)
@@ -15,7 +15,6 @@ public class AuditLogViewModel : ViewModelBase
     {
         _model = model;
     }
- 
     public int Id => _model.Id;
  
     public string Timestamp => _model.Timestamp;
@@ -32,15 +31,17 @@ public class AuditLogViewModel : ViewModelBase
  
     public string Title =>
         $"{ActorName} - {Action}";
- 
+
     public string Subtitle =>
         $"{EntityType} ({EntityId})";
  
+    //kleurcode per actie voor de badge in de View
     public string ActionColor => Action switch
     {
         "CREATE" => "#16A34A",
         "UPDATE" => "#D97706",
         "DELETE" => "#DC2626",
+        "LOGIN"  => "#7C3AED",
         "LOAN"   => "#2563EB",
         _        => "#6B7280"
     };

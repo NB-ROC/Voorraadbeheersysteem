@@ -17,6 +17,7 @@ public class AuditLogManager
     {
         _context.AuditLogs.Add(new AuditLog
         {
+            TimeStamp = DateTime.UtcNow,
             ActorId = actorId,
             Action = action,
             EntityType = entityType,

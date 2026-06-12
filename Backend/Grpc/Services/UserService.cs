@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Backend.Database;
 using Backend.Database.Managers;
 using Backend.Entities;
@@ -15,13 +16,19 @@ public class UserService : Users.UsersBase
     private readonly UserManager _manager;
     private readonly UserValidator _validator;
     private readonly AppDbContext _context;
+    private readonly AuditLogManager _auditLogManager;
 
-    public UserService(UserManager manager, AppDbContext context)
+    public UserService(UserManager manager, AppDbContext context, AuditLogManager auditLogManager)
     {
         _manager = manager;
         _validator = new UserValidator(manager);
         _context = context;
+        _auditLogManager = auditLogManager;
     }
+
+    private static int GetActorId(ServerCallContext context) =>
+        int.Parse(context.GetHttpContext().User
+            .FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserPageResponse> Page(UserPageRequest request, ServerCallContext context)
@@ -69,7 +76,7 @@ public class UserService : Users.UsersBase
         bool created = await _manager.Create(user);
         if (!created)
             return new UserCreateResponse { Success = false };
-        
+
         Notification notification = new()
         {
             Title = "Nieuwe registratie",
@@ -78,14 +85,21 @@ public class UserService : Users.UsersBase
         };
 
         _context.Notifications.Add(notification);
-
         await _context.SaveChangesAsync();
-        
+
         if (request.RoleIds.Count > 0)
         {
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
             await _manager.SetRoles(user.Id, roles);
         }
+
+        await _auditLogManager.Log(
+            GetActorId(context),
+            "CREATE",
+            "User",
+            user.Id.ToString(),
+            $"Gebruiker '{user.FirstName} {user.LastName}' aangemaakt"
+        );
 
         return new UserCreateResponse { Success = true };
     }
@@ -105,44 +119,41 @@ public class UserService : Users.UsersBase
         bool modified = await _manager.Modify(user);
         if (!modified)
             return new UserModifyResponse { Success = false };
-        
+
         if (request.RoleIds.Count > 0)
         {
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
             await _manager.SetRoles(user.Id, roles);
         }
 
+        await _auditLogManager.Log(
+            GetActorId(context),
+            "UPDATE",
+            "User",
+            user.Id.ToString(),
+            $"Gebruiker '{user.FirstName} {user.LastName}' aangepast"
+        );
+
         return new UserModifyResponse { Success = true };
-    }
-
-    private static MetaUser MapMeta(User user)
-    {
-        MetaUser meta = new()
-        {
-            Id = user.Id,
-            CardId = ByteString.CopyFrom(user.CardId),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Number = user.Number
-        };
-
-        meta.Roles.AddRange(user.UserRoles.Select(ur => new Role
-        {
-            Id = (int)ur.Role.Id,
-            Name = ur.Role.Name
-        }));
-
-        return meta;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
     public override async Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
     {
-        return new UserDeleteResponse
+        bool success = await _manager.Delete(request.Id);
+
+        if (success)
         {
-            Success = await _manager.Delete(request.Id)
-        };
+            await _auditLogManager.Log(
+                GetActorId(context),
+                "DELETE",
+                "User",
+                request.Id.ToString(),
+                $"Gebruiker verwijderd (id {request.Id})"
+            );
+        }
+
+        return new UserDeleteResponse { Success = success };
     }
 
     [AllowAnonymous]
@@ -172,6 +183,26 @@ public class UserService : Users.UsersBase
         {
             Users = { users.Select(MapMeta) }
         };
-        ;
+    }
+
+    private static MetaUser MapMeta(User user)
+    {
+        MetaUser meta = new()
+        {
+            Id = user.Id,
+            CardId = ByteString.CopyFrom(user.CardId),
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Number = user.Number
+        };
+
+        meta.Roles.AddRange(user.UserRoles.Select(ur => new Role
+        {
+            Id = (int)ur.Role.Id,
+            Name = ur.Role.Name
+        }));
+
+        return meta;
     }
 }

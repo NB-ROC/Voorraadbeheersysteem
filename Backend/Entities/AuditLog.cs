@@ -5,7 +5,7 @@ namespace Backend.Entities;
 public class AuditLog
 {
     public int Id { get; set; }
-    public DateTime TimeStamp { get; set; }
+    public DateTime TimeStamp { get; set; } = DateTime.Now;
     public int ActorId { get; set; }
     public User Actor { get; set; } = null!;
 
