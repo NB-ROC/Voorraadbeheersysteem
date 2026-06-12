@@ -13,7 +13,7 @@ public class LoginScannerViewModel : PageViewModelBase
     private void ScannerCallback(byte[] bytes)
     {
         (RequestResult result, (string name, string email)? tuple) =
-            Services.GetRequiredService<BackendService>().Users.LenderScan(bytes).Result;
+            Services.GetRequiredService<ApiService>().Users.LenderScan(bytes).Result;
 
         if (result != RequestResult.Success || tuple == null)
         {

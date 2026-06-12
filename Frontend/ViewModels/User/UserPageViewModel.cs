@@ -12,13 +12,13 @@ namespace Frontend.ViewModels.User;
 
 public class UserPageViewModel : PageViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly ApiService _api;
 
     private int _notificationCount = 2;
 
     public UserPageViewModel(ServiceProvider services) : base(services)
     {
-        _backend = services.GetService<BackendService>() ??
+        _api = services.GetService<ApiService>() ??
                    throw new NullReferenceException("Backend service not initialised");
 
         NavigateUserForm = ReactiveCommand.Create(() =>
@@ -43,7 +43,7 @@ public class UserPageViewModel : PageViewModelBase
     public async Task LoadUsersAsync()
     {
         (RequestResult result, List<UserModel> users) =
-            await _backend.Users.LenderPage(1, 20);
+            await _api.Users.LenderPage(1, 20);
 
         Users.Clear();
 

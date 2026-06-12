@@ -13,12 +13,12 @@ namespace Frontend.ViewModels.User;
 
 public class UserFormViewModel : PageViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly ApiService _api;
 
     public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
         base(services)
     {
-        _backend = services.GetService<BackendService>() ??
+        _api = services.GetService<ApiService>() ??
                    throw new NullReferenceException("Backend service not initialised");
 
         if (existing == null)
@@ -72,8 +72,8 @@ public class UserFormViewModel : PageViewModelBase
             };
 
             (RequestResult result, bool success) = await (existing == null
-                ? _backend.Users.Create(model)
-                : _backend.Users.Modify(model));
+                ? _api.Users.Create(model)
+                : _api.Users.Modify(model));
 
             if (result == RequestResult.Success && success)
                 Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));

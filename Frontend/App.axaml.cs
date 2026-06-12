@@ -20,43 +20,16 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            ServiceCollection serviceCollection = new();
+        ServiceCollection serviceCollection = new();
 
-            MainWindowViewModel mainWindowViewModel = new();
-            NavigationService navigationService = new(mainWindowViewModel);
-            BackendService backendService = new();
-            SmartCardService smartCardService = new();
+        serviceCollection.AddCommonServices();
+        serviceCollection.AddPageServices();
+        serviceCollection.AddFormServices();
 
-            serviceCollection.AddSingleton(navigationService);
-            serviceCollection.AddSingleton(backendService);
-            serviceCollection.AddSingleton(smartCardService);
-
-            DisableAvaloniaDataAnnotationValidation();
-
-            ServiceProvider services = serviceCollection.BuildServiceProvider();
-
-
-            mainWindowViewModel.CurrentPage = new LoginScannerViewModel(services);
-
-            desktop.MainWindow = new MainWindowView
-            {
-                DataContext = mainWindowViewModel
-            };
-        }
+        ServiceProvider services = serviceCollection.BuildServiceProvider();
+        MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
+        main.CurrentPage = services.GetRequiredService<LoginPageViewModel>();
 
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-        // remove each entry found
-        foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
-            BindingPlugins.DataValidators.Remove(plugin);
     }
 }

@@ -11,7 +11,7 @@ namespace Frontend.ViewModels.CustomerProduct;
 
 public class CustomerProductPageViewModel : PageViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly ApiService _api;
     private readonly ServiceProvider _services;
 
     private bool _isLoading;
@@ -19,7 +19,7 @@ public class CustomerProductPageViewModel : PageViewModelBase
     public CustomerProductPageViewModel(ServiceProvider services) : base(services)
     {
         _services = services;
-        _backend = services.GetRequiredService<BackendService>();
+        _api = services.GetRequiredService<ApiService>();
 
         _ = LoadProducts();
     }
@@ -34,12 +34,12 @@ public class CustomerProductPageViewModel : PageViewModelBase
 
     private async Task LoadProducts()
     {
-        await _backend.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
+        await _api.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
         try
         {
             IsLoading = true;
 
-            (RequestResult result, List<ProductModel> models) = await _backend.Products.Page(1, 20);
+            (RequestResult result, List<ProductModel> models) = await _api.Products.Page(1, 20);
 
             Products.Clear();
             foreach (ProductModel model in models) Products.Add(new ProductViewModel(Services, model));

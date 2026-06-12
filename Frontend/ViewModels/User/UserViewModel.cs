@@ -11,13 +11,13 @@ namespace Frontend.ViewModels.User;
 
 public class UserViewModel : ViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly ApiService _api;
     private readonly UserModel _model;
 
     public UserViewModel(ServiceProvider services, UserModel model) : base(services)
     {
         _model = model;
-        _backend = services.GetService<BackendService>() ??
+        _api = services.GetService<ApiService>() ??
                    throw new NullReferenceException("Backend service not initialised");
 
         EditCommand = ReactiveCommand.Create(() =>
@@ -107,6 +107,6 @@ public class UserViewModel : ViewModelBase
 
     private async Task DeleteAsync()
     {
-        await _backend.Users.Delete(Id);
+        await _api.Users.Delete(Id);
     }
 }

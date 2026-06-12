@@ -45,7 +45,7 @@ public class LoginPageViewModel : PageViewModelBase
 
     private async Task Login()
     {
-        bool success = await Services.GetService<BackendService>()!.LogIn(_email, Password);
+        bool success = await Services.GetService<ApiService>()!.LogIn(_email, Password);
 
         if (success) Services.GetService<NavigationService>()?.NavigateTo(new DashboardPageViewModel(Services));
     }

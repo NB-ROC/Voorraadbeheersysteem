@@ -22,7 +22,7 @@ public class HeaderViewModel : ViewModelBase
         smartCardService.ReadersAvailableChanged += OnReadersAvailableChanged;
 
 
-        UserModel? loggedInUser = services.GetRequiredService<BackendService>().LoggedInUser;
+        UserModel? loggedInUser = services.GetRequiredService<ApiService>().LoggedInUser;
 
         Greet = loggedInUser == null
             ? ""

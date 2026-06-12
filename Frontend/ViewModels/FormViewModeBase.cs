@@ -3,9 +3,10 @@ using Frontend.ViewModels.Components;
 
 namespace Frontend.ViewModels;
 
-public abstract class PageViewModelBase : ViewModelBase
+public abstract class FormViewModelBase<TModel> : ViewModelBase
+    where TModel : class
 {
-    public PageViewModelBase(HeaderViewModel header, FooterViewModel footer)
+    protected FormViewModelBase(HeaderViewModel header, FooterViewModel footer)
     {
         Header = header;
         Footer = footer;
@@ -14,5 +15,5 @@ public abstract class PageViewModelBase : ViewModelBase
     public HeaderViewModel Header { get; set; }
     public FooterViewModel Footer { get; set; }
 
-    public abstract Task LoadAsync();
+    public abstract Task LoadAsync(TModel? existing);
 }
