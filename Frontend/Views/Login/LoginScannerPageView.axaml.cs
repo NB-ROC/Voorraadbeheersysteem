@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace Frontend.Views.Login;
 
-public partial class LoginScannerView : UserControl
+public partial class LoginScannerPageView : UserControl
 {
-    public LoginScannerView()
+    public LoginScannerPageView()
     {
         InitializeComponent();
     }

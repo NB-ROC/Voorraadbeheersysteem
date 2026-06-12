@@ -28,8 +28,25 @@ public class App : Application
 
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
-        main.CurrentPage = services.GetRequiredService<LoginPageViewModel>();
-
+        INavigationService navigation = services.GetRequiredService<INavigationService>();
+        navigation.NavigateTo<LoginScannerPageViewModel>().Wait();
+        
+        switch (ApplicationLifetime)
+        {
+            case IClassicDesktopStyleApplicationLifetime desktop:
+                desktop.MainWindow = new MainWindowView
+                {
+                    DataContext = main
+                };
+                break;
+            case ISingleViewApplicationLifetime single:
+                single.MainView = new MainWindowView
+                {
+                    DataContext = main
+                };
+                break;
+        }
+        
         base.OnFrameworkInitializationCompleted();
     }
 }

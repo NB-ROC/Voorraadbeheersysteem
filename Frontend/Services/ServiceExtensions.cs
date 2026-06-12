@@ -34,7 +34,7 @@ public static class ServiceExtensions
             collection.TryAddSingleton<FooterViewModel>();
 
             collection
-                .AddSingleton<LoginScannerViewModel>()
+                .AddSingleton<LoginScannerPageViewModel>()
                 .AddSingleton<LoginPageViewModel>()
                 .AddSingleton<CustomerProductPageViewModel>()
                 .AddSingleton<DashboardPageViewModel>()

@@ -61,7 +61,7 @@ public class LoginPageViewModel : FormViewModelBase<LoginInfo>
     {
         if (existing == null)
         {
-            await _navigation.NavigateTo<DashboardPageViewModel>();
+            await _navigation.NavigateTo<LoginScannerPageViewModel>();
             return;
         }
         
