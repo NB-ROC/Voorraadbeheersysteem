@@ -1,27 +1,39 @@
+using System.Threading.Tasks;
 using Frontend.Services;
+using Frontend.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Frontend.ViewModels.Login;
 
 public class LoginScannerViewModel : PageViewModelBase
 {
-    public LoginScannerViewModel(ServiceProvider services) : base(services)
+    private readonly ISmartCardService _smartCard;
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
+    
+    public LoginScannerViewModel(HeaderViewModel header, FooterViewModel footer, ISmartCardService smartCard, IApiService api, INavigationService navigation) : base(header, footer)
     {
-        services.GetRequiredService<SmartCardService>().SetCardDetectedCallback(ScannerCallback);
+        _smartCard = smartCard;
+        _api = api;
+        _navigation = navigation;
     }
 
     private void ScannerCallback(byte[] bytes)
     {
-        (RequestResult result, (string name, string email)? tuple) =
-            Services.GetRequiredService<ApiService>().Users.LenderScan(bytes).Result;
+        (RequestResult result, (string name, string email)? tuple) = _api.Users.LenderScan(bytes).Result;
 
         if (result != RequestResult.Success || tuple == null)
         {
-            Services.GetRequiredService<SmartCardService>().SetCardDetectedCallback(ScannerCallback);
+            _smartCard.SetCardDetectedCallback(ScannerCallback);
             return;
         }
 
-        Services.GetRequiredService<NavigationService>()
-            .NavigateTo(new LoginPageViewModel(Services, tuple.Value.email, tuple.Value.name));
+        _navigation.NavigateTo<LoginPageViewModel, LoginInfo>(new LoginInfo(tuple.Value.name, tuple.Value.email));
+    }
+
+    public override Task LoadAsync()
+    {
+        _smartCard.SetCardDetectedCallback(ScannerCallback);
+        return Task.CompletedTask;
     }
 }
