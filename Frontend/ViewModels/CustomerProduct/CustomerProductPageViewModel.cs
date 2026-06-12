@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Services;
+using Frontend.ViewModels.Components;
 using Frontend.ViewModels.Product;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -11,43 +12,26 @@ namespace Frontend.ViewModels.CustomerProduct;
 
 public class CustomerProductPageViewModel : PageViewModelBase
 {
-    private readonly ApiService _api;
-    private readonly ServiceProvider _services;
+    private readonly IApiService _api;
 
-    private bool _isLoading;
-
-    public CustomerProductPageViewModel(ServiceProvider services) : base(services)
+    public CustomerProductPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api) : base(header, footer)
     {
-        _services = services;
-        _api = services.GetRequiredService<ApiService>();
-
-        _ = LoadProducts();
+        _api = api;
     }
 
     public ObservableCollection<ProductViewModel> Products { get; } = [];
 
-    public bool IsLoading
+    public override async Task LoadAsync()
     {
-        get => _isLoading;
-        set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        await LoadProducts();
     }
 
     private async Task LoadProducts()
     {
-        await _api.LogIn("testmail@roc-nijmegen.nl", "Placeholder1");
-        try
-        {
-            IsLoading = true;
+        (RequestResult result, List<ProductModel> models) = await _api.Products.Page(1, 20);
 
-            (RequestResult result, List<ProductModel> models) = await _api.Products.Page(1, 20);
-
-            Products.Clear();
-            foreach (ProductModel model in models) Products.Add(new ProductViewModel(Services, model));
-            this.RaisePropertyChanged(nameof(Products));
-        }
-        finally
-        {
-            IsLoading = false;
-        }
+        Products.Clear();
+        foreach (ProductModel model in models) Products.Add(new ProductViewModel(_api, model));
+        this.RaisePropertyChanged(nameof(Products));
     }
 }

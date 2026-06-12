@@ -9,13 +9,13 @@ namespace Frontend.ViewModels.Product;
 
 public class ProductViewModel : ViewModelBase
 {
-    private readonly ApiService _api;
+    private readonly IApiService _api;
     private readonly ProductModel _model;
 
-    public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
+    public ProductViewModel(IApiService api, ProductModel model)
     {
         _model = model;
-        _api = services.GetRequiredService<ApiService>();
+        _api = api;
 
         _ = LoadImageAsync();
     }
