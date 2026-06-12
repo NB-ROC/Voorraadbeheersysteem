@@ -102,11 +102,12 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    private void OnScan(byte[] uid)
+    private bool OnScan(byte[] uid)
     {
         _cardId = uid;
         CardIdText = "Kaartinformatie opgehaald! :D";
         this.RaisePropertyChanged(nameof(ResetCardVisible));
+        return true;
     }
 
     public ICommand ResetCardIdCommand { get; }

@@ -16,7 +16,7 @@ public interface ISmartCardService : IDisposable
 
     event Action<bool>? ReadersAvailableChanged;
 
-    void SetCardDetectedCallback(Action<byte[]> callback);
+    void SetCardDetectedCallback(Func<byte[], bool> callback);
 
     void Start();
     void Stop();
@@ -55,7 +55,7 @@ public sealed class SmartCardService : ISmartCardService
     // -------------------------------------------------------------------------
     // Private state
     // -------------------------------------------------------------------------
-    private Action<byte[]>? _cardDetectedCallback;
+    private Func<byte[], bool>? _cardDetectedCallback;
 
     private CancellationTokenSource? _cts;
     private bool _disposed;
@@ -116,7 +116,7 @@ public sealed class SmartCardService : ISmartCardService
     ///     detected on any reader.  The <paramref name="callback" /> receives the raw
     ///     UID bytes returned by the card.
     /// </summary>
-    public void SetCardDetectedCallback(Action<byte[]> callback)
+    public void SetCardDetectedCallback(Func<byte[], bool> callback)
     {
         _cardDetectedCallback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
@@ -273,8 +273,8 @@ public sealed class SmartCardService : ISmartCardService
             {
                 byte[]? uid = ReadUid(readerName);
                 if (uid == null || _cardDetectedCallback == null) return;
-                _cardDetectedCallback(uid);
-                _cardDetectedCallback = null;
+                bool disposeCallback = _cardDetectedCallback(uid);
+                if (disposeCallback) _cardDetectedCallback = null;
             }
             catch (Exception ex)
             {

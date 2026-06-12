@@ -18,8 +18,6 @@ public class User
 
     public int Number { get; set; }
 
-    public bool IsBlocked { get; set; }
-
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;
 
     [MaxLength(NameLength)] public string FirstName { get; set; } = null!;

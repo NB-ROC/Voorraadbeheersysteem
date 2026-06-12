@@ -19,18 +19,18 @@ public class LoginScannerPageViewModel : PageViewModelBase
         _navigation = navigation;
     }
 
-    private void ScannerCallback(byte[] bytes)
+    private bool ScannerCallback(byte[] bytes)
     {
 
         (RequestResult result, (string email, string name)? tuple) = _api.Users.LenderScan(bytes).Result;
 
         if (result != RequestResult.Success || tuple == null)
         {
-            _smartCard.SetCardDetectedCallback(ScannerCallback);
-            return;
+            return false;
         }
 
         _navigation.NavigateTo<LoginPageViewModel, LoginInfo>(new LoginInfo(tuple.Value.name, tuple.Value.email));
+        return true;
     }
 
     public override Task LoadAsync()

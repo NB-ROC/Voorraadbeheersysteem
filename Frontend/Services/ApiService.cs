@@ -312,7 +312,7 @@ public class UserEndpoint
             return (GetFailCode(e), null);
         }
 
-        return (RequestResult.Success, (response.Email, response.Name));
+        return (RequestResult.Success, response.HasEmail ? (response.Email, response.Name) : null);
     }
 
     public async Task<(RequestResult, List<UserModel>)> LenderPage(int page, int pageSize)

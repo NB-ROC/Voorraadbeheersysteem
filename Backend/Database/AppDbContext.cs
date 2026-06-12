@@ -148,7 +148,6 @@ public class AppDbContext : DbContext
             {
                 CardId = cardId,
                 Number = 123456,
-                IsBlocked = false,
                 Email = "testmail@roc-nijmegen.nl",
                 PasswordHash = hasher.HashPassword(null!, "Placeholder1"),
                 FirstName = "Admin",
