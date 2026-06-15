@@ -26,8 +26,8 @@ internal class Program
 
         // TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
         builder.Services.AddDbContext<AppDbContext>(options =>
-             options.UseInMemoryDatabase("testing"));
-        // 00builder.Services.AddDbContext<AppDbContext>();
+            options.UseInMemoryDatabase("testing"));
+        // builder.Services.AddDbContext<AppDbContext>();
 
         builder.Services.AddDbContext<AppDbContext>();
         builder.Services.AddScoped<UserManager>();
