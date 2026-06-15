@@ -16,32 +16,32 @@ public class LoanPageViewModel : PageViewModelBase
     [
         new(new LoanModel
         {
-            ProductName = "Laptop",
+            ProductName = "stressbal",
             BorrowerNumber = "123456",
             LoanDate = "01-04-2026",
             ReturnDate = "15-04-2026",
             Status = "Active",
-            Image = "avares://FrontendAdmin/Assets/laptop.png"
+            Image = "avares://Frontend/Assets/stressbal.jpg"
         }),
 
         new(new LoanModel
         {
-            ProductName = "Book",
+            ProductName = "stressbal",
             BorrowerNumber = "6767676",
             LoanDate = "20-03-2026",
             ReturnDate = "25-03-2026",
             Status = "Overdue",
-            Image = "avares://FrontendAdmin/Assets/boek.jpg"
+            Image = "avares://Frontend/Assets/stressbal.jpg"
         }),
 
         new(new LoanModel
         {
-            ProductName = "Tablet",
+            ProductName = "stressbal",
             BorrowerNumber = "345678",
             LoanDate = "01-02-2026",
             ReturnDate = "10-02-2026",
             Status = "Returned",
-            Image = "avares://FrontendAdmin/Assets/tablet.png"
+            Image = "avares://Frontend/Assets/stressbal.jpg"
         })
     ];
 
