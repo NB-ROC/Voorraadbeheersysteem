@@ -15,10 +15,16 @@ public class AuditLogPageViewModel : PageViewModelBase
     public ObservableCollection<AuditLogViewModel> Logs { get; } = [];
     public ObservableCollection<AuditLogViewModel> FilteredLogs { get; } = [];  
     private int _page = 1;
- 
+    private static int _instanceCount;
+
     public AuditLogPageViewModel(ServiceProvider services)
         : base(services)
     {
+        _instanceCount++;
+
+        Console.WriteLine(
+            $"AuditLogPageViewModel instance #{_instanceCount}");
+
         this.WhenAnyValue(
                 x => x.AuditLogQuery,
                 x => x.AdminQuery,
@@ -68,11 +74,7 @@ public class AuditLogPageViewModel : PageViewModelBase
     public string SelectedStatus
     {
         get => _selectedStatus;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _selectedStatus, value);
-            ApplyFilters();
-        }
+        set => this.RaiseAndSetIfChanged(ref _selectedStatus, value);
     }
     public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
     public ReactiveCommand<Unit, Unit> ResetCommand { get; }
@@ -105,7 +107,6 @@ public class AuditLogPageViewModel : PageViewModelBase
     private void FilterByStatus(string status)
     {
         SelectedStatus = (status ?? "").ToLowerInvariant();
-        ApplyFilters();
     }
 
     private void ResetFilters()
