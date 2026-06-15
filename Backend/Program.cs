@@ -32,6 +32,7 @@ internal class Program
         builder.Services.AddDbContext<AppDbContext>();
         builder.Services.AddScoped<UserManager>();
         builder.Services.AddScoped<ProductManager>();
+        builder.Services.AddScoped<AuditLogManager>();
 
         builder.Services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
@@ -73,6 +74,7 @@ internal class Program
         app.MapGrpcService<AuthService>();
         app.MapGrpcService<ScanService>();
         app.MapGrpcService<NotificationService>();
+        app.MapGrpcService<AuditLogService>();
         
         app.Run();
 

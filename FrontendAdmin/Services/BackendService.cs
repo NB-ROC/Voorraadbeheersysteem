@@ -9,6 +9,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
+using Protos.AuditLog;
 using Protos.Auth;
 using Protos.Product;
 using Protos.User;
@@ -31,6 +32,7 @@ public class BackendService
         Products = new ProductEndpoint(new Products.ProductsClient(invoker));
         Users = new UserEndpoint(new Users.UsersClient(invoker));
         Notifications = new NotificationEndpoint(new Notifications.NotificationsClient(invoker));
+        AuditLogs = new AuditLogEndpoint(new AuditLogs.AuditLogsClient(invoker));
     }
 
     private string Token { get; set; } = string.Empty;
@@ -41,6 +43,7 @@ public class BackendService
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
+    public AuditLogEndpoint AuditLogs { get; }
     
     public NotificationEndpoint Notifications { get; }
     public async Task<bool> LogIn(string email, string password)
@@ -618,6 +621,7 @@ public class ProductEndpoint
             : RequestResult.Failed;
     }
 }
+
 public class NotificationEndpoint
 {
     private readonly Notifications.NotificationsClient _client;
@@ -651,6 +655,56 @@ public class NotificationEndpoint
             }).ToList()
         );
     }
+    private static RequestResult GetFailCode(RpcException e)
+    {
+        return e.StatusCode == StatusCode.PermissionDenied
+            ? RequestResult.Denied
+            : RequestResult.Failed;
+    }
+}
+
+public class AuditLogEndpoint
+{
+    private readonly AuditLogs.AuditLogsClient _client;
+
+    public AuditLogEndpoint(AuditLogs.AuditLogsClient client)
+    {
+        _client = client;
+    }
+
+    public async Task<(RequestResult, List<AuditLogModel>)> Page()
+    {
+        AuditLogPageResponse? response;
+
+        try
+        {
+            response = await _client.PageAsync(
+                new AuditLogPageRequest
+                {
+                    Page = 1,
+                    PageSize = 100
+                });
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Logs.Select(l => new AuditLogModel
+            {
+                Id = l.Id,
+                Timestamp = l.Timestamp,
+                ActorName = l.ActorName,
+                Action = l.Action,
+                EntityType = l.EntityType,
+                EntityId = l.EntityId,
+                Description = l.Description
+            }).ToList()
+        );
+    }
 
     private static RequestResult GetFailCode(RpcException e)
     {
@@ -659,4 +713,5 @@ public class NotificationEndpoint
             : RequestResult.Failed;
     }
 }
+
 #endregion

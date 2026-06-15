@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Backend.Database;
+using Backend.Database.Managers;
 using Backend.Entities;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace Backend.Grpc.Services;
 public class ScanService : Scans.ScansBase
 {
     private readonly AppDbContext _context;
+    private readonly AuditLogManager _auditLogManager;
 
-    public ScanService(AppDbContext context)
+    public ScanService(AppDbContext context, AuditLogManager auditLogManager)
     {
         _context = context;
+        _auditLogManager = auditLogManager;
     }
 
     public override async Task<TryLoginResponse> TryLogin(
@@ -43,6 +46,14 @@ public class ScanService : Scans.ScansBase
             .Any(ur => ur.RoleId == RoleType.Lender);
 
         string token = GenerateToken(user, roles);
+
+        await _auditLogManager.Log(
+            user.Id,
+            "LOGIN",
+            "User",
+            user.Id.ToString(),
+            $"'{user.FirstName} {user.LastName}' heeft ingelogd via kaart"
+        );
 
         TryLoginResponse response = new()
         {

@@ -24,13 +24,13 @@ public class LoginPageViewModel : PageViewModelBase
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    } = "Placeholder1";
 
     public string Email
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    } = "testmail@roc-nijmegen.nl";
 
     public string ErrorMessage
     {
