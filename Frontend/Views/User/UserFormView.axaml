@@ -9,8 +9,9 @@
         <ContentControl Content="{Binding Header}" />
         <StackPanel Grid.Row="1" Margin="20">
 
-            <StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <TextBlock FontSize="16" Text="{Binding CardIdText}" Margin="0,0,0,15" />
+                <Button Content="Reset kaart" Command="{Binding ResetCardIdCommand}" IsVisible="{Binding ResetCardVisible}"/>
             </StackPanel>
 
             <StackPanel>
@@ -40,16 +41,26 @@
             </StackPanel>
 
             <StackPanel Margin="0,0,0,10">
-                <TextBlock Text="Rollen:" />
 
-                <ItemsControl ItemsSource="{Binding Roles}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Content="{Binding Name}"
-                                      IsChecked="{Binding IsSelected}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <TextBlock FontWeight="Bold" Text="Rollen:" />
+
+                <Border BorderThickness="{Binding RolesErrorBorderThickness}"
+                        BorderBrush="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                        CornerRadius="{DynamicResource ControlCornerRadius}"
+                        Padding="10"
+                        Margin="{Binding RolesErrorBorderMargin}">
+                    <ItemsControl ItemsSource="{Binding Roles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Name}"
+                                          IsChecked="{Binding IsSelected}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+                <TextBlock
+                    Text="{Binding RolesError}"
+                    Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}" />
             </StackPanel>
 
             <TextBlock Foreground="Red"

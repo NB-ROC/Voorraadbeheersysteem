@@ -1,9 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:models="clr-namespace:FrontendAdmin.Models"
              xmlns:user="clr-namespace:FrontendAdmin.ViewModels.User"
-             x:DataType="{x:Type user:UserFormViewModel}"
-             x:Class="FrontendAdmin.Views.User.UserFormView">
+             xmlns:models="clr-namespace:FrontendAdmin.Models"
+             x:Class="FrontendAdmin.Views.User.UserFormView"
+             x:DataType="user:UserFormViewModel">
 
     <StackPanel Margin="20">
 
@@ -33,21 +33,35 @@
                            Margin="0,0,0,10" />
         </StackPanel>
 
-        <StackPanel>
-            <TextBlock Text="Rol ID:" />
-            <TextBox Text="{Binding RoleId}" Margin="0,0,0,10" />
+        <StackPanel Margin="0,0,0,10">
+
+            <TextBlock FontWeight="Bold" Text="Rollen:" />
+
+            <Border BorderThickness="{Binding RolesErrorBorderThickness}"
+                    BorderBrush="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    Padding="10"
+                    Margin="{Binding RolesErrorBorderMargin}">
+                <ItemsControl ItemsSource="{Binding Roles}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Name}"
+                                      IsChecked="{Binding IsSelected}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+            <TextBlock
+                Text="{Binding RolesError}"
+                Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}" />
         </StackPanel>
 
-        <CheckBox Content="Geblokkeerd"
-                  IsChecked="{Binding IsBlocked}"
-                  Margin="0,0,0,10" />
+        <Button Content="Opslaan"
+                Command="{Binding SaveCommand}" />
 
         <TextBlock Foreground="Red"
                    Text="{Binding Error}"
                    Margin="0,0,0,10" />
-
-        <Button Content="Opslaan"
-                Command="{Binding SaveCommand}" />
 
     </StackPanel>
 </UserControl>

@@ -29,6 +29,7 @@ internal class Program
             options.UseInMemoryDatabase("testing"));
         // builder.Services.AddDbContext<AppDbContext>();
 
+
         builder.Services.AddDbContext<AppDbContext>();
         builder.Services.AddScoped<UserManager>();
         builder.Services.AddScoped<ProductManager>();
@@ -72,7 +73,6 @@ internal class Program
         app.MapGrpcService<UserService>();
         app.MapGrpcService<ProductService>();
         app.MapGrpcService<AuthService>();
-        app.MapGrpcService<ScanService>();
         app.MapGrpcService<NotificationService>();
         app.MapGrpcService<AuditLogService>();
         

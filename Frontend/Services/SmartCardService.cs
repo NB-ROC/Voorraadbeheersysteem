@@ -10,6 +10,18 @@ using PCSC.Monitoring;
 
 namespace Frontend.Services;
 
+public interface ISmartCardService : IDisposable
+{
+    bool HasAvailableReader { get; }
+
+    event Action<bool>? ReadersAvailableChanged;
+
+    void SetCardDetectedCallback(Func<byte[], bool> callback);
+
+    void Start();
+    void Stop();
+}
+
 /// <summary>
 ///     A reactive, hot-pluggable smart card service that monitors all connected PC/SC
 ///     readers simultaneously and invokes a user-supplied callback with the card UID
@@ -26,7 +38,7 @@ namespace Frontend.Services;
 ///     svc.Stop();
 ///     svc.Dispose();
 /// </summary>
-public sealed class SmartCardService : IDisposable
+public sealed class SmartCardService : ISmartCardService
 {
     // -------------------------------------------------------------------------
     // APDU that asks the reader for the card UID (Get Data – UID)
@@ -43,7 +55,7 @@ public sealed class SmartCardService : IDisposable
     // -------------------------------------------------------------------------
     // Private state
     // -------------------------------------------------------------------------
-    private Action<byte[]>? _cardDetectedCallback;
+    private Func<byte[], bool>? _cardDetectedCallback;
 
     private CancellationTokenSource? _cts;
     private bool _disposed;
@@ -104,7 +116,7 @@ public sealed class SmartCardService : IDisposable
     ///     detected on any reader.  The <paramref name="callback" /> receives the raw
     ///     UID bytes returned by the card.
     /// </summary>
-    public void SetCardDetectedCallback(Action<byte[]> callback)
+    public void SetCardDetectedCallback(Func<byte[], bool> callback)
     {
         _cardDetectedCallback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
@@ -254,20 +266,36 @@ public sealed class SmartCardService : IDisposable
     {
         string? readerName = e.ReaderName;
         Console.WriteLine("[SmartCardService] Card inserted: " + readerName);
+        if (_cardDetectedCallback == null) return;
 
         Task.Run(() =>
         {
+
+            byte[]? uid;
             try
             {
-                byte[]? uid = ReadUid(readerName);
-                if (uid == null || _cardDetectedCallback == null) return;
-                _cardDetectedCallback(uid);
-                _cardDetectedCallback = null;
+                uid = ReadUid(readerName);
+                if (uid == null) throw new NullReferenceException("UID is null");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[SmartCardService] Error reading UID from '{readerName}': {ex.Message}");
+                return;
             }
+
+            Console.WriteLine(string.Join(',', uid));
+            bool disposeCallback;
+            try
+            {
+                disposeCallback = _cardDetectedCallback(uid);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[SmartCardService] Error dispose callback from '{_cardDetectedCallback.Method}': {ex.Message}");
+                return;
+            }
+            if (disposeCallback) _cardDetectedCallback = null;
+            
         });
     }
 

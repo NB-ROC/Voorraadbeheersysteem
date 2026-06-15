@@ -5,25 +5,24 @@ using System.Reactive;
 using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
+using FrontendAdmin.ViewModels.Components;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductPageViewModel : PageViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
 
-    public ProductPageViewModel(ServiceProvider services) : base(services)
+    public ProductPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api,
+        INavigationService navigationService) : base(header, footer)
     {
-        _backend = Services.GetService<BackendService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
+        _api = api;
+        _navigation = navigationService;
 
-        _ = LoadProducts();
-        NavigateProductForm = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services));
-        });
+        NavigateProductForm = ReactiveCommand.CreateFromTask(async () =>
+            await _navigation.NavigateTo<ProductFormViewModel, ProductModel>());
     }
 
 
@@ -31,17 +30,33 @@ public class ProductPageViewModel : PageViewModelBase
 
     public ReactiveCommand<Unit, Unit> NavigateProductForm { get; }
 
-    private async Task LoadProducts()
+    private async Task EditProduct(ProductModel product)
     {
-        (RequestResult result, List<ProductModel> products) = await _backend.Products.Page(1, 20);
+        await _navigation.NavigateTo<ProductFormViewModel, ProductModel>(product);
+    }
 
+    private async Task DeleteProduct(ProductViewModel product)
+    {
+        (RequestResult, bool) valueTuple = await _api.Products.Delete(product.Id);
+
+        if (valueTuple is { Item1: RequestResult.Success, Item2: true }) Products.Remove(product);
+    }
+
+    public override async Task LoadAsync()
+    {
         Products.Clear();
+
+        (RequestResult result, List<ProductModel> products) = await _api.Products.Page(1, 20);
+
+        if (result != RequestResult.Success) return;
+
         foreach (ProductModel product in products)
         {
             Console.WriteLine(product.Id);
+            ProductViewModel productViewModel = new(_api, product, EditProduct, DeleteProduct);
+            await productViewModel.LoadImageAsync();
             Products.Add(
-                new ProductViewModel(Services, product
-                )
+                productViewModel
             );
         }
     }

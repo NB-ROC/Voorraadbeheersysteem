@@ -33,7 +33,7 @@
                       ColumnSpacing="10">
 
                     <!-- Zoekbalk -->
-                    <Border Grid.Column="0"  BoxShadow="0 4 10 #33000000"
+                    <Border Grid.Column="0" BoxShadow="0 4 10 #33000000"
                             Background="#F9FAFB"
                             BorderBrush="#D1D5DB"
                             BorderThickness="1"
@@ -46,7 +46,7 @@
                     </Border>
 
                     <!-- Filter knop -->
-                    
+
                     <Button Grid.Column="1"
                             Content="Filters"
                             Height="38"

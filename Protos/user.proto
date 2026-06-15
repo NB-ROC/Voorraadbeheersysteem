@@ -18,7 +18,7 @@ service Users {
 // Meta
 message MetaUser {
   int32 id = 1;
-  bytes card_id = 2;
+  optional bytes card_id = 2;
   string first_name = 3;
   string last_name = 4;
   string email = 5;
@@ -47,7 +47,7 @@ message UserGetResponse {
 
 // Create
 message UserCreateRequest {
-  bytes card_id = 2;
+  optional bytes card_id = 2;
   string first_name = 3;
   string last_name = 4;
   string email = 5;

@@ -5,34 +5,24 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
 public class ProductViewModel : ViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly IApiService _api;
     private readonly ProductModel _model;
 
-    public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
+    public ProductViewModel(IApiService api, ProductModel model,
+        Func<ProductModel, Task> editAction,
+        Func<ProductViewModel, Task> deleteAction)
     {
-        Console.WriteLine(model.Id);
-        _backend = services.GetService<BackendService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
+        _api = api;
         _model = model;
 
-        EditCommand = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?.NavigateTo(new ProductFormViewModel(Services, this));
-        });
-        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            await DeleteAsync();
-            Services.GetService<NavigationService>()?.NavigateTo(new ProductPageViewModel(Services));
-        });
-
-        _ = LoadImageAsync();
+        EditCommand = ReactiveCommand.CreateFromTask(() => editAction(_model));
+        DeleteCommand = ReactiveCommand.CreateFromTask(() => deleteAction(this));
     }
 
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
@@ -53,11 +43,11 @@ public class ProductViewModel : ViewModelBase
 
     public CategoryModel CategoryModel
     {
-        get => _model.Category;
+        get => _model.CategoryModel;
         set
         {
-            if (_model.Category.Equals(value)) return;
-            _model.Category = value;
+            if (_model.CategoryModel.Equals(value)) return;
+            _model.CategoryModel = value;
             this.RaisePropertyChanged();
         }
     }
@@ -115,17 +105,12 @@ public class ProductViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private async Task DeleteAsync()
-    {
-        await _backend.Products.Delete(Id);
-    }
-
-    private async Task LoadImageAsync()
+    public async Task LoadImageAsync()
     {
         IsImageLoading = true;
         ImageFailed = false;
 
-        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(ImageName);
+        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _api.Products.Image(ImageName);
 
         if (result == RequestResult.Success) Thumbnail = image!.Value.bitmap;
         else ImageFailed = true;

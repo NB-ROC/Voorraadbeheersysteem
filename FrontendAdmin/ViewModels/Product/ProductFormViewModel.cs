@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -10,118 +15,80 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
+using DynamicData;
+using DynamicData.Binding;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
+using FrontendAdmin.ViewModels.Components;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Product;
 
-public class ProductFormViewModel : ViewModelBase
+public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorInfo
 {
-    private readonly BackendService _backend;
-    private readonly ProductViewModel? _existing;
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
+    private CompositeDisposable _disposables = new();
 
-    public ProductFormViewModel(ServiceProvider services, ProductViewModel? existing = null)
-        : base(services)
+    public ProductFormViewModel(IApiService api, INavigationService navigation, HeaderViewModel header,
+        FooterViewModel footer)
+        : base(header, footer)
     {
-        _backend = Services.GetService<BackendService>()
-                   ?? throw new NullReferenceException("Backend service not initialised");
+        _api = api;
+        _navigation = navigation;
 
-        _existing = existing;
 
-        this.WhenAnyValue(
-                x => x.Name,
-                x => x.CategoryModel,
-                x => x.Description,
-                x => x.ImageBytes,
-                x => x.CustomCategory
-            )
-            .Subscribe(_ => Validate());
         this.WhenAnyValue(x => x.CategoryModel)
             .Subscribe(_ => this.RaisePropertyChanged(nameof(IsCustomCategory)));
+        this.WhenAnyValue(x => x.ImageBytes)
+            .Subscribe(_ => ImageError = ImageBytes == null
+                ? "Selecteer een afbeelding."
+                : string.Empty);
 
+        IObservable<bool> canSave = this.WhenAnyValue(
+                x => x.Name,
+                x => x.CategoryModel,
+                x => x.CustomCategory,
+                x => x.Description,
+                x => x.ImageBytes,
+                (name, category, custom, desc, image) => true)
+            .CombineLatest(
+                Roles.ToObservableChangeSet()
+                    .AutoRefresh(r => r.IsSelected)
+                    .ToCollection()
+                    .Select(roles => roles.Any(r => r.IsSelected)),
+                (_, anyRole) => anyRole)
+            .Select(_ => IsFormValid);
+
+        SaveCommand = ReactiveCommand.CreateFromTask(SaveProductAsync, canSave);
         GetImageCommand = ReactiveCommand.CreateFromTask(OpenImageFileAsync);
-
-        SaveCommand = ReactiveCommand.CreateFromTask(
-            SaveProductAsync,
-            this.WhenAnyValue(x => x.Error,
-                error => string.IsNullOrWhiteSpace(error)));
-
-        _ = LoadLookupDataAsync(existing);
-        
     }
-
-    #region Validation
-
-    private void Validate()
-    {
-        if (string.IsNullOrWhiteSpace(Name))
-        {
-            Error = "Naam is verplicht.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(CategoryModel?.Name))
-        {
-            Error = "Categorie is verplicht.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(Description))
-        {
-            Error = "Beschrijving is verplicht.";
-            return;
-        }
-
-        if (ImageBytes == null || ImageBytes.Length == 0)
-        {
-            Error = "Selecteer een afbeelding.";
-            return;
-        }
-
-        if (IsCustomCategory && string.IsNullOrWhiteSpace(CustomCategory))
-        {
-            Error = "Voer een naam in voor de nieuwe categorie.";
-            return;
-        }
-
-        if (!Roles.Any(x => x.IsSelected))
-        {
-            Error = "Minstens één rol is verplicht.";
-            return;
-        }
-
-        Error = string.Empty;
-    }
-
-    #endregion
 
     #region Save
 
     private async Task SaveProductAsync()
     {
+        if (CategoryModel == null) return;
+
         ProductModel model = new()
         {
-            Id = Id,
+            Id = _id ?? -1,
             Name = Name,
-            Category = CategoryModel?.Id == NewCategoryOption.Id
+            CategoryModel = CategoryModel.Id == NewCategoryOption.Id
                 ? new CategoryModel { Id = -1, Name = CustomCategory }
-                : CategoryModel!,
+                : CategoryModel,
             Roles = SelectedRoleIds.Select(id => new RoleModel { Id = id }).ToList(),
             Description = Description
         };
-        
-        
+
 
         (RequestResult result, bool success) =
-            await (_existing == null
-                ? _backend.Products.Create(model, ImageBytes)
-                : _backend.Products.Modify(model, ImageBytes));
+            await (_id == null
+                ? _api.Products.Create(model, ImageBytes)
+                : _api.Products.Modify(model, ImageBytes));
 
         if (result == RequestResult.Success && success)
-            Services.GetService<NavigationService>()
-                ?.NavigateTo(new ProductPageViewModel(Services));
+            await _navigation.NavigateTo<ProductPageViewModel>();
     }
 
     #endregion
@@ -177,7 +144,53 @@ public class ProductFormViewModel : ViewModelBase
 
     #region Properties
 
-    public int Id { get; set; }
+    private int? _id;
+
+    private byte[]? ImageBytes
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    [Required(ErrorMessage = "Naam is verplicht.")]
+    public string Name
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    [Required(ErrorMessage = "Je moet een categorie kiezen")]
+    public CategoryModel? CategoryModel
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = null!;
+
+    [Required(ErrorMessage = "Beschrijving is verplicht.")]
+    public string Description
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    [Required(ErrorMessage = "Naam voor de nieuwe categorie is verplicht")]
+    public string CustomCategory
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
+    private int[] SelectedRoleIds =>
+        Roles
+            .Where(x => x.IsSelected)
+            .Select(x => x.Id)
+            .ToArray();
+
+    #endregion
+
+    #region UI
+
+    private static readonly CategoryModel NewCategoryOption = new() { Id = -1, Name = "＋ Nieuwe categorie..." };
 
     public Bitmap? PreviewImage
     {
@@ -185,29 +198,35 @@ public class ProductFormViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public byte[]? ImageBytes
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public ObservableCollection<CategoryModel> Categories { get; } = [];
 
-    public string Name
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
 
-    public CategoryModel CategoryModel
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = null!;
+    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(0)
+        : new Thickness(1);
 
-    public string Description
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = string.Empty;
+    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(1)
+        : new Thickness(0);
+
+    public Thickness ImageErrorBorderThickness => string.IsNullOrWhiteSpace(ImageError)
+        ? new Thickness(0)
+        : new Thickness(1);
+
+    public Thickness ImageErrorBorderMargin => string.IsNullOrWhiteSpace(ImageError)
+        ? new Thickness(1)
+        : new Thickness(0);
+
+    public ICommand SaveCommand { get; }
+    public ICommand GetImageCommand { get; }
+
+    public bool IsCustomCategory =>
+        CategoryModel?.Id == NewCategoryOption.Id;
+
+    #endregion
+
+    #region Validation
 
     public string Error
     {
@@ -215,35 +234,77 @@ public class ProductFormViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public string CustomCategory
+    public string RolesError
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(RolesErrorBorderThickness));
+            this.RaisePropertyChanged(nameof(RolesErrorBorderMargin));
+        }
     } = string.Empty;
-    
-    public static readonly CategoryModel NewCategoryOption = new() { Id = -2, Name = "＋ Nieuwe categorie..." };
 
-    public ObservableCollection<CategoryModel> Categories { get; } = [];
+    public string ImageError
+    {
+        get;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(ImageErrorBorderThickness));
+            this.RaisePropertyChanged(nameof(ImageErrorBorderMargin));
+        }
+    } = string.Empty;
 
-    public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
+    public string this[string columnName]
+    {
+        get
+        {
+            ValidationContext context = new(this) { MemberName = columnName };
+            List<ValidationResult> results = [];
+            object? value = GetType().GetProperty(columnName)?.GetValue(this);
 
-    public int[] SelectedRoleIds =>
-        Roles
-            .Where(x => x.IsSelected)
-            .Select(x => x.Id)
-            .ToArray();
+            if (!Validator.TryValidateProperty(value, context, results))
+            {
+                string? message = results.First().ErrorMessage;
+                if (!string.IsNullOrEmpty(message)) return message;
+            }
 
-    public ICommand SaveCommand { get; }
-    public ICommand GetImageCommand { get; }
+            return string.Empty;
+        }
+    }
+
+    private bool IsFormValid =>
+        !string.IsNullOrWhiteSpace(Name) &&
+        CategoryModel != null &&
+        (!IsCustomCategory || !string.IsNullOrWhiteSpace(CustomCategory)) &&
+        !string.IsNullOrWhiteSpace(Description) &&
+        ImageBytes is { Length: > 0 } &&
+        Roles.Any(x => x.IsSelected);
 
     #endregion
 
-    #region Lookup Data
+    #region Loading
 
-    private async Task LoadLookupDataAsync(ProductViewModel? existing = null)
+    public override async Task LoadAsync(ProductModel? existing)
+    {
+        await LoadCategoriesAsync();
+        await LoadRolesAsync();
+
+        if (existing != null)
+            await LoadExistingProduct(existing);
+        else
+            ResetFields();
+
+        LoadSubscriptions();
+
+        CustomCategory = string.Empty;
+    }
+
+    private async Task LoadCategoriesAsync()
     {
         (RequestResult categoryResult, List<CategoryModel> categories) =
-            await _backend.Products.Category();
+            await _api.Products.Category();
 
         if (categoryResult == RequestResult.Success)
         {
@@ -254,28 +315,20 @@ public class ProductFormViewModel : ViewModelBase
         }
 
         Categories.Add(NewCategoryOption);
-
-        Roles.Add(new RoleSelectionViewModel(Services, 3, "Student", false));
-        Roles.Add(new RoleSelectionViewModel(Services, 4, "Personnel", false));
-        Roles.Add(new RoleSelectionViewModel(Services, 5, "Guest", false));
-
-        if (existing != null)
-        {
-            Console.WriteLine(string.Join(", ", existing.Roles.Select(r => r.Name)));
-            LoadExistingProduct(existing);
-        }
     }
-    
-    public bool IsCustomCategory =>
-        CategoryModel?.Id == NewCategoryOption.Id;
 
-    #endregion
-
-    #region Product Loading
-
-    private void LoadExistingProduct(ProductViewModel existing)
+    private async Task LoadRolesAsync()
     {
-        Id = existing.Id;
+        Roles.Clear();
+
+        Roles.Add(new RoleSelectionViewModel(3, "Student", false));
+        Roles.Add(new RoleSelectionViewModel(4, "Personnel", false));
+        Roles.Add(new RoleSelectionViewModel(5, "Guest", false));
+    }
+
+    private async Task LoadExistingProduct(ProductModel existing)
+    {
+        _id = existing.Id;
         Name = existing.Name;
 
         CategoryModel = Categories.FirstOrDefault(c => c.Id == existing.CategoryModel.Id)
@@ -283,23 +336,47 @@ public class ProductFormViewModel : ViewModelBase
 
         Description = existing.Description;
 
-        if (!string.IsNullOrWhiteSpace(existing.ImageName))
-            _ = LoadExistingImageAsync(existing.ImageName);
-
         foreach (RoleSelectionViewModel role in Roles)
             role.IsSelected = existing.Roles.Select(r => r.Id).Contains(role.Id);
+
+        if (!string.IsNullOrWhiteSpace(existing.ImageName))
+            await LoadExistingImageAsync(existing.ImageName);
     }
 
     private async Task LoadExistingImageAsync(string imageName)
     {
         (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) =
-            await _backend.Products.Image(imageName);
+            await _api.Products.Image(imageName);
 
         if (result != RequestResult.Success || image == null)
             return;
 
         ImageBytes = image.Value.bytes;
         PreviewImage = image.Value.bitmap;
+    }
+
+    private void LoadSubscriptions()
+    {
+        _disposables.Dispose();
+        _disposables = new CompositeDisposable();
+
+        foreach (RoleSelectionViewModel role in Roles)
+            role.WhenAnyValue(x => x.IsSelected)
+                .Subscribe(_ => RolesError = Roles.Any(x => x.IsSelected)
+                    ? string.Empty
+                    : "Minstens één rol is verplicht.")
+                .DisposeWith(_disposables);
+    }
+
+    private void ResetFields()
+    {
+        _id = null;
+        Name = string.Empty;
+        Description = string.Empty;
+        Error = string.Empty;
+        ImageBytes = null;
+        PreviewImage = null;
+        CustomCategory = string.Empty;
     }
 
     #endregion

@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:dashboard="clr-namespace:FrontendAdmin.ViewModels.Dashboard"
-             
+
              x:Class="FrontendAdmin.Views.Dashboard.DashboardPageView"
              x:DataType="{x:Type dashboard:DashboardPageViewModel}">
 
@@ -98,7 +98,7 @@
                             </StackPanel>
                         </Button>
                     </Border>
-                    
+
                 </StackPanel>
             </Border>
         </DockPanel>

@@ -76,7 +76,7 @@ public class UserService : Users.UsersBase
         bool created = await _manager.Create(user);
         if (!created)
             return new UserCreateResponse { Success = false };
-
+        
         Notification notification = new()
         {
             Title = "Nieuwe registratie",
@@ -85,8 +85,9 @@ public class UserService : Users.UsersBase
         };
 
         _context.Notifications.Add(notification);
-        await _context.SaveChangesAsync();
 
+        await _context.SaveChangesAsync();
+        
         if (request.RoleIds.Count > 0)
         {
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
@@ -119,7 +120,7 @@ public class UserService : Users.UsersBase
         bool modified = await _manager.Modify(user);
         if (!modified)
             return new UserModifyResponse { Success = false };
-
+        
         if (request.RoleIds.Count > 0)
         {
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
@@ -135,54 +136,6 @@ public class UserService : Users.UsersBase
         );
 
         return new UserModifyResponse { Success = true };
-    }
-
-    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
-    public override async Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
-    {
-        bool success = await _manager.Delete(request.Id);
-
-        if (success)
-        {
-            await _auditLogManager.Log(
-                GetActorId(context),
-                "DELETE",
-                "User",
-                request.Id.ToString(),
-                $"Gebruiker verwijderd (id {request.Id})"
-            );
-        }
-
-        return new UserDeleteResponse { Success = success };
-    }
-
-    [AllowAnonymous]
-    public override async Task<UserLenderScanResponse> LenderScan(UserLenderScanRequest request,
-        ServerCallContext context)
-    {
-        (string email, string name)? tuple = await _manager.LenderScan(request.CardId.ToByteArray());
-
-        UserLenderScanResponse response = new();
-
-        if (tuple != null)
-        {
-            response.Email = tuple.Value.email;
-            response.Name = tuple.Value.name;
-        }
-
-        return response;
-    }
-
-    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Lender)}")]
-    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request,
-        ServerCallContext context)
-    {
-        List<User> users = await _manager.LenderPage(request.Page, request.PageSize);
-
-        return new UserLenderPageResponse
-        {
-            Users = { users.Select(MapMeta) }
-        };
     }
 
     private static MetaUser MapMeta(User user)
@@ -204,5 +157,54 @@ public class UserService : Users.UsersBase
         }));
 
         return meta;
+    }
+
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
+    public override async Task<UserDeleteResponse> Delete(UserDeleteRequest request, ServerCallContext context)
+    {
+        bool success = await _manager.Delete(request.Id);
+
+        if (success)
+        {
+            await _auditLogManager.Log(
+                GetActorId(context),
+                "DELETE",
+                "User",
+                request.Id.ToString(),
+                $"Gebruiker verwijderd (id {request.Id})"
+            );
+        }
+
+        return new UserDeleteResponse { Success = success };
+    }
+
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Lender)}")]
+    public override async Task<UserLenderPageResponse> LenderPage(UserLenderPageRequest request,
+        ServerCallContext context)
+    {
+        List<User> users = await _manager.LenderPage(request.Page, request.PageSize);
+
+        return new UserLenderPageResponse
+        {
+            Users = { users.Select(MapMeta) }
+        };
+        ;
+    }
+
+    [AllowAnonymous]
+    public override async Task<UserLenderScanResponse> LenderScan(UserLenderScanRequest request,
+        ServerCallContext context)
+    {
+        (string email, string name)? tuple = await _manager.LenderScan(request.CardId.ToByteArray());
+
+        UserLenderScanResponse response = new();
+
+        if (tuple != null)
+        {
+            response.Email = tuple.Value.email;
+            response.Name = tuple.Value.name;
+        }
+
+        return response;
     }
 }

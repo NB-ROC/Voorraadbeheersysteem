@@ -1,4 +1,3 @@
-using System;
 using System.Reactive;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels.AuditLog;
@@ -6,22 +5,19 @@ using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
 using FrontendAdmin.ViewModels.Product;
 using FrontendAdmin.ViewModels.User;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Components;
 
 public class FooterViewModel : ViewModelBase
 {
-    public FooterViewModel(ServiceProvider services) : base(services)
+    public FooterViewModel(INavigationService navigationService)
     {
-        NavigationService navigation = services.GetService<NavigationService>() ?? throw new NullReferenceException();
-
-        NavigateDashboard = ReactiveCommand.Create(() => navigation.NavigateTo(new DashboardPageViewModel(services)));
-        NavigateProducts = ReactiveCommand.Create(() => navigation.NavigateTo(new ProductPageViewModel(services)));
-        NavigateLoans = ReactiveCommand.Create(() => navigation.NavigateTo(new LoanPageViewModel(services)));
-        NavigateUsers = ReactiveCommand.Create(() => navigation.NavigateTo(new UserPageViewModel(services)));
-        NavigateAuditLog = ReactiveCommand.Create(() => navigation.NavigateTo(new AuditLogPageViewModel(services)));
+        NavigateDashboard = ReactiveCommand.CreateFromTask(navigationService.NavigateTo<DashboardPageViewModel>);
+        NavigateProducts = ReactiveCommand.CreateFromTask(navigationService.NavigateTo<ProductPageViewModel>);
+        NavigateLoans = ReactiveCommand.CreateFromTask(navigationService.NavigateTo<LoanPageViewModel>);
+        NavigateUsers = ReactiveCommand.CreateFromTask(navigationService.NavigateTo<UserPageViewModel>);
+        NavigateAuditLog = ReactiveCommand.CreateFromTask(navigationService.NavigateTo<AuditLogPageViewModel>);
     }
 
     public ReactiveCommand<Unit, Unit> NavigateDashboard { get; }

@@ -4,8 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FrontendAdmin.Models;
-using Microsoft.Extensions.DependencyInjection;
+using FrontendAdmin.ViewModels.Components;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.Loan;
@@ -45,11 +46,7 @@ public class LoanPageViewModel : PageViewModelBase
         })
     ];
 
-    private string _borrowerQuery = "";
-
-    private string _productQuery = "";
-
-    public LoanPageViewModel(ServiceProvider services) : base(services)
+    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
     {
         this.WhenAnyValue(x => x.ProductQuery, x => x.BorrowerQuery)
             .Throttle(TimeSpan.FromMilliseconds(300))
@@ -63,15 +60,15 @@ public class LoanPageViewModel : PageViewModelBase
 
     public string ProductQuery
     {
-        get => _productQuery;
-        set => this.RaiseAndSetIfChanged(ref _productQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
 
     public string BorrowerQuery
     {
-        get => _borrowerQuery;
-        set => this.RaiseAndSetIfChanged(ref _borrowerQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
 
     public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
     public ReactiveCommand<Unit, Unit> ResetCommand { get; }
@@ -117,5 +114,10 @@ public class LoanPageViewModel : PageViewModelBase
 
         foreach (LoanViewModel loan in loans)
             FilteredLoans.Add(loan);
+    }
+
+    public override Task LoadAsync()
+    {
+        return Task.CompletedTask;
     }
 }

@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:login="clr-namespace:Frontend.ViewModels.Login"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Frontend.Views.Login.LoginScannerView"
-             x:DataType="login:LoginScannerViewModel">
+             x:Class="Frontend.Views.Login.LoginScannerPageView"
+             x:DataType="login:LoginScannerPageViewModel">
 
     <Grid RowDefinitions="100,*,100">
         <ContentControl Content="{Binding Header}" />

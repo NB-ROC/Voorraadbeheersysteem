@@ -14,11 +14,9 @@ public class User
 
     public int Id { get; set; }
 
-    public byte[] CardId { get; set; } = new byte[IdLength];
+    public byte[]? CardId { get; set; } = new byte[IdLength];
 
     public int Number { get; set; }
-
-    public bool IsBlocked { get; set; }
 
     [MaxLength(EmailLength)] public string Email { get; set; } = null!;
 

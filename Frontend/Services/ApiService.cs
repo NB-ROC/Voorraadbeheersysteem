@@ -15,11 +15,20 @@ using Protos.User;
 
 namespace Frontend.Services;
 
-public class BackendService
+public interface IApiService
+{
+    public UserModel? LoggedInUser { get; }
+    public UserEndpoint Users { get; }
+    public ProductEndpoint Products { get; }
+
+    public Task<bool> LogIn(string email, string password);
+}
+
+public class ApiService : IApiService
 {
     private const string GrpcChannelIp = "http://127.0.0.1:8080";
 
-    public BackendService()
+    public ApiService()
     {
         GrpcChannel channel = GrpcChannel.ForAddress(GrpcChannelIp);
         TokenInjector injector = new(() => Token);
@@ -303,7 +312,7 @@ public class UserEndpoint
             return (GetFailCode(e), null);
         }
 
-        return (RequestResult.Success, (response.Email, response.Name));
+        return (RequestResult.Success, response.HasEmail ? (response.Email, response.Name) : null);
     }
 
     public async Task<(RequestResult, List<UserModel>)> LenderPage(int page, int pageSize)

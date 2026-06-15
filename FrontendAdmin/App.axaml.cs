@@ -1,7 +1,5 @@
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels;
@@ -20,41 +18,32 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        ServiceCollection serviceCollection = new();
+
+        serviceCollection.AddCommonServices();
+        serviceCollection.AddPageServices();
+        serviceCollection.AddFormServices();
+
+        ServiceProvider services = serviceCollection.BuildServiceProvider();
+        MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
+        main.CurrentPage = services.GetRequiredService<LoginPageViewModel>();
+
+        switch (ApplicationLifetime)
         {
-            ServiceCollection serviceCollection = new();
-
-            MainWindowViewModel mainWindowViewModel = new();
-            NavigationService navigationService = new(mainWindowViewModel);
-            BackendService backendService = new();
-
-            serviceCollection.AddSingleton(navigationService);
-            serviceCollection.AddSingleton(backendService);
-            
-            DisableAvaloniaDataAnnotationValidation();
-
-            ServiceProvider services = serviceCollection.BuildServiceProvider();
-
-
-            mainWindowViewModel.CurrentPage = new LoginPageViewModel(services);
-
-            desktop.MainWindow = new MainWindowView
-            {
-                DataContext = mainWindowViewModel
-            };
+            case IClassicDesktopStyleApplicationLifetime desktop:
+                desktop.MainWindow = new MainWindowView
+                {
+                    DataContext = main
+                };
+                break;
+            case ISingleViewApplicationLifetime single:
+                single.MainView = new MainWindowView
+                {
+                    DataContext = main
+                };
+                break;
         }
 
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-        // remove each entry found
-        foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
-            BindingPlugins.DataValidators.Remove(plugin);
     }
 }

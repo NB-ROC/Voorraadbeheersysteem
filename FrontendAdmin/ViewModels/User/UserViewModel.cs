@@ -2,32 +2,20 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using FrontendAdmin.Models;
-using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
 public class UserViewModel : ViewModelBase
 {
-    private readonly BackendService _backend;
     private readonly UserModel _model;
 
-    public UserViewModel(ServiceProvider services, UserModel model) : base(services)
+    public UserViewModel(UserModel model, Func<UserModel, Task> editAction, Func<UserViewModel, Task> deleteAction)
     {
         _model = model;
-        _backend = services.GetService<BackendService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
 
-        EditCommand = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?.NavigateTo(new UserFormViewModel(Services, this));
-        });
-        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            await DeleteAsync();
-            Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
-        });
+        EditCommand = ReactiveCommand.CreateFromTask(() => editAction(_model));
+        DeleteCommand = ReactiveCommand.CreateFromTask(() => deleteAction(this));
     }
 
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
@@ -79,11 +67,5 @@ public class UserViewModel : ViewModelBase
             _model.Number = value;
             this.RaisePropertyChanged();
         }
-    }
-
-
-    private async Task DeleteAsync()
-    {
-        await _backend.Users.Delete(Id);
     }
 }

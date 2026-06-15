@@ -1,31 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
+using FrontendAdmin.ViewModels.Components;
 
 namespace FrontendAdmin.ViewModels.Notifications;
 
 public class NotificationPageViewModel : PageViewModelBase
 {
-    public ObservableCollection<NotificationViewModel> Notifications { get; } = [];
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
 
-    public NotificationPageViewModel(ServiceProvider services)
-        : base(services)
+    public NotificationPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api,
+        INavigationService navigationService) : base(header, footer)
     {
-        Load();
+        _api = api;
+        _navigation = navigationService;
+        Notifications = [];
     }
 
-    private async void Load()
+    public ObservableCollection<NotificationViewModel> Notifications { get; }
+
+    public override async Task LoadAsync()
     {
-        BackendService? backend =
-            Services.GetService<BackendService>();
-
-        if (backend == null)
-            return;
-
         (RequestResult result, List<NotificationModel> notifications)
-            = await backend.Notifications.Page();
+            = await _api.Notifications.Page();
 
         if (result != RequestResult.Success)
             return;
@@ -33,10 +33,6 @@ public class NotificationPageViewModel : PageViewModelBase
         Notifications.Clear();
 
         foreach (NotificationModel notification in notifications)
-        {
-            Notifications.Add(new NotificationViewModel(
-                Services,
-                notification));
-        }
+            Notifications.Add(new NotificationViewModel(_navigation, notification));
     }
 }

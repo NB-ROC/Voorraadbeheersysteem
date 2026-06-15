@@ -1,170 +1,230 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia;
+using Avalonia.Threading;
+using DynamicData;
+using DynamicData.Binding;
 using Frontend.Models;
 using Frontend.Services;
+using Frontend.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace Frontend.ViewModels.User;
 
-public class UserFormViewModel : PageViewModelBase
+public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
 {
-    private readonly BackendService _backend;
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
+    private readonly ISmartCardService _smartCard;
+    private CompositeDisposable _disposables = new();
 
-    public UserFormViewModel(ServiceProvider services, UserViewModel? existing = null) :
-        base(services)
+    public UserFormViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api, INavigationService navigation, ISmartCardService smartCard) :
+        base(header, footer)
     {
-        _backend = services.GetService<BackendService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
-
-        if (existing == null)
-            _cardId = Enumerable.Range(0, 7)
-                .Select(_ => (byte)Random.Shared.Next(256))
-                .ToArray();
-
-        Roles.Add(new RoleSelectionViewModel(services, 3, "Student", false));
-        Roles.Add(new RoleSelectionViewModel(services, 4, "Personnel", false));
-        Roles.Add(new RoleSelectionViewModel(services, 5, "Guest", false));
-
-        foreach (RoleSelectionViewModel role in Roles)
-            role.WhenAnyValue(x => x.IsSelected).Subscribe(_ => Validate());
-
-        this.WhenAnyValue(
-            x => x.FirstName,
-            x => x.LastName,
-            x => x.Email,
-            x => x.Number
-        ).Subscribe(_ => Validate());
-
-        Validate();
-
-        SaveCommand =
-            ReactiveCommand.CreateFromTask(SaveAsync, this.WhenAnyValue(x => x.Error, string.IsNullOrEmpty));
-
-        if (existing != null)
-        {
-            LoadExistingUser(existing);
-            CardIdText = "Kaart is al gescand";
-        }
-        else
-        {
-            services.GetRequiredService<SmartCardService>().SetCardDetectedCallback(ScanCallback);
-            CardIdText = "Wachten op scan...";
-        }
-
-        return;
-
-        async Task SaveAsync()
-        {
-            UserModel model = new()
-            {
-                Id = Id,
-                CardId = _cardId ?? throw new NullReferenceException(),
-                FirstName = FirstName,
-                LastName = LastName,
-                Email = Email,
-                Number = Number,
-                Roles = SelectedRoleIds.Select(id => new RoleModel { Id = id }).ToList()
-            };
-
-            (RequestResult result, bool success) = await (existing == null
-                ? _backend.Users.Create(model)
-                : _backend.Users.Modify(model));
-
-            if (result == RequestResult.Success && success)
-                Services.GetService<NavigationService>()?.NavigateTo(new UserPageViewModel(Services));
-        }
+        _api = api;
+        _navigation = navigation;
+        _smartCard = smartCard;
+        
+        ResetCardIdCommand = ReactiveCommand.Create(ResetCardId);
     }
 
     #region Properties
 
-    public int Id { get; set; }
+    private int? _id;
 
-    private byte[]? _cardId;
 
-    public string CardIdText
+    public byte[]? CardId
     {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        get => field;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(ResetCardVisible));
+        }
     }
-
+    
+    [Required(ErrorMessage = "Voornaam is verplicht")]
     public string FirstName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
+    [Required(ErrorMessage = "Achternaam is verplicht")]
     public string LastName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
-
-    public int[] SelectedRoleIds =>
-        Roles
-            .Where(x => x.IsSelected)
-            .Select(x => x.Id)
-            .ToArray();
-
-    public bool IsBlocked
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
+    [Required(ErrorMessage = "E-Mail adres is verplicht")]
+    [EmailAddress(ErrorMessage = "E-Mail adres moet valide zijn")]
     public string Email
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public int Number
+    [Required(ErrorMessage = "Persoonsnummer is verplicht")]
+    [Range(100000, 9999999, ErrorMessage = "Persoonsnummer is verplicht")]
+    public int? Number
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = 0;
 
+    private int[] SelectedRoleIds =>
+        Roles
+            .Where(x => x.IsSelected)
+            .Select(x => x.Id)
+            .ToArray();
+
+    #endregion
+
+    #region Scanner
+
+    public string CardIdText
+    {
+        get;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(ResetCardVisible));
+        }
+    } = string.Empty;
+
+    private bool OnScan(byte[] uid)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            CardId = uid;
+            CardIdText = "Kaartinformatie opgehaald! :D";
+        });
+        Console.WriteLine(IsFormValid);
+        return true;
+    }
+
+    private void ResetCardId()
+    {
+        CardId = null;
+        CardIdText = "Wachten op scanner-invoer...";
+        _smartCard.SetCardDetectedCallback(OnScan);
+    }
+
+    public ICommand ResetCardIdCommand { get; }
+
+    #endregion
+    
+    #region UI
+
+    public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
+    
+    public bool ResetCardVisible => CardId != null;
+
+    public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(0)
+        : new Thickness(1);
+
+    public Thickness RolesErrorBorderMargin => string.IsNullOrWhiteSpace(RolesError)
+        ? new Thickness(1)
+        : new Thickness(0);
+
+    #endregion
+    
+    #region Saving
+
+    public ICommand? SaveCommand { get; set; }
+
+    public async Task SaveUserAsync()
+    {
+        if (Number == null) return;
+
+        UserModel user = new()
+        {
+            Id = _id ?? -1,
+            FirstName = FirstName,
+            LastName = LastName,
+            Number = Number ??
+                     throw new NullReferenceException(
+                         "This error should not be able to instantiate and is only here to let the code compile."),
+            Email = Email,
+            Roles = SelectedRoleIds.Select(role => new RoleModel
+            {
+                Id = role
+            }).ToList()
+        };
+
+        (RequestResult result, bool success) = await (_id == null
+            ? _api.Users.Create(user)
+            : _api.Users.Modify(user));
+
+        if (result == RequestResult.Success && success) await _navigation.NavigateTo<UserPageViewModel>();
+    }
+
+    #endregion
+    
+    #region Validation
+
+    public string RolesError
+    {
+        get;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(RolesErrorBorderThickness));
+            this.RaisePropertyChanged(nameof(RolesErrorBorderMargin));
+        }
+    } = string.Empty;
+
+    public string this[string columnName]
+    {
+        get
+        {
+            ValidationContext context = new(this) { MemberName = columnName };
+            List<ValidationResult> results = [];
+            object? value = GetType().GetProperty(columnName)?.GetValue(this);
+            Console.WriteLine(columnName);
+
+            if (!Validator.TryValidateProperty(value, context, results))
+            {
+                string? message = results.First().ErrorMessage;
+                if (!string.IsNullOrEmpty(message)) return message;
+            }
+
+            return string.Empty;
+        }
+    }
 
     public string Error
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        private set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    public ICommand SaveCommand { get; }
-
-    #endregion
-
-    #region Private Methods
-
-    private void Validate()
-    {
-        Error = _cardId is not { Length: UserModel.IdLength }
-            ? "Ongeldig ID."
-            : string.IsNullOrWhiteSpace(FirstName)
-                ? "Voornaam is verplicht."
-                : string.IsNullOrWhiteSpace(LastName)
-                    ? "Achternaam is verplicht."
-                    : string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email)
-                        ? "Ongeldig e-mailadres."
-                        : !Roles.Any(x => x.IsSelected)
-                            ? "Minstens één rol is verplicht."
-                            : Number <= 0
-                                ? "Ongeldig nummer."
-                                : string.Empty;
-    }
-
-    private static bool IsValidEmail(string email)
+    private bool IsFormValid =>
+        CardId != null  &&
+        !string.IsNullOrWhiteSpace(FirstName) &&
+        !string.IsNullOrWhiteSpace(LastName) &&
+        Number is > 99999 and < 10000000 &&
+        IsValidEmail() &&
+        Roles.Any(x => x.IsSelected);
+    
+    private bool IsValidEmail()
     {
         try
         {
-            _ = new MailAddress(email);
+            _ = new MailAddress(Email);
             return true;
         }
         catch
@@ -173,34 +233,86 @@ public class UserFormViewModel : PageViewModelBase
         }
     }
 
-    private static int GetNumberLength(uint? num)
+    #endregion
+
+    #region Loading
+
+    public override async Task LoadAsync(UserModel? existing)
     {
-        return num switch
-        {
-            null => -1,
-            0 => 1,
-            _ => (int)Math.Floor(Math.Log10((double)num)) + 1
-        };
+        ResetFields();
+        await LoadRolesAsync();
+        if (existing != null) LoadUser(existing);
+
+        ResetCardId();
+        LoadSubscriptions();
     }
 
-    private void LoadExistingUser(UserViewModel existing)
+    private void LoadSubscriptions()
     {
-        Id = existing.Id;
-        _cardId = existing.CardId;
-        FirstName = existing.FirstName;
-        LastName = existing.LastName;
-        Email = existing.Email;
-        Number = existing.Number;
+        _disposables.Dispose();
+        _disposables = new CompositeDisposable();
 
         foreach (RoleSelectionViewModel role in Roles)
-            role.IsSelected = existing.Roles.Select(r => r.Id).Contains(role.Id);
+            role.WhenAnyValue(x => x.IsSelected)
+                .Subscribe(_ => RolesError = Roles.Any(x => x.IsSelected)
+                    ? string.Empty
+                    : "Minstens één rol is verplicht.")
+                .DisposeWith(_disposables);
+        
+        IObservable<bool> canSave = this.WhenAnyValue(
+                x => x.FirstName,
+                x => x.LastName,
+                x => x.Number,
+                x => x.Email,
+                x => x.CardId)
+            .CombineLatest(
+                Roles.ToObservableChangeSet()
+                    .AutoRefresh(r => r.IsSelected)
+                    .ToCollection()
+                    .Select(roles => roles.Any(r => r.IsSelected))
+                    .StartWith(false),
+                (_, _) => IsFormValid);
+        
+        
+
+        SaveCommand = ReactiveCommand.CreateFromTask(SaveUserAsync, canSave);
     }
 
-    private void ScanCallback(byte[] cardId)
+    private void LoadUser(UserModel user)
     {
-        _cardId = cardId;
-        CardIdText = "Kaart gescand!";
+        _id = user.Id;
+        FirstName = user.FirstName;
+        LastName = user.LastName;
+        Email = user.Email;
+        Number = user.Number;
+
+        foreach (RoleSelectionViewModel role in Roles)
+            role.IsSelected = user.Roles.Any(urm => urm.Id == role.Id);
+    }
+
+    private async Task LoadRolesAsync()
+    {
+        Roles.Clear();
+
+        (RequestResult result, List<RoleModel> roles) = await _api.Products.LenderRole();
+
+        foreach (RoleModel role in roles)
+            Roles.Add(new RoleSelectionViewModel(role.Id, role.Name, false));
+    }
+
+    private void ResetFields()
+    {
+        _id = null;
+        CardId = null;
+        FirstName = string.Empty;
+        LastName = string.Empty;
+        Email = string.Empty;
+        Number = 0;
+
+        foreach (RoleSelectionViewModel role in Roles)
+            role.IsSelected = false;
     }
 
     #endregion
+
 }

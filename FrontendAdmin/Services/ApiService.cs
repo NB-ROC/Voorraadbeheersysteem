@@ -11,17 +11,28 @@ using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Protos.AuditLog;
 using Protos.Auth;
+using Protos.Notification;
 using Protos.Product;
 using Protos.User;
-using Protos.Notification;
 
 namespace FrontendAdmin.Services;
 
-public class BackendService
+public interface IApiService
+{
+    public UserModel? LoggedInUser { get; }
+    public UserEndpoint Users { get; }
+    public ProductEndpoint Products { get; }
+    public NotificationEndpoint Notifications { get; }
+    public AuditLogEndpoint AuditLogs { get; }
+
+    public Task<bool> LogIn(string email, string password);
+}
+
+public class ApiService : IApiService
 {
     private const string GrpcChannelIp = "http://127.0.0.1:8080";
 
-    public BackendService()
+    public ApiService()
     {
         GrpcChannel channel = GrpcChannel.ForAddress(GrpcChannelIp);
         TokenInjector injector = new(() => Token);
@@ -37,15 +48,15 @@ public class BackendService
 
     private string Token { get; set; } = string.Empty;
 
-    public UserModel? LoggedInUser { get; private set; }
-
     private Auth.AuthClient AuthClient { get; }
+
+    public UserModel? LoggedInUser { get; private set; }
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
     public AuditLogEndpoint AuditLogs { get; }
-    
     public NotificationEndpoint Notifications { get; }
+
     public async Task<bool> LogIn(string email, string password)
     {
         AuthLoginResponse? response;
@@ -429,12 +440,12 @@ public class ProductEndpoint
             Description = productModel.Description,
             Category = new Category
             {
-                Id = productModel.Category.Id,
-                Name = productModel.Category.Name
+                Id = productModel.CategoryModel.Id,
+                Name = productModel.CategoryModel.Name
             },
             Image = ByteString.CopyFrom(imageBytes)
         };
-        
+
         request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         ProductCreateResponse? response;
@@ -459,12 +470,12 @@ public class ProductEndpoint
             Description = productModel.Description,
             Category = new Category
             {
-                Id = productModel.Category.Id,
-                Name = productModel.Category.Name
+                Id = productModel.CategoryModel.Id,
+                Name = productModel.CategoryModel.Name
             },
             Image = ByteString.CopyFrom(imageBytes)
         };
-        
+
         request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         if (imageBytes != null)
@@ -581,7 +592,7 @@ public class ProductEndpoint
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Category = new CategoryModel
+            CategoryModel = new CategoryModel
             {
                 Id = product.Category.Id,
                 Name = product.Category.Name
@@ -655,6 +666,7 @@ public class NotificationEndpoint
             }).ToList()
         );
     }
+
     private static RequestResult GetFailCode(RpcException e)
     {
         return e.StatusCode == StatusCode.PermissionDenied

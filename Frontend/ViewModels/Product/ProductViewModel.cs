@@ -9,13 +9,13 @@ namespace Frontend.ViewModels.Product;
 
 public class ProductViewModel : ViewModelBase
 {
-    private readonly BackendService _backend;
+    private readonly IApiService _api;
     private readonly ProductModel _model;
 
-    public ProductViewModel(ServiceProvider services, ProductModel model) : base(services)
+    public ProductViewModel(IApiService api, ProductModel model)
     {
         _model = model;
-        _backend = services.GetRequiredService<BackendService>();
+        _api = api;
 
         _ = LoadImageAsync();
     }
@@ -91,7 +91,7 @@ public class ProductViewModel : ViewModelBase
         IsImageLoading = true;
         ImageFailed = false;
 
-        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _backend.Products.Image(Image);
+        (RequestResult result, (byte[] bytes, Bitmap bitmap)? image) = await _api.Products.Image(Image);
 
         if (result == RequestResult.Success) Thumbnail = image!.Value.bitmap;
         else ImageFailed = true;

@@ -1,39 +1,30 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
 using FrontendAdmin.Models;
 using FrontendAdmin.Services;
+using FrontendAdmin.ViewModels.Components;
 using FrontendAdmin.ViewModels.Notifications;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.User;
 
 public class UserPageViewModel : PageViewModelBase
 {
-    private readonly BackendService _backend;
-    private int _notificationCount;
+    private readonly IApiService _api;
+    private readonly INavigationService _navigation;
 
-    public UserPageViewModel(ServiceProvider services) : base(services)
+    public UserPageViewModel(IApiService api, INavigationService navigation, HeaderViewModel header,
+        FooterViewModel footer) : base(header, footer)
     {
-        _backend = services.GetService<BackendService>() ??
-                   throw new NullReferenceException("Backend service not initialised");
+        _api = api;
+        _navigation = navigation;
 
-        NavigateUserForm = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?
-                .NavigateTo(new UserFormViewModel(Services));
-        });
+        NavigateUserForm =
+            ReactiveCommand.CreateFromTask(async () => await _navigation.NavigateTo<UserFormViewModel, UserModel>());
 
-        NavigateNotifications = ReactiveCommand.Create(() =>
-        {
-            Services.GetService<NavigationService>()?
-                .NavigateTo(new NotificationPageViewModel(Services));
-        });
-        _ = LoadNotificationsAsync();
-        _ = LoadUsersAsync();
+        NavigateNotifications = ReactiveCommand.CreateFromTask(_navigation.NavigateTo<NotificationPageViewModel>);
     }
 
     public ObservableCollection<UserViewModel> Users { get; } = [];
@@ -44,24 +35,43 @@ public class UserPageViewModel : PageViewModelBase
 
     public int NotificationCount
     {
-        get => _notificationCount;
-        set => this.RaiseAndSetIfChanged(ref _notificationCount, value);
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public async Task LoadUsersAsync()
+    public override async Task LoadAsync()
+    {
+        await LoadUsersAsync();
+        await LoadNotificationsAsync();
+    }
+
+    private async Task LoadUsersAsync()
     {
         (RequestResult result, List<UserModel> users) =
-            await _backend.Users.Page(1, 20);
+            await _api.Users.Page(1, 20);
 
         Users.Clear();
 
         foreach (UserModel user in users)
-            Users.Add(new UserViewModel(Services, user));
+            Users.Add(new UserViewModel(user, EditUser, DeleteUser));
     }
+
+    private async Task EditUser(UserModel user)
+    {
+        await _navigation.NavigateTo<UserFormViewModel, UserModel>(user);
+    }
+
+    private async Task DeleteUser(UserViewModel user)
+    {
+        (RequestResult result, bool success) = await _api.Users.Delete(user.Id);
+
+        if (result == RequestResult.Success && success) Users.Remove(user);
+    }
+
     private async Task LoadNotificationsAsync()
     {
         (RequestResult result, List<NotificationModel> notifications) =
-            await _backend.Notifications.Page();
+            await _api.Notifications.Page();
 
         if (result != RequestResult.Success)
             return;

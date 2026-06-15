@@ -3,106 +3,81 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using FrontendAdmin.Models;
 using FrontendAdmin.Services;
-using Microsoft.Extensions.DependencyInjection;
+using FrontendAdmin.ViewModels.Components;
 using ReactiveUI;
 
 namespace FrontendAdmin.ViewModels.AuditLog;
- 
+
 public class AuditLogPageViewModel : PageViewModelBase
 {
-    public ObservableCollection<AuditLogViewModel> Logs { get; } = [];
-    public ObservableCollection<AuditLogViewModel> FilteredLogs { get; } = [];  
+    private readonly IApiService _api;
+    private CompositeDisposable _disposables = new();
     private int _page = 1;
-    private static int _instanceCount;
 
-    public AuditLogPageViewModel(ServiceProvider services)
-        : base(services)
+    public AuditLogPageViewModel(HeaderViewModel header, FooterViewModel footer, IApiService api) : base(header, footer)
     {
-        _instanceCount++;
+        _api = api;
 
-        Console.WriteLine(
-            $"AuditLogPageViewModel instance #{_instanceCount}");
-
-        this.WhenAnyValue(
-                x => x.AuditLogQuery,
-                x => x.AdminQuery,
-                x => x.SelectedStatus)
-            .Throttle(TimeSpan.FromMilliseconds(300))
-            .Subscribe(_ => ApplyFilters());
-        
         FilterStatusCommand = ReactiveCommand.Create<string>(FilterByStatus);
         ResetCommand = ReactiveCommand.Create(ResetFilters);
-        
-        ApplyFilters();
-        
-        Load();
     }
- 
-    private async void Load()
-    {
-        var backend = Services.GetRequiredService<BackendService>();
- 
-        var (result, logs) = await backend.AuditLogs.Page();
- 
-        if (result != RequestResult.Success || logs == null)
-            return;
- 
-        Logs.Clear();
- 
-        foreach (var log in logs)
-        {
-            Logs.Add(new AuditLogViewModel(Services, log));
-        }
-        ApplyFilters();
-    }
-    private string _adminQuery = "";
-    private string _auditLogQuery = "";
-    private string _selectedStatus = "";
-    
+
+    public ObservableCollection<AuditLogViewModel> Logs { get; } = [];
+    public ObservableCollection<AuditLogViewModel> FilteredLogs { get; } = [];
+
+    #region Filter
+
     public string AdminQuery
     {
-        get => _adminQuery;
-        set => this.RaiseAndSetIfChanged(ref _adminQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
+
     public string AuditLogQuery
     {
-        get => _auditLogQuery;
-        set => this.RaiseAndSetIfChanged(ref _auditLogQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
+
     public string SelectedStatus
     {
-        get => _selectedStatus;
-        set => this.RaiseAndSetIfChanged(ref _selectedStatus, value);
-    }
-    public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
-    public ReactiveCommand<Unit, Unit> ResetCommand { get; }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
+
     private void ApplyFilters()
     {
-        string auditLogQuery = (AuditLogQuery ?? "").ToLower();
-        string adminQuery = (AdminQuery ?? "").ToLower();
+        string auditLogQuery = AuditLogQuery.ToLower();
+        string adminQuery = AdminQuery.ToLower();
 
         IEnumerable<AuditLogViewModel> filtered = Logs.Where(l =>
             (
-                (l.EntityId?.ToLower().Contains(auditLogQuery) == true ||
-                 l.Timestamp?.ToLower().Contains(auditLogQuery) == true ||
-                 l.Action?.ToLower().Contains(auditLogQuery) == true ||
-                 l.Description?.ToLower().Contains(auditLogQuery) == true)
+                l.EntityId.Contains(auditLogQuery, StringComparison.OrdinalIgnoreCase) ||
+                l.Timestamp.Contains(auditLogQuery, StringComparison.OrdinalIgnoreCase) ||
+                l.Action.Contains(auditLogQuery, StringComparison.OrdinalIgnoreCase) ||
+                l.Description.Contains(auditLogQuery, StringComparison.OrdinalIgnoreCase)
             )
             &&
             (
                 string.IsNullOrWhiteSpace(SelectedStatus) ||
-                l.Action?.ToLower() == SelectedStatus
+                l.Action.Equals(SelectedStatus, StringComparison.OrdinalIgnoreCase)
             )
             &&
-            (
-                l.ActorName?.ToLower().Contains(adminQuery) == true
-            )
+            l.ActorName.Contains(adminQuery, StringComparison.OrdinalIgnoreCase)
         );
 
         UpdateFilteredLogs(filtered);
     }
+
+
+    public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
+    public ReactiveCommand<Unit, Unit> ResetCommand { get; }
 
     private void FilterByStatus(string status)
     {
@@ -113,10 +88,10 @@ public class AuditLogPageViewModel : PageViewModelBase
     {
         AuditLogQuery = "";
         AdminQuery = "";
-        
+
         ApplyFilters();
     }
-    
+
     private void UpdateFilteredLogs(IEnumerable<AuditLogViewModel> logs)
     {
         FilteredLogs.Clear();
@@ -124,4 +99,45 @@ public class AuditLogPageViewModel : PageViewModelBase
         foreach (AuditLogViewModel log in logs)
             FilteredLogs.Add(log);
     }
+
+    #endregion
+
+    #region Loading
+
+    public override async Task LoadAsync()
+    {
+        await LoadAuditLogs();
+
+        LoadSubscriptions();
+
+        ResetFilters();
+        ApplyFilters();
+    }
+
+    private async Task LoadAuditLogs()
+    {
+        (RequestResult result, List<AuditLogModel> logs) = await _api.AuditLogs.Page();
+
+        Logs.Clear();
+
+        if (result != RequestResult.Success || logs.Count == 0) return;
+
+        foreach (AuditLogModel log in logs)
+            Logs.Add(new AuditLogViewModel(log));
+    }
+
+    private void LoadSubscriptions()
+    {
+        _disposables.Dispose();
+        _disposables = new CompositeDisposable();
+
+        this.WhenAnyValue(
+                x => x.AuditLogQuery,
+                x => x.AdminQuery,
+                x => x.SelectedStatus)
+            .Subscribe(_ => ApplyFilters())
+            .DisposeWith(_disposables);
+    }
+
+    #endregion
 }
