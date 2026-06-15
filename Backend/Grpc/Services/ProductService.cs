@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Backend.Database.Managers;
 using Backend.Entities;
 using Backend.Grpc.Helpers;
@@ -17,11 +18,13 @@ public class ProductService : Products.ProductsBase
 
     private readonly ProductManager _manager;
     private readonly ProductValidator _validator;
+    private readonly AuditLogManager _auditLogManager;
 
-    public ProductService(ProductManager manager)
+    public ProductService(ProductManager manager, AuditLogManager auditLogManager)
     {
         _manager = manager;
         _validator = new ProductValidator(manager);
+        _auditLogManager = auditLogManager;
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
@@ -86,7 +89,16 @@ public class ProductService : Products.ProductsBase
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
             await _manager.SetRoles(product.Id, roles);
         }
-
+        if (success)
+        {
+            await _auditLogManager.Log(
+                GetActorId(context),
+                "CREATE",
+                "Product",
+                product.Id.ToString(),
+                $"Product '{product.Name}' aangemaakt"
+            );
+        }
         return new ProductCreateResponse
         {
             Success = success
@@ -124,7 +136,16 @@ public class ProductService : Products.ProductsBase
             IEnumerable<RoleType> roles = request.RoleIds.Select(id => (RoleType)id);
             await _manager.SetRoles(product.Id, roles);
         }
-
+        if (success)
+        {
+            await _auditLogManager.Log(
+                GetActorId(context),
+                "UPDATE",
+                "Product",
+                product.Id.ToString(),
+                $"Product '{product.Name}' aangepast"
+            );
+        }
         return new ProductModifyResponse
         {
             Success = success
@@ -132,15 +153,30 @@ public class ProductService : Products.ProductsBase
     }
 
     [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)}")]
-    public override async Task<ProductDeleteResponse> Delete(ProductDeleteRequest request, ServerCallContext context)
+    public override async Task<ProductDeleteResponse> Delete(
+        ProductDeleteRequest request,
+        ServerCallContext context)
     {
         string image = await _validator.ValidateDelete(request);
 
         StorageHelper.DeleteFile(Path.Combine(ImagePath, image));
 
+        bool success = await _manager.Delete(request.Id);
+
+        if (success)
+        {
+            await _auditLogManager.Log(
+                GetActorId(context),
+                "DELETE",
+                "Product",
+                request.Id.ToString(),
+                $"Product verwijderd (id {request.Id})"
+            );
+        }
+
         return new ProductDeleteResponse
         {
-            Success = await _manager.Delete(request.Id)
+            Success = success
         };
     }
 
@@ -220,5 +256,12 @@ public class ProductService : Products.ProductsBase
         }));
 
         return meta;
+    }
+    private static int GetActorId(ServerCallContext context)
+    {
+        return int.Parse(
+            context.GetHttpContext().User
+                .FindFirst(ClaimTypes.NameIdentifier)!
+                .Value);
     }
 }

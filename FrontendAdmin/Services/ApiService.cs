@@ -9,6 +9,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
+using Protos.AuditLog;
 using Protos.Auth;
 using Protos.Notification;
 using Protos.Product;
@@ -41,17 +42,18 @@ public class ApiService : IApiService
         Products = new ProductEndpoint(new Products.ProductsClient(invoker));
         Users = new UserEndpoint(new Users.UsersClient(invoker));
         Notifications = new NotificationEndpoint(new Notifications.NotificationsClient(invoker));
+        AuditLogs = new AuditLogEndpoint(new AuditLogs.AuditLogsClient(invoker));
     }
 
     private string Token { get; set; } = string.Empty;
 
-    private Auth.AuthClient AuthClient { get; }
-
     public UserModel? LoggedInUser { get; private set; }
+
+    private Auth.AuthClient AuthClient { get; }
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
-
+    public AuditLogEndpoint AuditLogs { get; }
     public NotificationEndpoint Notifications { get; }
 
     public async Task<bool> LogIn(string email, string password)
@@ -192,7 +194,7 @@ public class UserEndpoint
         }
         catch (RpcException e)
         {
-            return (GetFailCode(e), []);
+            return (GetFailCode(e), null!);
         }
 
         return
@@ -351,7 +353,7 @@ public class UserEndpoint
         return new UserModel
         {
             Id = user.Id,
-            CardId = user.HasCardId ? user.CardId.ToByteArray() : null,
+            CardId = user.CardId.ToByteArray(),
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
@@ -442,7 +444,7 @@ public class ProductEndpoint
             },
             Image = ByteString.CopyFrom(imageBytes)
         };
-
+        
         request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         ProductCreateResponse? response;
@@ -472,7 +474,7 @@ public class ProductEndpoint
             },
             Image = ByteString.CopyFrom(imageBytes)
         };
-
+        
         request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         if (imageBytes != null)
@@ -663,7 +665,6 @@ public class NotificationEndpoint
             }).ToList()
         );
     }
-
     private static RequestResult GetFailCode(RpcException e)
     {
         return e.StatusCode == StatusCode.PermissionDenied
@@ -672,4 +673,54 @@ public class NotificationEndpoint
     }
 }
 
+public class AuditLogEndpoint
+{
+    private readonly AuditLogs.AuditLogsClient _client;
+
+    public AuditLogEndpoint(AuditLogs.AuditLogsClient client)
+    {
+        _client = client;
+    }
+
+    public async Task<(RequestResult, List<AuditLogModel>)> Page()
+    {
+        AuditLogPageResponse? response;
+
+        try
+        {
+            response = await _client.PageAsync(
+                new AuditLogPageRequest
+                {
+                    Page = 1,
+                    PageSize = 100
+                });
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), []);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Logs.Select(l => new AuditLogModel
+            {
+                Id = l.Id,
+                Timestamp = l.Timestamp,
+                ActorName = l.ActorName,
+                Action = l.Action,
+                EntityType = l.EntityType,
+                EntityId = l.EntityId,
+                Description = l.Description
+            }).ToList()
+        );
+    }
+
+    private static RequestResult GetFailCode(RpcException e)
+    {
+        return e.StatusCode == StatusCode.PermissionDenied
+            ? RequestResult.Denied
+            : RequestResult.Failed;
+    }
+}
 #endregion

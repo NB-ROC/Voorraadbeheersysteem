@@ -1,0 +1,29 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Protos.AuditLog";
+
+package auditlog;
+
+service AuditLogs {
+  rpc Page (AuditLogPageRequest) returns (AuditLogPageResponse);
+}
+
+message MetaAuditLog {
+  int32 id = 1;
+  string timestamp = 2;
+  string actor_name = 3;
+  string action = 4;
+  string entity_type = 5;
+  string entity_id = 6;
+  string description = 7;
+}
+
+message AuditLogPageRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message AuditLogPageResponse {
+  repeated MetaAuditLog logs = 1;
+  int32 total = 2;
+}

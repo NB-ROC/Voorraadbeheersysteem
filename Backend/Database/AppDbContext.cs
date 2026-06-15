@@ -21,6 +21,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     public DbSet<ProductRole> ProductRoles => Set<ProductRole>();
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -121,7 +122,11 @@ public class AppDbContext : DbContext
                 new Role(RoleType.Personnel),
                 new Role(RoleType.Guest)
             );
-
+        modelBuilder.Entity<AuditLog>()
+            .HasOne(a => a.Actor)
+            .WithMany()
+            .HasForeignKey(a => a.ActorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Default category
         modelBuilder.Entity<Category>()

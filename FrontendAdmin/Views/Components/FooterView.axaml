@@ -7,7 +7,7 @@
              x:Class="FrontendAdmin.Views.Components.FooterView"
              x:DataType="{x:Type components:FooterViewModel}">
     <Border Background="#6E6EB4">
-        <UniformGrid Rows="1" Columns="4">
+        <UniformGrid Rows="1" Columns="5">
             <Button Background="Transparent" BorderThickness="0"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
@@ -48,7 +48,16 @@
                     <TextBlock Text="Gebruikers" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>
-
+            <Button Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding NavigateAuditLog}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="🕵️" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Historie" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="11" />
+                </StackPanel>
+            </Button>
         </UniformGrid>
     </Border>
 </UserControl>
