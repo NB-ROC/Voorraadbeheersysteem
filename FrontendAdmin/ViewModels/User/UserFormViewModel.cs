@@ -33,7 +33,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         _api = api;
         _navigation = navigation;
         _disposables = new CompositeDisposable();
-        
+
         IObservable<bool> canSave = this.WhenAnyValue(
                 x => x.FirstName,
                 x => x.LastName,
@@ -177,14 +177,14 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         private set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
-    
+
     private bool IsFormValid =>
         !string.IsNullOrWhiteSpace(FirstName) &&
         !string.IsNullOrWhiteSpace(LastName) &&
         Number is > 99999 and < 10000000 &&
         IsValidEmail() &&
         Roles.Any(x => x.IsSelected);
-    
+
     private bool IsValidEmail()
     {
         try

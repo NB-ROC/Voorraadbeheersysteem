@@ -46,10 +46,6 @@ public class LoanPageViewModel : PageViewModelBase
         })
     ];
 
-    private string _borrowerQuery = "";
-
-    private string _productQuery = "";
-
     public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
     {
         this.WhenAnyValue(x => x.ProductQuery, x => x.BorrowerQuery)
@@ -64,15 +60,15 @@ public class LoanPageViewModel : PageViewModelBase
 
     public string ProductQuery
     {
-        get => _productQuery;
-        set => this.RaiseAndSetIfChanged(ref _productQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
 
     public string BorrowerQuery
     {
-        get => _borrowerQuery;
-        set => this.RaiseAndSetIfChanged(ref _borrowerQuery, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "";
 
     public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
     public ReactiveCommand<Unit, Unit> ResetCommand { get; }

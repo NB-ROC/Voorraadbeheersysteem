@@ -1,5 +1,6 @@
 using System;
 using FrontendAdmin.ViewModels;
+using FrontendAdmin.ViewModels.AuditLog;
 using FrontendAdmin.ViewModels.Components;
 using FrontendAdmin.ViewModels.Dashboard;
 using FrontendAdmin.ViewModels.Loan;
@@ -39,7 +40,8 @@ public static class ServiceExtensions
                 .AddSingleton<UserPageViewModel>()
                 .AddSingleton<NotificationPageViewModel>()
                 .AddSingleton<LoanPageViewModel>()
-                .AddSingleton<ProductPageViewModel>();
+                .AddSingleton<ProductPageViewModel>()
+                .AddSingleton<AuditLogPageViewModel>();
         }
 
         public void AddFormServices()

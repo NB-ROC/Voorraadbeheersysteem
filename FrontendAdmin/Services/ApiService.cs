@@ -23,6 +23,7 @@ public interface IApiService
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
     public NotificationEndpoint Notifications { get; }
+    public AuditLogEndpoint AuditLogs { get; }
 
     public Task<bool> LogIn(string email, string password);
 }
@@ -47,9 +48,9 @@ public class ApiService : IApiService
 
     private string Token { get; set; } = string.Empty;
 
-    public UserModel? LoggedInUser { get; private set; }
-
     private Auth.AuthClient AuthClient { get; }
+
+    public UserModel? LoggedInUser { get; private set; }
 
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
@@ -444,7 +445,7 @@ public class ProductEndpoint
             },
             Image = ByteString.CopyFrom(imageBytes)
         };
-        
+
         request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         ProductCreateResponse? response;
@@ -474,7 +475,7 @@ public class ProductEndpoint
             },
             Image = ByteString.CopyFrom(imageBytes)
         };
-        
+
         request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         if (imageBytes != null)
@@ -665,6 +666,7 @@ public class NotificationEndpoint
             }).ToList()
         );
     }
+
     private static RequestResult GetFailCode(RpcException e)
     {
         return e.StatusCode == StatusCode.PermissionDenied
@@ -723,4 +725,5 @@ public class AuditLogEndpoint
             : RequestResult.Failed;
     }
 }
+
 #endregion

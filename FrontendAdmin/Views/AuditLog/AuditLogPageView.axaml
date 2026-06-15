@@ -62,7 +62,7 @@
                         CornerRadius="8"
                         Background="#E5E7EB"
                         Foreground="#374151"
-                        BorderThickness="0"/>
+                        BorderThickness="0" />
 
                 <Button Content="CREATE"
                         Command="{Binding FilterStatusCommand}"
@@ -71,7 +71,7 @@
                         CornerRadius="8"
                         Background="#E5E7EB"
                         Foreground="#374151"
-                        BorderThickness="0"/>
+                        BorderThickness="0" />
 
                 <Button Content="UPDATE"
                         Command="{Binding FilterStatusCommand}"
@@ -80,7 +80,7 @@
                         CornerRadius="8"
                         Background="#E5E7EB"
                         Foreground="#374151"
-                        BorderThickness="0"/>
+                        BorderThickness="0" />
 
                 <Button Content="DELETE"
                         Command="{Binding FilterStatusCommand}"
@@ -89,7 +89,7 @@
                         CornerRadius="8"
                         Background="#E5E7EB"
                         Foreground="#374151"
-                        BorderThickness="0"/>
+                        BorderThickness="0" />
 
                 <Button Content="LOGIN"
                         Command="{Binding FilterStatusCommand}"
@@ -98,7 +98,7 @@
                         CornerRadius="8"
                         Background="#E5E7EB"
                         Foreground="#374151"
-                        BorderThickness="0"/>
+                        BorderThickness="0" />
 
             </StackPanel>
 
