@@ -57,7 +57,7 @@
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="producten overzicht" Foreground="{StaticResource Purple}"
                                                FontSize="15" FontWeight="SemiBold" />
-                                    <TextBlock Text="Bekijk en beheer alle beschikbare producten" Foreground="#888"
+                                    <TextBlock Text="Bekijk en beheer alle beschikbare producten" Foreground="{StaticResource Gray}"
                                                FontSize="13" />
                                 </StackPanel>
                             </StackPanel>
@@ -74,7 +74,7 @@
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="Leningen overzicht" Foreground="{StaticResource Purple}"
                                                FontSize="15" FontWeight="SemiBold" />
-                                    <TextBlock Text="Bekijk al je leningen" Foreground="#888"
+                                    <TextBlock Text="Bekijk al je leningen" Foreground="{StaticResource Gray}"
                                                FontSize="13" />
                                 </StackPanel>
                             </StackPanel>
@@ -91,7 +91,7 @@
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="Gebruikers overzicht" Foreground="{StaticResource Purple}"
                                                FontSize="15" FontWeight="SemiBold" />
-                                    <TextBlock Text="Bekijk en beheer alle gebruikers" Foreground="#888"
+                                    <TextBlock Text="Bekijk en beheer alle gebruikers" Foreground="{StaticResource Gray}"
                                                FontSize="13" />
                                 </StackPanel>
                             </StackPanel>

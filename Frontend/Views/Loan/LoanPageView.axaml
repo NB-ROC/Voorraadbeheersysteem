@@ -8,7 +8,7 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <DockPanel Grid.Row="1" Background="White" Margin="10">
+        <DockPanel Grid.Row="1" Background="{StaticResource White}" Margin="10">
             <!-- titel -->
             <TextBlock DockPanel.Dock="Top"
                        Text="Mijn Leningen"
@@ -32,51 +32,51 @@
                 <Button Content="Actief"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Active"
-                        Background="#2e7d32"
-                        Foreground="White" />
+                        Background="{StaticResource Purple}"
+                        Foreground="{StaticResource White}" />
 
                 <Button Content="Te laat"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Overdue"
-                        Background="#d32f2f"
-                        Foreground="White" />
+                        Background="{StaticResource Purple}"
+                        Foreground="{StaticResource White}" />
 
                 <Button Content="Ingeleverd"
                         Command="{Binding FilterStatusCommand}"
                         CommandParameter="Returned"
-                        Background="#0277bd"
-                        Foreground="White" />
+                        Background="{StaticResource Purple}"
+                        Foreground="{StaticResource White}" />
 
                 <Button Content="Reset"
                         Command="{Binding ResetCommand}"
-                        Background="#777777"
-                        Foreground="White" />
+                        Background="{StaticResource Purple}"
+                        Foreground="{StaticResource White}" />
             </StackPanel>
             <!-- Leningen -->
             <ScrollViewer>
                 <ItemsControl x:Name="LoanList" ItemsSource="{Binding FilteredLoans}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="loan:LoanViewModel">
-                            <Border BorderBrush="#eeeeee" BorderThickness="0,0,0,1" Padding="10">
+                            <Border BorderBrush="{StaticResource White}" BorderThickness="0,0,0,1" Padding="10">
                                 <Grid ColumnDefinitions="80,*,100,Auto">
                                     <Image Source="{Binding Image}" Width="70" Height="70" Grid.Column="0" />
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
                                         <TextBlock Text="{Binding ProductName}" FontWeight="Bold" FontSize="14" />
-                                        <TextBlock FontSize="12" Foreground="#555">
+                                        <TextBlock FontSize="12" Foreground="{StaticResource Gray}">
                                             <Run Text="Borrower:" />
                                             <Run Text="{Binding BorrowerNumber}" />
                                         </TextBlock>
-                                        <TextBlock FontSize="12" Foreground="#555">
+                                        <TextBlock FontSize="12" Foreground="{StaticResource Gray}">
                                             <Run Text="Loan date:" />
                                             <Run Text="{Binding LoanDate}" />
                                         </TextBlock>
                                     </StackPanel>
                                     <TextBlock Text="{Binding ReturnDate}" Grid.Column="2"
                                                VerticalAlignment="Center" HorizontalAlignment="Center"
-                                               FontSize="12" Foreground="#555" />
+                                               FontSize="12" Foreground="{StaticResource Gray}" />
                                     <Border Background="{Binding StatusColor}" CornerRadius="4" Padding="5"
                                             Grid.Column="3" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Status}" Foreground="White" />
+                                        <TextBlock Text="{Binding Status}" Foreground="{StaticResource White}" />
                                     </Border>
                                 </Grid>
                             </Border>

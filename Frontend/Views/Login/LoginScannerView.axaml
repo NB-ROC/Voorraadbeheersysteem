@@ -10,7 +10,7 @@
     <Grid RowDefinitions="100,*,100">
         <ContentControl Content="{Binding Header}" />
 
-        <TextBlock Grid.Row="1" Text="Scan u uitlenerspas om in te loggen" HorizontalAlignment="Center"
+        <TextBlock Grid.Row="1" Foreground="{StaticResource Purple}" Text="Scan u uitlenerspas om in te loggen" HorizontalAlignment="Center"
                    VerticalAlignment="Center" FontSize="60" />
     </Grid>
 </UserControl>

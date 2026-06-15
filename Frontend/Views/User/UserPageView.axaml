@@ -8,40 +8,38 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <Grid Grid.Row="1" Background="#F6F7FB" RowDefinitions="Auto,Auto,*">
+        <Grid Grid.Row="1" Background="{StaticResource DarkerWhite}" RowDefinitions="Auto,Auto,*">
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="20,20,20,12" Spacing="4">
                 <TextBlock Text="Gebruiker Overzicht"
                            FontSize="28"
-                           FontWeight="Bold"
-                           Foreground="#1F2937" />
+                           FontWeight="Bold"/>
                 <TextBlock Text="Bekijk en beheer alle gebruikers"
                            FontSize="13"
-                           Foreground="#6B7280" />
+                           Foreground="{StaticResource Gray}" />
             </StackPanel>
 
             <!-- Toolbar -->
             <Border Grid.Row="1"
                     Margin="20,0,20,16"
-                    Background="White"
+                    Background="{StaticResource DarkerWhite}"
                     CornerRadius="12"
                     Padding="14"
-                    BorderBrush="#E5E7EB"
+                    BorderBrush="{StaticResource Gray}"
                     BorderThickness="1">
                 <Grid ColumnDefinitions="*,Auto,Auto, Auto"
                       ColumnSpacing="10">
 
                     <!-- Zoekbalk -->
                     <Border Grid.Column="0"
-                            Background="#F9FAFB"
-                            BorderBrush="#D1D5DB"
+                            Background="{StaticResource DarkerWhite}"
+                            BorderBrush="{StaticResource Gray}"
                             BorderThickness="1"
                             CornerRadius="8"
                             Padding="12,8"
                             VerticalAlignment="Center">
                         <TextBlock Text="🔍 Zoek gebruikers..."
-                                   Foreground="#9CA3AF"
                                    FontSize="13" />
                     </Border>
 
@@ -50,9 +48,8 @@
                             Content="Filters"
                             Height="38"
                             MinWidth="100"
-                            Background="#F3F4F6"
-                            Foreground="#111827"
-                            BorderBrush="#D1D5DB"
+                            Background="{StaticResource DarkerWhite}"
+                            BorderBrush="{StaticResource Gray}"
                             BorderThickness="1"
                             CornerRadius="8"
                             HorizontalContentAlignment="Center"
@@ -63,8 +60,8 @@
                             Content="Gebruiker toevoegen"
                             Height="38"
                             MinWidth="150"
-                            Background="#4F46E5"
-                            Foreground="White"
+                            Background="{StaticResource Purple}"
+                            Foreground="{StaticResource White}"
                             BorderThickness="0"
                             CornerRadius="8"
                             HorizontalContentAlignment="Center"
@@ -80,8 +77,8 @@
                         <DataTemplate DataType="{x:Type user:UserViewModel}">
                             <StackPanel Spacing="12">
 
-                                <Border Background="White"
-                                        BorderBrush="#E5E7EB"
+                                <Border Background="{StaticResource White}"
+                                        BorderBrush="{StaticResource DarkerWhite}"
                                         BorderThickness="1"
                                         CornerRadius="12"
                                         Padding="14">
@@ -93,14 +90,14 @@
                                                     VerticalAlignment="Center"
                                                     Spacing="4">
                                             <TextBlock Text="{Binding Number}"
-                                                       Foreground="#9CA3AF"
+                                                       Foreground="{StaticResource Gray}"
                                                        FontSize="12" />
                                             <TextBlock Text="{Binding Name}"
-                                                       Foreground="#111827"
                                                        FontWeight="Bold"
+                                                       Foreground="{StaticResource Gray}"
                                                        FontSize="16" />
                                             <TextBlock Text="{Binding Email}"
-                                                       Foreground="#6B7280"
+                                                       Foreground="{StaticResource Gray}"
                                                        FontSize="13"
                                                        TextWrapping="Wrap" />
                                         </StackPanel>
@@ -110,7 +107,7 @@
                                                    VerticalAlignment="Center">
                                             <Button Content="Bewerk"
                                                     Background="Orange"
-                                                    Foreground="White"
+                                                    Foreground="{StaticResource White}"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"
@@ -118,7 +115,7 @@
                                                     Command="{Binding EditCommand}" />
                                             <Button Content="Verwijder"
                                                     Background="Red"
-                                                    Foreground="White"
+                                                    Foreground="{StaticResource White}"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"
