@@ -266,20 +266,36 @@ public sealed class SmartCardService : ISmartCardService
     {
         string? readerName = e.ReaderName;
         Console.WriteLine("[SmartCardService] Card inserted: " + readerName);
+        if (_cardDetectedCallback == null) return;
 
         Task.Run(() =>
         {
+
+            byte[]? uid;
             try
             {
-                byte[]? uid = ReadUid(readerName);
-                if (uid == null || _cardDetectedCallback == null) return;
-                bool disposeCallback = _cardDetectedCallback(uid);
-                if (disposeCallback) _cardDetectedCallback = null;
+                uid = ReadUid(readerName);
+                if (uid == null) throw new NullReferenceException("UID is null");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[SmartCardService] Error reading UID from '{readerName}': {ex.Message}");
+                return;
             }
+
+            Console.WriteLine(string.Join(',', uid));
+            bool disposeCallback;
+            try
+            {
+                disposeCallback = _cardDetectedCallback(uid);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[SmartCardService] Error dispose callback from '{_cardDetectedCallback.Method}': {ex.Message}");
+                return;
+            }
+            if (disposeCallback) _cardDetectedCallback = null;
+            
         });
     }
 

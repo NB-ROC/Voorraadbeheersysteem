@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Threading;
 using DynamicData;
 using DynamicData.Binding;
 using Frontend.Models;
@@ -35,24 +36,6 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         _navigation = navigation;
         _smartCard = smartCard;
         
-        IObservable<bool> canSave = this.WhenAnyValue(
-                x => x.FirstName,
-                x => x.LastName,
-                x => x.Number,
-                x => x.Email,
-                x => x._cardId,
-                (name, category, custom, desc, cardId) => true)
-            .CombineLatest(
-                Roles.ToObservableChangeSet()
-                    .AutoRefresh(r => r.IsSelected)
-                    .ToCollection()
-                    .Select(roles => roles.Any(r => r.IsSelected)),
-                (_, anyRole) => anyRole)
-            .Select(_ => IsFormValid);
-        
-        
-
-        SaveCommand = ReactiveCommand.CreateFromTask(SaveUserAsync, canSave);
         ResetCardIdCommand = ReactiveCommand.Create(ResetCardId);
     }
 
@@ -60,26 +43,41 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
 
     private int? _id;
 
-    private byte[]? _cardId;
 
+    public byte[]? CardId
+    {
+        get => field;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(ResetCardVisible));
+        }
+    }
+    
+    [Required(ErrorMessage = "Voornaam is verplicht")]
     public string FirstName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
+    [Required(ErrorMessage = "Achternaam is verplicht")]
     public string LastName
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
+    [Required(ErrorMessage = "E-Mail adres is verplicht")]
+    [EmailAddress(ErrorMessage = "E-Mail adres moet valide zijn")]
     public string Email
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = string.Empty;
 
+    [Required(ErrorMessage = "Persoonsnummer is verplicht")]
+    [Range(100000, 9999999, ErrorMessage = "Persoonsnummer is verplicht")]
     public int? Number
     {
         get;
@@ -99,26 +97,32 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     public string CardIdText
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            this.RaisePropertyChanged(nameof(ResetCardVisible));
+        }
     } = string.Empty;
 
     private bool OnScan(byte[] uid)
     {
-        _cardId = uid;
-        CardIdText = "Kaartinformatie opgehaald! :D";
-        this.RaisePropertyChanged(nameof(ResetCardVisible));
+        Dispatcher.UIThread.Post(() =>
+        {
+            CardId = uid;
+            CardIdText = "Kaartinformatie opgehaald! :D";
+        });
+        Console.WriteLine(IsFormValid);
         return true;
     }
 
-    public ICommand ResetCardIdCommand { get; }
-    
     private void ResetCardId()
     {
-        _cardId = null;
+        CardId = null;
         CardIdText = "Wachten op scanner-invoer...";
         _smartCard.SetCardDetectedCallback(OnScan);
-        this.RaisePropertyChanged(nameof(ResetCardVisible));
     }
+
+    public ICommand ResetCardIdCommand { get; }
 
     #endregion
     
@@ -126,7 +130,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
 
     public ObservableCollection<RoleSelectionViewModel> Roles { get; } = [];
     
-    public bool ResetCardVisible => _cardId != null;
+    public bool ResetCardVisible => CardId != null;
 
     public Thickness RolesErrorBorderThickness => string.IsNullOrWhiteSpace(RolesError)
         ? new Thickness(0)
@@ -140,7 +144,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     
     #region Saving
 
-    public ICommand SaveCommand { get; }
+    public ICommand? SaveCommand { get; set; }
 
     public async Task SaveUserAsync()
     {
@@ -209,7 +213,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     } = string.Empty;
 
     private bool IsFormValid =>
-        _cardId != null  &&
+        CardId != null  &&
         !string.IsNullOrWhiteSpace(FirstName) &&
         !string.IsNullOrWhiteSpace(LastName) &&
         Number is > 99999 and < 10000000 &&
@@ -239,6 +243,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
         await LoadRolesAsync();
         if (existing != null) LoadUser(existing);
 
+        ResetCardId();
         LoadSubscriptions();
     }
 
@@ -253,6 +258,24 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
                     ? string.Empty
                     : "Minstens één rol is verplicht.")
                 .DisposeWith(_disposables);
+        
+        IObservable<bool> canSave = this.WhenAnyValue(
+                x => x.FirstName,
+                x => x.LastName,
+                x => x.Number,
+                x => x.Email,
+                x => x.CardId)
+            .CombineLatest(
+                Roles.ToObservableChangeSet()
+                    .AutoRefresh(r => r.IsSelected)
+                    .ToCollection()
+                    .Select(roles => roles.Any(r => r.IsSelected))
+                    .StartWith(false),
+                (_, _) => IsFormValid);
+        
+        
+
+        SaveCommand = ReactiveCommand.CreateFromTask(SaveUserAsync, canSave);
     }
 
     private void LoadUser(UserModel user)
@@ -271,7 +294,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     {
         Roles.Clear();
 
-        (RequestResult result, List<RoleModel> roles) = await _api.Products.Role();
+        (RequestResult result, List<RoleModel> roles) = await _api.Products.LenderRole();
 
         foreach (RoleModel role in roles)
             Roles.Add(new RoleSelectionViewModel(role.Id, role.Name, false));
@@ -280,7 +303,7 @@ public class UserFormViewModel : FormViewModelBase<UserModel>, IDataErrorInfo
     private void ResetFields()
     {
         _id = null;
-        _cardId = null;
+        CardId = null;
         FirstName = string.Empty;
         LastName = string.Empty;
         Email = string.Empty;
