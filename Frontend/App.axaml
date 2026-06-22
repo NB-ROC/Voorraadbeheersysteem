@@ -23,6 +23,7 @@
         <SolidColorBrush x:Key="White">#FAFAFA</SolidColorBrush>
         <SolidColorBrush x:Key="DarkerWhite">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="Gray">#6B7280</SolidColorBrush>
+        <BoxShadows x:Key="Shadow">0 4 10 0 #40000000</BoxShadows>
     </Application.Resources>
 
     <Application.Styles>

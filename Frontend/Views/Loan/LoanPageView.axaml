@@ -17,13 +17,13 @@
                        Margin="0,0,0,10" />
             <!-- Zoekbalken -->
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
-                <Border BoxShadow="0 4 10 #33000000">
+                <Border BoxShadow="{StaticResource Shadow}">
                     <TextBox Width="250"
                              Watermark="🔍 Zoek op product of datum"
                              Text="{Binding ProductQuery, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,0,10,0" />
                 </Border>
-                <Border BoxShadow="0 4 10 #33000000">
+                <Border BoxShadow="{StaticResource Shadow}">
                     <TextBox Width="250" Watermark="🔍 Zoek op gebruiker"
                              Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
                 </Border>

@@ -16,7 +16,7 @@
                 VerticalAlignment="Center"
                 BorderBrush="{StaticResource Purple}"
                 BorderThickness="3"
-                BoxShadow="0 8 30 #33000000">
+                BoxShadow="{StaticResource Shadow}">
 
             <StackPanel Spacing="28">
 

@@ -11,7 +11,7 @@
         <DockPanel Background="{StaticResource White}" Grid.Row="1">
             <Border Height="250" DockPanel.Dock="Top" Padding="15">
                 <UniformGrid Rows="1" Columns="4" HorizontalAlignment="Stretch">
-                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="{StaticResource Purple}" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
@@ -19,7 +19,7 @@
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="orange" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
@@ -27,14 +27,14 @@
                                        FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="red" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
                             <TextBlock Text="Te laat" Foreground="red" HorizontalAlignment="Center" FontSize="22" />
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="0 8 30 #33000000">
+                    <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
                             <TextBlock Text="0" Foreground="Green" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
@@ -46,7 +46,7 @@
             </Border>
             <Border DockPanel.Dock="Top" Padding="10,20,10,10">
                 <StackPanel Spacing="20">
-                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                    <Border BoxShadow="{StaticResource Shadow}" CornerRadius="12">
                         <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
                                 Background="{StaticResource DarkerWhite}">
                             <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
@@ -63,7 +63,7 @@
                             </StackPanel>
                         </Button>
                     </Border>
-                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                    <Border BoxShadow="{StaticResource Shadow}" CornerRadius="12">
                         <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
                                 Background="{StaticResource DarkerWhite}">
                             <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
@@ -80,7 +80,7 @@
                             </StackPanel>
                         </Button>
                     </Border>
-                    <Border BoxShadow="0 8 30 #33000000" CornerRadius="12">
+                    <Border BoxShadow="{StaticResource Shadow}" CornerRadius="12">
                         <Button HorizontalAlignment="Stretch" Height="70" CornerRadius="12"
                                 Background="{StaticResource DarkerWhite}">
                             <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">

@@ -31,7 +31,7 @@
                     <Border Grid.Column="0"
                             Background="{StaticResource DarkerWhite}"
                             BorderBrush="{StaticResource Gray}"
-                            BoxShadow="0 4 10 #33000000"
+                            BoxShadow="{StaticResource Shadow}"
                             BorderThickness="1"
                             CornerRadius="8"
                             Padding="12,8"
