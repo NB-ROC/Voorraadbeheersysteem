@@ -1,3 +1,5 @@
+using Backend.Entities.Relations;
+
 namespace Backend.Entities;
 
 public class Loan
@@ -10,7 +12,9 @@ public class Loan
     public int LenderId { get; set; }
     public User Lender { get; set; } = null!;
 
+    public ICollection<LoanProduct> Products = null!;
+    
     public DateTime LoanedAt { get; set; } = DateTime.UtcNow;
-    public DateTime DueDate { get; set; }
+    public DateTime DueAt { get; set; }
     public DateTime? ReturnedAt { get; set; }
 }

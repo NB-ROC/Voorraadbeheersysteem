@@ -12,7 +12,14 @@ message MetaLoan {
   int64 LoanedAt = 4;
   int64 DueAt = 5;
   int64 ReturnedAt = 6;
-  repeated product.MetaProduct products = 7;
+  repeated MetaLoanProduct products = 7;
+}
+
+message MetaLoanProduct {
+  int32 id = 1;
+  int32 amount = 2;
+  bool returned = 3;
+  product.MetaProduct product = 4;
 }
 
 // Page
@@ -41,7 +48,7 @@ message CreateLoanRequest {
   int64 LoanedAt = 3;
   int64 DueAt = 4;
   int64 ReturnedAt = 5;
-  repeated product.MetaProduct products = 6;
+  repeated MetaLoanProduct products = 6;
 }
 
 message CreateLoanResponse {
@@ -56,7 +63,7 @@ message ModifyLoanRequest {
   optional int64 LoanedAt = 4;
   optional int64 DueAt = 5;
   optional int64 ReturnedAt = 6;
-  repeated product.MetaProduct products = 7;
+  repeated MetaLoanProduct products = 7;
 }
 
 message ModifyLoanResponse {

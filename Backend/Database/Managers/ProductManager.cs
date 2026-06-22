@@ -23,7 +23,6 @@ public class ProductManager
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync().ConfigureAwait(false);
-        ;
     }
 
     public async Task<Product?> Get(int id)

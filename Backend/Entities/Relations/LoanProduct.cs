@@ -7,4 +7,7 @@ public class LoanProduct
 
     public int ProductId { get; set; }
     public Product Product { get; set; } = null!;
+
+    public int Amount { get; set; }
+    public bool Returned { get; set; }
 }

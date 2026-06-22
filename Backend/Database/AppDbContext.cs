@@ -64,6 +64,11 @@ public class AppDbContext : DbContext
             .HasForeignKey(l => l.LenderId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Loan>()
+            .HasMany(l => l.Products)
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
+
         // Product → Category
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Category)
@@ -99,18 +104,18 @@ public class AppDbContext : DbContext
             .HasForeignKey(ur => ur.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // // ProductRole → Product
-        // modelBuilder.Entity<ProductRole>()
-        //     .HasOne(pr => pr.Product)
-        //     .WithMany()
-        //     .HasForeignKey(pr => pr.ProductId)
-        //     .OnDelete(DeleteBehavior.Cascade);
-        //
-        // modelBuilder.Entity<ProductRole>()
-        //     .HasOne(pr => pr.Role)
-        //     .WithMany()
-        //     .HasForeignKey(pr => pr.RoleId)
-        //     .OnDelete(DeleteBehavior.Cascade);
+        // ProductRole → Product
+        modelBuilder.Entity<ProductRole>()
+            .HasOne(pr => pr.Product)
+            .WithMany()
+            .HasForeignKey(pr => pr.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<ProductRole>()
+            .HasOne(pr => pr.Role)
+            .WithMany()
+            .HasForeignKey(pr => pr.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // Default roles
         modelBuilder.Entity<Role>()
