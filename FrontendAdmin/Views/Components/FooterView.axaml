@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Components.FooterView"
              x:DataType="{x:Type components:FooterViewModel}">
-    <Border Background="#6E6EB4">
+    <Border Background="{StaticResource Purple}">
         <UniformGrid Rows="1" Columns="4">
             <Button Background="Transparent" BorderThickness="0"
                     HorizontalAlignment="Stretch"
@@ -14,8 +14,8 @@
                     VerticalContentAlignment="Center"
                     Command="{Binding NavigateDashboard}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                    <TextBlock Text="⊞" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="16" />
-                    <TextBlock Text="Dashboard" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="11" />
+                    <TextBlock Text="⊞" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Dashboard" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>
             <Button Background="Transparent" BorderThickness="0"
@@ -24,8 +24,8 @@
                     VerticalContentAlignment="Center"
                     Command="{Binding NavigateProducts}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                    <TextBlock Text="☰" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="16" />
-                    <TextBlock Text="Producten" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="11" />
+                    <TextBlock Text="☰" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Producten" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>
             <Button Background="Transparent" BorderThickness="0"
@@ -34,8 +34,8 @@
                     VerticalContentAlignment="Center"
                     Command="{Binding NavigateLoans}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                    <TextBlock Text="📋" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="16" />
-                    <TextBlock Text="Leningen" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="11" />
+                    <TextBlock Text="📋" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Leningen" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>
             <Button Background="Transparent" BorderThickness="0"
@@ -44,8 +44,8 @@
                     VerticalContentAlignment="Center"
                     Command="{Binding NavigateUsers}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                    <TextBlock Text="👤" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="16" />
-                    <TextBlock Text="Gebruikers" Foreground="#FAFAFA" HorizontalAlignment="Center" FontSize="11" />
+                    <TextBlock Text="👤" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="16" />
+                    <TextBlock Text="Gebruikers" Foreground="{StaticResource White}" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>
 
