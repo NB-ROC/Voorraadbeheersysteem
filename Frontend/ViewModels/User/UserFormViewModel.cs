@@ -151,7 +151,7 @@ public class UserFormViewModel : PageViewModelBase
                 ? "Voornaam is verplicht."
                 : string.IsNullOrWhiteSpace(LastName)
                     ? "Achternaam is verplicht."
-                    : string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email)
+                    : !string.IsNullOrWhiteSpace(Email) && !IsValidEmail(Email)
                         ? "Ongeldig e-mailadres."
                         : !Roles.Any(x => x.IsSelected)
                             ? "Minstens één rol is verplicht."
