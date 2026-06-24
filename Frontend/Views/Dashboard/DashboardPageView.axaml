@@ -21,24 +21,24 @@
                     </Border>
                     <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="orange" HorizontalAlignment="Center" FontSize="70"
+                            <TextBlock Text="0" Foreground="{StaticResource Warning}" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Bijna te laat" Foreground="orange" HorizontalAlignment="Center"
+                            <TextBlock Text="Bijna te laat" Foreground="{StaticResource Warning}" HorizontalAlignment="Center"
                                        FontSize="22" />
                         </StackPanel>
                     </Border>
                     <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="red" HorizontalAlignment="Center" FontSize="70"
+                            <TextBlock Text="0" Foreground="{StaticResource Danger}" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Te laat" Foreground="red" HorizontalAlignment="Center" FontSize="22" />
+                            <TextBlock Text="Te laat" Foreground="{StaticResource Danger}" HorizontalAlignment="Center" FontSize="22" />
                         </StackPanel>
                     </Border>
                     <Border Background="{StaticResource DarkerWhite}" Margin="0,0,16,0" CornerRadius="20" BoxShadow="{StaticResource Shadow}">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                            <TextBlock Text="0" Foreground="Green" HorizontalAlignment="Center" FontSize="70"
+                            <TextBlock Text="0" Foreground="{StaticResource Correct}" HorizontalAlignment="Center" FontSize="70"
                                        FontWeight="Bold" />
-                            <TextBlock Text="Beschikbare Products" Foreground="Green" HorizontalAlignment="Center"
+                            <TextBlock Text="Beschikbare Products" Foreground="{StaticResource Correct}" HorizontalAlignment="Center"
                                        FontSize="22" TextWrapping="Wrap" TextAlignment="Center" />
                         </StackPanel>
                     </Border>

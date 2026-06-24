@@ -8,17 +8,16 @@
 
         <ContentControl Content="{Binding Header}" />
 
-        <Grid Grid.Row="1" Background="#FAFAFA" RowDefinitions="Auto,Auto,*">
+        <Grid Grid.Row="1" Background="{StaticResource White}" RowDefinitions="Auto,Auto,*">
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="20,20,20,12" Spacing="4">
                 <TextBlock Text="Producten Overzicht"
                            FontSize="28"
-                           FontWeight="Bold"
-                           Foreground="#1F2937" />
+                           FontWeight="Bold"/>
                 <TextBlock Text="Bekijk en beheer alle beschikbare producten"
                            FontSize="13"
-                           Foreground="#4B4B4D" />
+                           Foreground="{StaticResource Gray}" />
             </StackPanel>
 
             <!-- Toolbar -->
@@ -30,15 +29,15 @@
 
                     <!-- Zoekbalk -->
                     <Border Grid.Column="0"
-                            Background="#F9FAFB"
-                            BoxShadow="0 4 10 #33000000"
-                            BorderBrush="#D1D5DB"
+                            Background="{StaticResource DarkerWhite}"
+                            BoxShadow="{StaticResource Shadow}"
+                            BorderBrush="{StaticResource Gray}"
                             BorderThickness="1"
                             CornerRadius="8"
                             Padding="12,8"
                             VerticalAlignment="Center">
                         <TextBlock Text="🔍 Zoek producten..."
-                                   Foreground="#9CA3AF"
+                                   Foreground="{StaticResource Gray}"
                                    FontSize="13" />
                     </Border>
 
@@ -47,9 +46,8 @@
                             Content="Filters"
                             Height="38"
                             MinWidth="100"
-                            Background="#F3F4F6"
-                            Foreground="#111827"
-                            BorderBrush="#D1D5DB"
+                            Background="{StaticResource DarkerWhite}"
+                            BorderBrush="{StaticResource Gray}"
                             BorderThickness="1"
                             CornerRadius="8"
                             HorizontalContentAlignment="Center"
@@ -60,8 +58,8 @@
                             Content="Product toevoegen"
                             Height="38"
                             MinWidth="150"
-                            Background="#6E6EB4"
-                            Foreground="#FAFAFA"
+                            Background="{StaticResource Purple}"
+                            Foreground="{StaticResource White}"
                             BorderThickness="0"
                             CornerRadius="8"
                             HorizontalContentAlignment="Center"
@@ -77,8 +75,8 @@
                         <DataTemplate DataType="{x:Type product:ProductViewModel}">
                             <StackPanel Spacing="12">
 
-                                <Border Background="#FAFAFA"
-                                        BorderBrush="#E5E7EB"
+                                <Border Background="{StaticResource White}"
+                                        BorderBrush="{StaticResource DarkerWhite}"
                                         BorderThickness="1"
                                         CornerRadius="12"
                                         Padding="14">
@@ -89,8 +87,8 @@
                                         <Border Grid.Column="0"
                                                 Width="72"
                                                 Height="72"
-                                                Background="#F3F4F6"
-                                                BorderBrush="#D1D5DB"
+                                                Background="{StaticResource White}"
+                                                BorderBrush="{StaticResource DarkerWhite}"
                                                 BorderThickness="1"
                                                 CornerRadius="10">
                                             <Panel>
@@ -99,7 +97,7 @@
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"
                                                            FontSize="22"
-                                                           Foreground="#9CA3AF"
+                                                           Foreground="{StaticResource Gray}"
                                                            IsVisible="{Binding IsImageLoading}" />
 
                                                 <!-- Loaded -->
@@ -121,14 +119,13 @@
                                                     VerticalAlignment="Center"
                                                     Spacing="4">
                                             <TextBlock Text="{Binding CategoryName}"
-                                                       Foreground="#9CA3AF"
+                                                       Foreground="{StaticResource Gray}"
                                                        FontSize="12" />
                                             <TextBlock Text="{Binding Name}"
-                                                       Foreground="#111827"
                                                        FontWeight="Bold"
                                                        FontSize="16" />
                                             <TextBlock Text="{Binding Description}"
-                                                       Foreground="#6B7280"
+                                                       Foreground="{StaticResource Gray}"
                                                        FontSize="13"
                                                        TextWrapping="Wrap" />
                                         </StackPanel>
@@ -138,7 +135,7 @@
                                                    VerticalAlignment="Center">
                                             <Button Content="Bewerk"
                                                     Background="Orange"
-                                                    Foreground="#FAFAFA"
+                                                    Foreground="{StaticResource White}"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"
@@ -146,7 +143,7 @@
                                                     Command="{Binding EditCommand}" />
                                             <Button Content="Verwijder"
                                                     Background="Red"
-                                                    Foreground="#FAFAFA"
+                                                    Foreground="{StaticResource White}"
                                                     Padding="12 8"
                                                     CornerRadius="8"
                                                     VerticalAlignment="Center"

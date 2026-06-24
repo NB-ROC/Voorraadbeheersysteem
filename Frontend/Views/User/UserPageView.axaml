@@ -9,7 +9,6 @@
         <ContentControl Content="{Binding Header}" />
 
         <Grid Grid.Row="1" Background="{StaticResource DarkerWhite}" RowDefinitions="Auto,Auto,*">
-
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="20,20,20,12" Spacing="4">
                 <TextBlock Text="Gebruiker Overzicht"
@@ -102,7 +101,7 @@
                                         <DockPanel HorizontalSpacing="12" Grid.Column="2"
                                                    VerticalAlignment="Center">
                                             <Button Content="Bewerk"
-                                                    Background="Orange"
+                                                    Background="{StaticResource Warning}"
                                                     Foreground="{StaticResource White}"
                                                     Padding="12 8"
                                                     CornerRadius="8"
@@ -110,7 +109,7 @@
                                                     HorizontalAlignment="Center"
                                                     Command="{Binding EditCommand}" />
                                             <Button Content="Verwijder"
-                                                    Background="Red"
+                                                    Background="{StaticResource Danger}"
                                                     Foreground="{StaticResource White}"
                                                     Padding="12 8"
                                                     CornerRadius="8"

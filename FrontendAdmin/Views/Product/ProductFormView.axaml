@@ -57,14 +57,14 @@
                          MaxLength="{x:Static models:ProductModel.DescriptionLength}" />
             </StackPanel>
 
-            <Button FontWeight="Bold" Foreground="#FFFFFF" Content="Opslaan"
+            <Button FontWeight="Bold" Foreground="{StaticResource DarkerWhite}" Content="Opslaan"
                     Command="{Binding SaveCommand}"
                     HorizontalAlignment="Center"
-                    Background="#6E6EB4"
+                    Background="{StaticResource Purple}"
                     Margin="0,10,0,0" />
 
             <TextBlock Text="{Binding Error}"
-                       Foreground="Red"
+                       Foreground="{StaticResource Danger}"
                        TextWrapping="Wrap" />
 
         </StackPanel>
@@ -79,7 +79,7 @@
 
             <Border Width="400"
                     Height="400"
-                    BorderBrush="Black"
+                    BorderBrush="{StaticResource Gray}"
                     BorderThickness="1">
 
                 <Image Source="{Binding PreviewImage}"

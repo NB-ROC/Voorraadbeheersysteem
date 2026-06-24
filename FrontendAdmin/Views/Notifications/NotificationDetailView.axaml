@@ -16,28 +16,26 @@
             <Button Content="← Terug"
                     Width="100"
                     HorizontalAlignment="Left"
-                    Background="#E5E7EB"
-                    Foreground="#111827"
+                    Background="{StaticResource DarkerWhite}"
                     CornerRadius="8"
                     Padding="12,8"
                     Command="{Binding BackCommand}" />
 
             <TextBlock Text="{Binding Title}"
                        FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="#111827" />
+                       FontWeight="Bold"/>
 
-            <Border Background="White"
+            <Border Background="{StaticResource White}"
                     Padding="16"
                     CornerRadius="12"
-                    BorderBrush="#E5E7EB"
+                    BorderBrush="{StaticResource DarkerWhite}"
                     BorderThickness="1">
 
                 <StackPanel Spacing="12">
 
                     <TextBlock Text="{Binding Description}"
                                FontSize="14"
-                               Foreground="#374151"
+                               Foreground="{StaticResource Gray}"
                                TextWrapping="Wrap" />
                 </StackPanel>
 

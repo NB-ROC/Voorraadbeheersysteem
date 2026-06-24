@@ -18,5 +18,8 @@
         <SolidColorBrush x:Key="DarkerWhite">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="Gray">#6B7280</SolidColorBrush>
         <BoxShadows x:Key="Shadow">0 4 10 0 #40000000</BoxShadows>
+        <SolidColorBrush x:Key="Correct">Green</SolidColorBrush>
+        <SolidColorBrush x:Key="Warning">orange</SolidColorBrush>
+        <SolidColorBrush x:Key="Danger">Red</SolidColorBrush>
     </Application.Resources>
 </Application>

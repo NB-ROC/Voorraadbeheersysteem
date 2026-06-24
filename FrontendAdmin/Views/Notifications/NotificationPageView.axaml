@@ -11,7 +11,7 @@
 
         <!-- Content -->
         <ScrollViewer Grid.Row="1"
-                      Background="#F6F7FB">
+                      Background="{StaticResource White}">
 
             <StackPanel Margin="20"
                         Spacing="16">
@@ -20,12 +20,11 @@
                 <StackPanel Spacing="4">
                     <TextBlock Text="Meldingen"
                                FontSize="28"
-                               FontWeight="Bold"
-                               Foreground="#111827" />
+                               FontWeight="Bold"/>
 
                     <TextBlock Text="Nieuwe registratie aanvragen"
                                FontSize="13"
-                               Foreground="#6B7280" />
+                               Foreground="{StaticResource Gray}" />
                 </StackPanel>
 
                 <!-- Meldingen -->
@@ -34,10 +33,10 @@
 
                         <DataTemplate>
 
-                            <Border Background="White"
+                            <Border Background="{StaticResource White}"
                                     CornerRadius="12"
                                     Padding="16"
-                                    BorderBrush="#E5E7EB"
+                                    BorderBrush="{StaticResource DarkerWhite}"
                                     BorderThickness="1">
 
                                 <Grid ColumnDefinitions="*,Auto">
@@ -46,19 +45,18 @@
 
                                         <TextBlock Text="{Binding Title}"
                                                    FontWeight="Bold"
-                                                   FontSize="16"
-                                                   Foreground="#111827" />
+                                                   FontSize="16"/>
 
                                         <TextBlock Text="{Binding Description}"
-                                                   Foreground="#6B7280"
+                                                   Foreground="{StaticResource Gray}"
                                                    FontSize="13" />
 
                                     </StackPanel>
 
                                     <Button Grid.Column="1"
                                             Content="Bekijken"
-                                            Background="#4F46E5"
-                                            Foreground="White"
+                                            Background="{StaticResource Purple}"
+                                            Foreground="{StaticResource White}"
                                             CornerRadius="8"
                                             Command="{Binding ViewCommand}"
                                             Padding="12,8" />

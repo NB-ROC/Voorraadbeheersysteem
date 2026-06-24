@@ -46,7 +46,6 @@
                 <!-- Password -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Wachtwoord"
-                               Foreground="#2A2A2A"
                                FontSize="15" />
                     <TextBox Text="{Binding Password}"
                              PasswordChar="*"

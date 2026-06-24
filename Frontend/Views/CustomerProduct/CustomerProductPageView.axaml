@@ -94,13 +94,13 @@
                                                 VerticalAlignment="Center">
 
                                         <Button Content="Toevoegen aan mandje"
-                                                Background="Orange"
+                                                Background="{StaticResource Warning}"
                                                 Foreground="{StaticResource White}"
                                                 Padding="12,6"
                                                 CornerRadius="8" />
 
                                         <Button Content="Verwijderen"
-                                                Background="Red"
+                                                Background="{StaticResource Danger}"
                                                 Foreground="{StaticResource White}"
                                                 Padding="12,6"
                                                 CornerRadius="8" />

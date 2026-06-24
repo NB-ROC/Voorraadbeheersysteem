@@ -6,17 +6,17 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FrontendAdmin.Views.Login.LoginPageView"
              x:DataType="{x:Type login:LoginPageViewModel}">
-     <Grid Background="#FAFAFA">
+     <Grid Background="{StaticResource White}">
 
         <Border Width="440"
                 Padding="40"
-                Background="#FAFAFA"
+                Background="{StaticResource White}"
                 CornerRadius="20"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                BorderBrush="#6E6EB4"
+                BorderBrush="{StaticResource Purple}"
                 BorderThickness="3"
-                BoxShadow="0 8 30 #33000000">
+                BoxShadow="{StaticResource Shadow}">
 
             <StackPanel Spacing="28">
 
@@ -25,20 +25,19 @@
                     <TextBlock Text="Log in"
                                FontSize="32"
                                FontWeight="Bold"
-                               Foreground="#6E6EB4"/>
+                               Foreground="{StaticResource Purple}"/>
                     <TextBlock Text="om verder te gaan"
                                FontSize="18"
-                               Foreground="#4b4b4d"/>
+                               Foreground="{StaticResource Gray}"/>
                 </StackPanel>
 
                 <!-- Email -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Email"
-                               Foreground="#4b4b4d"
                                FontSize="15"/>
                     <TextBox Text="{Binding Email}"
                              Watermark="Vul hier uw email in"
-                             BorderBrush="#4b4b4d"
+                             BorderBrush="{StaticResource Gray}"
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
@@ -48,12 +47,11 @@
                 <!-- Password -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Wachtwoord"
-                               Foreground="#4b4b4d"
                                FontSize="15"/>
                     <TextBox Text="{Binding Password}"
                              PasswordChar="*"
                              Watermark="Vul hier uw wachtwoord in"
-                             BorderBrush="#4b4b4d"
+                             BorderBrush="{StaticResource Gray}"
                              BorderThickness="2"
                              CornerRadius="10"
                              Padding="12"
@@ -63,8 +61,8 @@
                 <!-- Continue Button -->
                 <Button Content="Inloggen"
                         Command="{Binding LoginCommand}"
-                        Background="#6E6EB4"
-                        Foreground="#FAFAFA"
+                        Background="{StaticResource Purple}"
+                        Foreground="{StaticResource White}"
                         CornerRadius="12"
                         Padding="16"
                         FontSize="18"
