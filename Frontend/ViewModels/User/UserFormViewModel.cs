@@ -60,13 +60,29 @@ public class UserFormViewModel : PageViewModelBase
 
         async Task SaveAsync()
         {
+            string email;
+            bool student = SelectedRoleIds.Contains(3);
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                if (student)
+                {
+                    email = $"{Number}@student.roc-nijmegen.nl";
+                } else
+                {
+                    email = $"{FirstName.First()}.{LastName}@roc-nijmegen.nl";
+                }
+            } else
+            {
+                email = Email;
+            }
+            
             UserModel model = new()
             {
                 Id = Id,
                 CardId = _cardId ?? throw new NullReferenceException(),
                 FirstName = FirstName,
                 LastName = LastName,
-                Email = Email,
+                Email = email,
                 Number = Number,
                 Roles = SelectedRoleIds.Select(id => new RoleModel { Id = id }).ToList()
             };
