@@ -40,7 +40,6 @@ public class LoanManager
             List<LoanProduct> loanProducts = products.Select(lp =>
             {
                 lp.LoanId = loanId;
-                lp.ProductId = lp.Product.Id;
                 lp.Returned = false;
                 return lp;
             }).ToList();
@@ -75,6 +74,8 @@ public class LoanManager
                 _context.LoanProducts.Remove(loanProduct);
                 loanProducts.Remove(loanProduct);
             }
+
+            if (loanProducts.Count == 0) loan.ReturnedAt = DateTime.UtcNow;
 
             foreach (LoanProduct loanProduct in loanProducts)
             {

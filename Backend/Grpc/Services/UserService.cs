@@ -138,7 +138,7 @@ public class UserService : Users.UsersBase
         return new UserModifyResponse { Success = true };
     }
 
-    private static MetaUser MapMeta(User user)
+    public static MetaUser MapMeta(User user)
     {
         MetaUser meta = new()
         {

@@ -234,7 +234,7 @@ public class ProductService : Products.ProductsBase
         return response;
     }
 
-    private static MetaProduct MapMeta(Product product)
+    public static MetaProduct MapMeta(Product product)
     {
         var meta = new MetaProduct
         {

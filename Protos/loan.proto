@@ -4,6 +4,16 @@ import "product.proto";
 
 option csharp_namespace = "Protos.Loan";
 
+package loan;
+
+service Loans {
+  rpc Page (LoanPageRequest) returns (LoanPageResponse);
+  rpc Get (LoanGetRequest) returns (LoanGetResponse);
+  rpc Create (LoanCreateRequest) returns (LoanCreateResponse);
+  rpc Modify (LoanModifyRequest) returns (LoanModifyResponse);
+  rpc Delete (LoanDeleteRequest) returns (LoanDeleteResponse);
+}
+
 // Meta
 message MetaLoan {
   int32 id = 1;
@@ -11,15 +21,15 @@ message MetaLoan {
   user.MetaUser lender = 3;
   int64 LoanedAt = 4;
   int64 DueAt = 5;
-  int64 ReturnedAt = 6;
+  optional int64 ReturnedAt = 6;
   repeated MetaLoanProduct products = 7;
 }
 
 message MetaLoanProduct {
-  int32 id = 1;
-  int32 amount = 2;
-  bool returned = 3;
-  product.MetaProduct product = 4;
+  int32 amount = 1;
+  bool returned = 2;
+  int32 product_id = 3;
+  optional product.MetaProduct product = 4;
 }
 
 // Page
@@ -33,48 +43,41 @@ message LoanPageResponse {
 }
 
 // Get
-message GetLoanRequest {
+message LoanGetRequest {
   int32 id = 1;
 }
 
-message GetLoanResponse {
-  MetaLoan loan = 1;
+message LoanGetResponse {
+  optional MetaLoan loan = 1;
 }
 
 // Create
-message CreateLoanRequest {
-  user.MetaUser user = 1;
-  user.MetaUser lender = 2;
-  int64 LoanedAt = 3;
-  int64 DueAt = 4;
-  int64 ReturnedAt = 5;
-  repeated MetaLoanProduct products = 6;
+message LoanCreateRequest {
+  int32 user_id = 1;
+  int32 lender_id = 2;
+  int64 DueAt = 3;
+  repeated MetaLoanProduct products = 4;
 }
 
-message CreateLoanResponse {
+message LoanCreateResponse {
   bool success = 1;
 }
 
 // Modify
-message ModifyLoanRequest {
+message LoanModifyRequest {
   int32 id = 1;
-  optional user.MetaUser user = 2;
-  optional user.MetaUser lender = 3;
-  optional int64 LoanedAt = 4;
-  optional int64 DueAt = 5;
-  optional int64 ReturnedAt = 6;
-  repeated MetaLoanProduct products = 7;
+  repeated MetaLoanProduct products = 2;
 }
 
-message ModifyLoanResponse {
+message LoanModifyResponse {
   bool success = 1;
 }
 
 // Delete
-message DeleteLoanRequest {
+message LoanDeleteRequest {
   int32 id = 1;
 }
 
-message DeleteLoanResponse {
+message LoanDeleteResponse {
   bool response = 1;
 }
