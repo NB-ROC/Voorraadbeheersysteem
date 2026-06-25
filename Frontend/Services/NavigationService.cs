@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Frontend.ViewModels;
 
@@ -11,6 +12,10 @@ public interface INavigationService
     public Task NavigateTo<TViewModel, TModel>(TModel? model = null)
         where TViewModel : FormViewModelBase<TModel>
         where TModel : class;
+
+    public Task NavigateTo<TViewModel, TSelectable>(Action<TSelectable?> callback, List<TSelectable>? data = null)
+        where TViewModel : SelectionViewModelBase<TSelectable>
+        where TSelectable : class;
 }
 
 public class NavigationService : INavigationService
@@ -42,6 +47,25 @@ public class NavigationService : INavigationService
                                        throw new NullReferenceException("Form not found in service provider");
         await vm.LoadAsync(model);
 
+        _mainWindow.CurrentPage = vm;
+    }
+
+    public async Task NavigateTo<TViewModel, TSelectable>(Action<TSelectable?> callback, List<TSelectable>? data = null) 
+        where TViewModel : SelectionViewModelBase<TSelectable> 
+        where TSelectable : class
+    {
+        SelectionViewModelBase<TSelectable> vm = _vmFactory(typeof(TViewModel)) as TViewModel ??
+                                                 throw new NullReferenceException("Selector not found in service provider");
+
+        ViewModelBase currentPage = _mainWindow.CurrentPage?? throw new NullReferenceException("Current page is not set");
+        Action<TSelectable?> intermediaryCallback = selectable =>
+        {
+            callback(selectable);
+            _mainWindow.CurrentPage = currentPage;
+        };
+        
+        await vm.LoadAsync(intermediaryCallback, data);
+        
         _mainWindow.CurrentPage = vm;
     }
 }

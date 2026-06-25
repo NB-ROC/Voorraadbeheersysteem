@@ -14,22 +14,14 @@ namespace Frontend.ViewModels.Loan;
 
 public class LoanPageViewModel : PageViewModelBase
 {
+    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
+    {
+    }
+
     public ObservableCollection<LoanViewModel> AllLoans
     {
         get;
     } = [];
-
-    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
-    {
-        this.WhenAnyValue(x => x.ProductQuery, x => x.BorrowerQuery)
-            .Throttle(TimeSpan.FromMilliseconds(300))
-            .Subscribe(_ => ApplyFilters());
-
-        FilterStatusCommand = ReactiveCommand.Create<string>(FilterByStatus);
-        ResetCommand = ReactiveCommand.Create(ResetFilters);
-
-        ApplyFilters();
-    }
 
     public ObservableCollection<LoanViewModel> FilteredLoans { get; } = new();
 
@@ -52,12 +44,12 @@ public class LoanPageViewModel : PageViewModelBase
     {
         string productQuery = ProductQuery.ToLower();
 
-        IEnumerable<LoanViewModel> filtered = AllLoans.Where(l =>
-            (l.ProductName.Contains(productQuery, StringComparison.OrdinalIgnoreCase) ||
-             l.LoanDate.Contains(productQuery, StringComparison.OrdinalIgnoreCase)) &&
-            l.BorrowerNumber.Contains(productQuery, StringComparison.OrdinalIgnoreCase));
-
-        UpdateFilteredLoans(filtered);
+        // IEnumerable<LoanViewModel> filtered = AllLoans.Where(l =>
+        //     (l.ProductName.Contains(productQuery, StringComparison.OrdinalIgnoreCase) ||
+        //      l.LoanDate.Contains(productQuery, StringComparison.OrdinalIgnoreCase)) &&
+        //     l.BorrowerNumber.Contains(productQuery, StringComparison.OrdinalIgnoreCase));
+        //
+        // UpdateFilteredLoans(filtered);
     }
 
     private void FilterByStatus(string status)
@@ -65,13 +57,13 @@ public class LoanPageViewModel : PageViewModelBase
         string productQuery = ProductQuery.ToLower();
         string borrowerQuery = BorrowerQuery.ToLower();
 
-        IEnumerable<LoanViewModel> filtered = AllLoans.Where(l =>
-            l.Status == status &&
-            (l.ProductName.Contains(productQuery, StringComparison.OrdinalIgnoreCase) ||
-             l.LoanDate.Contains(productQuery, StringComparison.OrdinalIgnoreCase)) &&
-            l.BorrowerNumber.Contains(borrowerQuery, StringComparison.OrdinalIgnoreCase));
-
-        UpdateFilteredLoans(filtered);
+        // IEnumerable<LoanViewModel> filtered = AllLoans.Where(l =>
+        //     l.Status == status &&
+        //     (l.ProductName.Contains(productQuery, StringComparison.OrdinalIgnoreCase) ||
+        //      l.LoanDate.Contains(productQuery, StringComparison.OrdinalIgnoreCase)) &&
+        //     l.BorrowerNumber.Contains(borrowerQuery, StringComparison.OrdinalIgnoreCase));
+        //
+        // UpdateFilteredLoans(filtered);
     }
 
     private void UpdateFilteredLoans(IEnumerable<LoanViewModel> loans)
@@ -90,51 +82,8 @@ public class LoanPageViewModel : PageViewModelBase
         ApplyFilters();
     }
 
-    public override async Task LoadAsync()
+    public override Task LoadAsync()
     {
-        await LoadLoans();
-        ResetFilters();
-    }
-
-    private async Task LoadLoans()
-    {
-        AllLoans.Clear();
-
-        List<LoanViewModel> loans =
-        [
-            new(new LoanModel
-            {
-                ProductName = "Laptop",
-                BorrowerNumber = "123456",
-                LoanDate = "01-04-2026",
-                ReturnDate = "15-04-2026",
-                Status = "Active",
-                Image = "avares://FrontendAdmin/Assets/laptop.png"
-            }),
-
-            new(new LoanModel
-            {
-                ProductName = "Book",
-                BorrowerNumber = "6767676",
-                LoanDate = "20-03-2026",
-                ReturnDate = "25-03-2026",
-                Status = "Overdue",
-                Image = "avares://FrontendAdmin/Assets/boek.jpg"
-            }),
-
-            new(new LoanModel
-            {
-                ProductName = "Tablet",
-                BorrowerNumber = "345678",
-                LoanDate = "01-02-2026",
-                ReturnDate = "10-02-2026",
-                Status = "Returned",
-                Image = "avares://FrontendAdmin/Assets/tablet.png"
-            })
-            
-        ];
-        
-        foreach (LoanViewModel loan in loans)
-            AllLoans.Add(loan);
+        return Task.CompletedTask;
     }
 }
