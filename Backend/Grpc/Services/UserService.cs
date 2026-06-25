@@ -195,12 +195,13 @@ public class UserService : Users.UsersBase
     public override async Task<UserLenderScanResponse> LenderScan(UserLenderScanRequest request,
         ServerCallContext context)
     {
-        (string email, string name)? tuple = await _manager.LenderScan(request.CardId.ToByteArray());
+        (int id, string email, string name)? tuple = await _manager.LenderScan(request.CardId.ToByteArray());
 
         UserLenderScanResponse response = new();
 
         if (tuple != null)
         {
+            response.Id = tuple.Value.id;
             response.Email = tuple.Value.email;
             response.Name = tuple.Value.name;
         }

@@ -22,7 +22,7 @@ public class LoginScannerPageViewModel : PageViewModelBase
     private bool ScannerCallback(byte[] bytes)
     {
 
-        (RequestResult result, (string email, string name)? tuple) = _api.Users.LenderScan(bytes).Result;
+        (RequestResult result, (int id, string email, string name)? tuple) = _api.Users.LenderScan(bytes).Result;
 
         if (result != RequestResult.Success || tuple == null)
         {

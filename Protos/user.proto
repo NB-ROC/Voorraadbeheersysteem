@@ -91,8 +91,9 @@ message UserLenderScanRequest {
 }
 
 message UserLenderScanResponse {
-  optional string email = 1;
-  optional string name = 2;
+  optional int32 id = 1;
+  optional string email = 2;
+  optional string name = 3;
 }
 
 // LenderPage

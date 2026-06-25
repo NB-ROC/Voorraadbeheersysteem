@@ -117,7 +117,7 @@ public class UserManager
             .FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<(string email, string name)?> LenderScan(byte[] cardId)
+    public async Task<(int id, string email, string name)?> LenderScan(byte[] cardId)
     {
         User? user = await _context.Users
             .Include(u => u.UserRoles)
@@ -132,7 +132,7 @@ public class UserManager
 
         if (user == null) return null;
 
-        return (user.Email, user.FirstName + " " + user.LastName);
+        return (user.Id, user.Email, user.FirstName + " " + user.LastName);
     }
 
     public async Task<List<User>> LenderPage(int page, int pageSize)

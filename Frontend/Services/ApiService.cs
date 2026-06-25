@@ -10,6 +10,7 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Protos.Auth;
+using Protos.Loan;
 using Protos.Product;
 using Protos.User;
 
@@ -295,7 +296,7 @@ public class UserEndpoint
         return (RequestResult.Success, response.Success);
     }
 
-    public async Task<(RequestResult, (string email, string name)?)> LenderScan(byte[] cardId)
+    public async Task<(RequestResult, (int id, string email, string name)?)> LenderScan(byte[] cardId)
     {
         UserLenderScanRequest request = new()
         {
@@ -312,7 +313,7 @@ public class UserEndpoint
             return (GetFailCode(e), null);
         }
 
-        return (RequestResult.Success, response.HasEmail ? (response.Email, response.Name) : null);
+        return (RequestResult.Success, response.HasEmail ? (response.Id, response.Email, response.Name) : null);
     }
 
     public async Task<(RequestResult, List<UserModel>)> LenderPage(int page, int pageSize)
@@ -620,6 +621,208 @@ public class ProductEndpoint
         return e.StatusCode == StatusCode.PermissionDenied
             ? RequestResult.Denied
             : RequestResult.Failed;
+    }
+}
+
+public class LoanEndpoint
+{
+    private readonly Loans.LoansClient _client;
+
+    public LoanEndpoint(Loans.LoansClient client)
+    {
+        _client = client;
+    }
+
+    public async Task<(RequestResult, List<LoanModel>)> Page(int page, int pageSize)
+    {
+        LoanPageRequest request = new()
+        {
+            Page = page,
+            PageSize = pageSize
+        };
+
+        LoanPageResponse? response;
+        try
+        {
+            response = await _client.PageAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null!);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Loans.Select(MapLoan).ToList()
+        );
+    }
+
+    public async Task<(RequestResult, LoanModel?)> Get(int id)
+    {
+        LoanGetRequest request = new()
+        {
+            Id = id
+        };
+
+        LoanGetResponse? response;
+        try
+        {
+            response = await _client.GetAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), null);
+        }
+
+        return
+        (
+            RequestResult.Success,
+            response.Loan != null ? MapLoan(response.Loan) : null
+        );
+    }
+
+    public async Task<(RequestResult, bool)> Create(LoanModel loanModel)
+    {
+        LoanCreateRequest request = new()
+        {
+            UserId = loanModel.User.Id,
+            LenderId = loanModel.Lender.Id,
+            DueAt = loanModel.DueAt.ToFileTimeUtc()
+        };
+
+        request.Products.Add(loanModel.Products.Select(MapLoanProduct));
+
+        LoanCreateResponse? response;
+        try
+        {
+            response = await _client.CreateAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, bool)> Modify(LoanModel loanModel)
+    {
+        LoanModifyRequest request = new()
+        {
+            Id = loanModel.Id
+        };
+
+        request.Products.Add(loanModel.Products.Select(MapLoanProduct));
+
+        LoanModifyResponse? response;
+        try
+        {
+            response = await _client.ModifyAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Success);
+    }
+
+    public async Task<(RequestResult, bool)> Delete(int id)
+    {
+        LoanDeleteRequest request = new()
+        {
+            Id = id
+        };
+
+        LoanDeleteResponse? response;
+        try
+        {
+            response = await _client.DeleteAsync(request);
+        }
+        catch (RpcException e)
+        {
+            return (GetFailCode(e), false);
+        }
+
+        return (RequestResult.Success, response.Response);
+    }
+
+    private static LoanModel MapLoan(MetaLoan loan)
+    {
+        return new LoanModel
+        {
+            Id = loan.Id,
+            User = new UserModel
+            {
+                Id = loan.User.Id,
+                CardId = loan.User.CardId.ToByteArray(),
+                Email = loan.User.Email,
+                FirstName = loan.User.FirstName,
+                LastName = loan.User.LastName,
+                Number = loan.User.Number
+            },
+            Lender = new UserModel
+            {
+                Id = loan.Lender.Id,
+                CardId = loan.Lender.CardId.ToByteArray(),
+                Email = loan.Lender.Email,
+                FirstName = loan.Lender.FirstName,
+                LastName = loan.Lender.LastName,
+                Number = loan.Lender.Number
+            },
+            LoanedAt = DateTime.FromFileTimeUtc(loan.LoanedAt),
+            DueAt = DateTime.FromFileTimeUtc(loan.DueAt),
+            ReturnedAt = loan.HasReturnedAt ? DateTime.FromFileTimeUtc(loan.ReturnedAt) : null,
+            Products = loan.Products.Select(MapLoanProduct).ToList()
+        };
+    }
+
+    private static LoanProductModel MapLoanProduct(MetaLoanProduct product)
+    {
+        return new LoanProductModel
+        {
+            Amount = product.Amount,
+            Returned = product.Returned,
+            ProductId = product.ProductId,
+            Product = MapProduct(product.Product)
+        };
+    }
+
+    private static MetaLoanProduct MapLoanProduct(LoanProductModel product)
+    {
+        return new MetaLoanProduct
+        {
+            Amount = product.Amount,
+            Returned = product.Returned,
+            ProductId = product.ProductId
+        };
+    }
+
+    private static ProductModel MapProduct(MetaProduct product)
+    {
+        return new ProductModel
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Description = product.Description,
+            Category = new CategoryModel
+            {
+                Id = product.Category.Id,
+                Name = product.Category.Name
+            },
+            RoleModel = new RoleModel
+            {
+                Id = product.Role.Id,
+                Name = product.Role.Name
+            },
+            ImageName = product.Image
+        };
+    }
+
+    private static RequestResult GetFailCode(RpcException e)
+    {
+        return e.StatusCode == StatusCode.PermissionDenied ? RequestResult.Denied : RequestResult.Failed;
     }
 }
 
