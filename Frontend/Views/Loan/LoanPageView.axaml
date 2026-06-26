@@ -11,7 +11,7 @@
         <DockPanel Grid.Row="1" Background="White" Margin="10">
             <!-- titel -->
             <TextBlock DockPanel.Dock="Top"
-                       Text="Mijn Leningen"
+                       Text="Leningen"
                        FontSize="20"
                        FontWeight="Bold"
                        Margin="0,0,0,10" />
@@ -24,7 +24,10 @@
 
                 <TextBox Width="250"
                          Watermark="Zoek op gebruiker"
+                         Margin="0,0,10,0"
                          Text="{Binding BorrowerQuery, UpdateSourceTrigger=PropertyChanged}" />
+                
+                <Button Content="Lening aanmaken" Command="{Binding LoanFormCommand}" />
             </StackPanel>
 
             <!-- filters -->

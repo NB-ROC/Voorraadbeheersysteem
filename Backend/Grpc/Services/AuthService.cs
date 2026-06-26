@@ -36,7 +36,7 @@ public class AuthService : Auth.AuthBase
             User = new MetaUser
             {
                 Id = user.Id,
-                CardId = ByteString.CopyFrom(user.CardId),
+                CardId = ByteString.CopyFrom(user.UserId),
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email

@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
+using Frontend.Services;
 using Frontend.ViewModels.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -14,8 +15,12 @@ namespace Frontend.ViewModels.Loan;
 
 public class LoanPageViewModel : PageViewModelBase
 {
-    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer) : base(header, footer)
+    private readonly INavigationService _navigation;
+    
+    public LoanPageViewModel(HeaderViewModel header, FooterViewModel footer, INavigationService navigation) : base(header, footer)
     {
+        _navigation = navigation;
+        LoanFormCommand = ReactiveCommand.CreateFromTask(async () => await _navigation.NavigateTo<LoanFormViewModel, LoanModel>());
     }
 
     public ObservableCollection<LoanViewModel> AllLoans
@@ -39,6 +44,7 @@ public class LoanPageViewModel : PageViewModelBase
 
     public ReactiveCommand<string, Unit> FilterStatusCommand { get; }
     public ReactiveCommand<Unit, Unit> ResetCommand { get; }
+    public ReactiveCommand<Unit, Unit> LoanFormCommand { get; }
 
     private void ApplyFilters()
     {

@@ -54,9 +54,8 @@ message LoanGetResponse {
 // Create
 message LoanCreateRequest {
   int32 user_id = 1;
-  int32 lender_id = 2;
-  int64 DueAt = 3;
-  repeated MetaLoanProduct products = 4;
+  int64 DueAt = 2;
+  repeated MetaLoanProduct products = 3;
 }
 
 message LoanCreateResponse {

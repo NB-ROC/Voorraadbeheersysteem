@@ -69,11 +69,13 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
     private async Task SaveProductAsync()
     {
         if (CategoryModel == null) return;
-
+        if (Amount == null) return;
+        
         ProductModel model = new()
         {
             Id = _id ?? -1,
             Name = Name,
+            Amount = Amount?? throw new NullReferenceException("This exception should not be able to get triggered."),
             CategoryModel = CategoryModel.Id == NewCategoryOption.Id
                 ? new CategoryModel { Id = -1, Name = CustomCategory }
                 : CategoryModel,
@@ -151,6 +153,14 @@ public class ProductFormViewModel : FormViewModelBase<ProductModel>, IDataErrorI
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+
+    [Required(ErrorMessage = "Hoeveelheid is verplicht")]
+    [Range(0, int.MaxValue, ErrorMessage = "Hoeveelheid is verplicht")]
+    public int? Amount
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = 0;
 
     [Required(ErrorMessage = "Naam is verplicht.")]
     public string Name

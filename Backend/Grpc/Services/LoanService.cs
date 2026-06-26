@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using Backend.Database.Managers;
 using Backend.Entities;
 using Backend.Entities.Relations;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Protos.Loan;
 
 namespace Backend.Grpc.Services;
@@ -15,6 +17,7 @@ public class LoanService : Loans.LoansBase
         _manager = manager;
     }
     
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)},{nameof(RoleType.Lender)}")]
     public override async Task<LoanPageResponse> Page(LoanPageRequest request, ServerCallContext context)
     {
         List<Loan> loans = await _manager.Page(request.Page, request.PageSize);
@@ -24,6 +27,7 @@ public class LoanService : Loans.LoansBase
         return response;
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)},{nameof(RoleType.Lender)}")]
     public override async Task<LoanGetResponse> Get(LoanGetRequest request, ServerCallContext context)
     {
         Loan? loan = await _manager.Get(request.Id);
@@ -34,12 +38,13 @@ public class LoanService : Loans.LoansBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)},{nameof(RoleType.Lender)}")]
     public override async Task<LoanCreateResponse> Create(LoanCreateRequest request, ServerCallContext context)
     {
-        Loan loan = new Loan
+        Loan loan = new()
         {
             UserId = request.UserId,
-            LenderId = request.LenderId,
+            LenderId = GetActorId(context),
             DueAt = new DateTime(request.DueAt)
         };
 
@@ -55,6 +60,7 @@ public class LoanService : Loans.LoansBase
         };
     }
 
+    [Authorize(Roles = $"{nameof(RoleType.Admin)},{nameof(RoleType.Manager)},{nameof(RoleType.Lender)}")]
     public override async Task<LoanModifyResponse> Modify(LoanModifyRequest request, ServerCallContext context)
     {
         Loan? loan = await _manager.Get(request.Id);
@@ -96,5 +102,13 @@ public class LoanService : Loans.LoansBase
             Returned = loanProduct.Returned,
             Product = ProductService.MapMeta(loanProduct.Product)
         };
+    }
+    
+    private static int GetActorId(ServerCallContext context)
+    {
+        return int.Parse(
+            context.GetHttpContext().User
+                .FindFirst(ClaimTypes.NameIdentifier)!
+                .Value);
     }
 }

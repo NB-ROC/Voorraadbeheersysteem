@@ -437,6 +437,7 @@ public class ProductEndpoint
         ProductCreateRequest request = new()
         {
             Name = productModel.Name,
+            Amount = productModel.Amount,
             Description = productModel.Description,
             Category = new Category
             {
@@ -468,6 +469,7 @@ public class ProductEndpoint
             Id = productModel.Id,
             Name = productModel.Name,
             Description = productModel.Description,
+            Amount = productModel.Amount,
             Category = new Category
             {
                 Id = productModel.CategoryModel.Id,
@@ -592,6 +594,7 @@ public class ProductEndpoint
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
+            Amount = product.Amount,
             CategoryModel = new CategoryModel
             {
                 Id = product.Category.Id,

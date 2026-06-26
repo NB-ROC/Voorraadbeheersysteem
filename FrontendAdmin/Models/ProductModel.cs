@@ -11,6 +11,8 @@ public class ProductModel
     public const int ImageLength = 16;
 
     public int Id { get; set; }
+    
+    public int Amount { get; set; }
 
     [MaxLength(CategoryLength)] public string Name { get; set; } = null!;
 

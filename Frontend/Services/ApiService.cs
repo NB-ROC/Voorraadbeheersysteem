@@ -21,6 +21,7 @@ public interface IApiService
     public UserModel? LoggedInUser { get; }
     public UserEndpoint Users { get; }
     public ProductEndpoint Products { get; }
+    public LoanEndpoint Loans { get; }
 
     public Task<bool> LogIn(string email, string password);
 }
@@ -28,6 +29,18 @@ public interface IApiService
 public class ApiService : IApiService
 {
     private const string GrpcChannelIp = "http://127.0.0.1:8080";
+
+    private string Token { get; set; } = string.Empty;
+
+    public UserModel? LoggedInUser { get; private set; }
+
+    private Auth.AuthClient AuthClient { get; }
+
+    public UserEndpoint Users { get; }
+
+    public ProductEndpoint Products { get; }
+    
+    public LoanEndpoint Loans { get; }
 
     public ApiService()
     {
@@ -39,16 +52,8 @@ public class ApiService : IApiService
         AuthClient = new Auth.AuthClient(channel);
         Products = new ProductEndpoint(new Products.ProductsClient(invoker));
         Users = new UserEndpoint(new Users.UsersClient(invoker));
+        Loans = new LoanEndpoint(new Loans.LoansClient(invoker));
     }
-
-    private string Token { get; set; } = string.Empty;
-
-    public UserModel? LoggedInUser { get; private set; }
-
-    private Auth.AuthClient AuthClient { get; }
-
-    public UserEndpoint Users { get; }
-    public ProductEndpoint Products { get; }
 
     public async Task<bool> LogIn(string email, string password)
     {
@@ -430,15 +435,17 @@ public class ProductEndpoint
         ProductCreateRequest request = new()
         {
             Name = productModel.Name,
+            Amount = productModel.Amount,
             Description = productModel.Description,
             Category = new Category
             {
-                Id = productModel.Category.Id,
-                Name = productModel.Category.Name
+                Id = productModel.CategoryModel.Id,
+                Name = productModel.CategoryModel.Name
             },
-            RoleId = productModel.RoleModel.Id,
             Image = ByteString.CopyFrom(imageBytes)
         };
+
+        request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         ProductCreateResponse? response;
         try
@@ -460,14 +467,16 @@ public class ProductEndpoint
             Id = productModel.Id,
             Name = productModel.Name,
             Description = productModel.Description,
+            Amount = productModel.Amount,
             Category = new Category
             {
-                Id = productModel.Category.Id,
-                Name = productModel.Category.Name
+                Id = productModel.CategoryModel.Id,
+                Name = productModel.CategoryModel.Name
             },
-            RoleId = productModel.RoleModel.Id,
             Image = ByteString.CopyFrom(imageBytes)
         };
+
+        request.RoleIds.Add(productModel.Roles.Select(r => r.Id));
 
         if (imageBytes != null)
             request.Image = ByteString.CopyFrom(imageBytes);
@@ -583,16 +592,17 @@ public class ProductEndpoint
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Category = new CategoryModel
+            Amount = product.Amount,
+            CategoryModel = new CategoryModel
             {
                 Id = product.Category.Id,
                 Name = product.Category.Name
             },
-            RoleModel = new RoleModel
+            Roles = product.Roles.Select(r => new RoleModel
             {
-                Id = product.Id,
-                Name = product.Name
-            },
+                Id = r.Id,
+                Name = r.Name
+            }).ToList(),
             ImageName = product.Image
         };
     }
@@ -687,7 +697,6 @@ public class LoanEndpoint
         LoanCreateRequest request = new()
         {
             UserId = loanModel.User.Id,
-            LenderId = loanModel.Lender.Id,
             DueAt = loanModel.DueAt.ToFileTimeUtc()
         };
 
@@ -806,16 +815,17 @@ public class LoanEndpoint
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Category = new CategoryModel
+            Amount = product.Amount,
+            CategoryModel = new CategoryModel
             {
                 Id = product.Category.Id,
                 Name = product.Category.Name
             },
-            RoleModel = new RoleModel
+            Roles = product.Roles.Select(r => new RoleModel
             {
-                Id = product.Role.Id,
-                Name = product.Role.Name
-            },
+                Id = r.Id,
+                Name = r.Name
+            }).ToList(),
             ImageName = product.Image
         };
     }

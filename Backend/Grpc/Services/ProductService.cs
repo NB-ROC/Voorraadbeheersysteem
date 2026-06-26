@@ -77,6 +77,7 @@ public class ProductService : Products.ProductsBase
                 Id = request.Category.Id,
                 Name = request.Category.Name
             },
+            Amount = request.Amount,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Image = imageName
@@ -112,6 +113,7 @@ public class ProductService : Products.ProductsBase
 
         if (request.HasName) product.Name = request.Name;
         if (request.HasDescription) product.Description = request.Description;
+        if (request.HasAmount) product.Amount = request.Amount;
         if (request.Category != null)
             product.Category = new Entities.Category
             {
@@ -236,7 +238,7 @@ public class ProductService : Products.ProductsBase
 
     public static MetaProduct MapMeta(Product product)
     {
-        var meta = new MetaProduct
+        MetaProduct meta = new()
         {
             Id = product.Id,
             Name = product.Name,
@@ -246,6 +248,7 @@ public class ProductService : Products.ProductsBase
                 Id = product.CategoryId,
                 Name = product.Category.Name
             },
+            Amount = product.Amount,
             Image = product.Image
         };
         

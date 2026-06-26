@@ -64,7 +64,7 @@ public class UserService : Users.UsersBase
 
         User user = new()
         {
-            CardId = request.CardId.ToByteArray(),
+            UserId = request.CardId.ToByteArray(),
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
@@ -109,7 +109,7 @@ public class UserService : Users.UsersBase
     {
         User user = await _validator.ValidateModify(request);
 
-        if (request.HasCardId) user.CardId = request.CardId.ToByteArray();
+        if (request.HasCardId) user.UserId = request.CardId.ToByteArray();
         if (request.HasFirstName) user.FirstName = request.FirstName;
         if (request.HasLastName) user.LastName = request.LastName;
         if (request.HasEmail) user.Email = request.Email;
@@ -143,7 +143,7 @@ public class UserService : Users.UsersBase
         MetaUser meta = new()
         {
             Id = user.Id,
-            CardId = ByteString.CopyFrom(user.CardId),
+            CardId = ByteString.CopyFrom(user.UserId),
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
@@ -199,13 +199,12 @@ public class UserService : Users.UsersBase
 
         UserLenderScanResponse response = new();
 
-        if (tuple != null)
-        {
-            response.Id = tuple.Value.id;
-            response.Email = tuple.Value.email;
-            response.Name = tuple.Value.name;
-        }
-
+        if (tuple == null) return response;
+        
+        response.Id = tuple.Value.id;
+        response.Email = tuple.Value.email;
+        response.Name = tuple.Value.name;
+        
         return response;
     }
 }

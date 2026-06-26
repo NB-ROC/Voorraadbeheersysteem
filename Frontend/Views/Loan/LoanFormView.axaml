@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Frontend.Models"
+             xmlns:loan="clr-namespace:Frontend.ViewModels.Loan"
+             x:DataType="{x:Type loan:LoanFormViewModel}"
+             x:Class="Frontend.Views.Loan.LoanFormView">
+
+    <Grid RowDefinitions="100,*,100">
+        <ContentControl Content="{Binding Header}" />
+        <StackPanel Grid.Row="1" Margin="20">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="16" Text="{Binding UserIdText}" Margin="0,0,0,15" />
+                <Button Content="Reset kaart" Command="{Binding ResetUserIdCommand}" IsVisible="{Binding ResetCardVisible}"/>
+            </StackPanel>
+            
+            <StackPanel>
+                <TextBlock Text="Inleverdatum:" />
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Inleverdatum:" />
+
+                    <DatePicker SelectedDate="{Binding DueDate}" />
+
+                    <TimePicker
+                             SelectedTime="{Binding DueTime}" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Foreground="Red"
+                       Text="{Binding Error}"
+                       Margin="0,0,0,10" />
+
+            <Button Content="Opslaan"
+                    Command="{Binding SaveCommand}" />
+
+        </StackPanel>
+        <ContentControl Grid.Row="2" Content="{Binding Footer}" />
+
+    </Grid>
+</UserControl>
+
+

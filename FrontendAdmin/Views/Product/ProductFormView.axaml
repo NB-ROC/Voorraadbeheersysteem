@@ -66,6 +66,14 @@
                          AcceptsReturn="True"
                          MaxLength="{x:Static models:ProductModel.DescriptionLength}" />
             </StackPanel>
+            
+            <StackPanel>
+                <TextBlock Text="Hoeveelheid:" />
+                <NumericUpDown Minimum="0"
+                               FormatString="0"
+                               Value="{Binding Amount}"
+                               Margin="0,0,0,10" />
+            </StackPanel>
 
             <Button FontWeight="Bold" Foreground="#FFFFFF" Content="Opslaan"
                     Command="{Binding SaveCommand}"

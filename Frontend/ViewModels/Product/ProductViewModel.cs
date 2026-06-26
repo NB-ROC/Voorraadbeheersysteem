@@ -2,7 +2,6 @@
 using Avalonia.Media.Imaging;
 using Frontend.Models;
 using Frontend.Services;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace Frontend.ViewModels.Product;
@@ -16,11 +15,20 @@ public class ProductViewModel : ViewModelBase
     {
         _model = model;
         _api = api;
-
-        _ = LoadImageAsync();
     }
 
     public int Id => _model.Id;
+
+    public int Amount
+    {
+        get => _model.Amount;
+        set
+        {
+            if (_model.Amount == value) return;
+            _model.Amount = value;
+            this.RaisePropertyChanged();
+        }
+    }
 
     public string Name
     {
@@ -35,16 +43,16 @@ public class ProductViewModel : ViewModelBase
 
     public CategoryModel Category
     {
-        get => _model.Category;
+        get => _model.CategoryModel;
         set
         {
-            if (_model.Category == value) return;
-            _model.Category = value;
+            if (_model.CategoryModel == value) return;
+            _model.CategoryModel = value;
             this.RaisePropertyChanged();
         }
     }
 
-    public string CategoryName => _model.Category.Name;
+    public string CategoryName => _model.CategoryModel.Name;
 
     public string Description
     {
@@ -86,7 +94,7 @@ public class ProductViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private async Task LoadImageAsync()
+    public async Task LoadImageAsync()
     {
         IsImageLoading = true;
         ImageFailed = false;

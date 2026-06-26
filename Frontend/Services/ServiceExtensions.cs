@@ -1,7 +1,6 @@
 using System;
 using Frontend.ViewModels;
 using Frontend.ViewModels.Components;
-using Frontend.ViewModels.CustomerProduct;
 using Frontend.ViewModels.Dashboard;
 using Frontend.ViewModels.Loan;
 using Frontend.ViewModels.Login;
@@ -36,7 +35,6 @@ public static class ServiceExtensions
             collection
                 .AddSingleton<LoginScannerPageViewModel>()
                 .AddSingleton<LoginPageViewModel>()
-                .AddSingleton<CustomerProductPageViewModel>()
                 .AddSingleton<DashboardPageViewModel>()
                 .AddSingleton<UserPageViewModel>()
                 .AddSingleton<LoanPageViewModel>();
@@ -48,7 +46,8 @@ public static class ServiceExtensions
             collection.TryAddSingleton<FooterViewModel>();
 
             collection
-                .AddSingleton<UserFormViewModel>();
+                .AddSingleton<UserFormViewModel>()
+                .AddSingleton<LoanFormViewModel>();
         }
     }
 }

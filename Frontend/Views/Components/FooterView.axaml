@@ -7,7 +7,7 @@
              x:Class="Frontend.Views.Components.FooterView"
              x:DataType="{x:Type components:FooterViewModel}">
     <Border Background="#3b3b5c">
-        <UniformGrid Rows="1" Columns="4">
+        <UniformGrid Rows="1" Columns="3">
             <Button Background="Transparent" BorderThickness="0"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
@@ -16,16 +16,6 @@
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
                     <TextBlock Text="⊞" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
                     <TextBlock Text="Dashboard" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
-                </StackPanel>
-            </Button>
-            <Button Background="Transparent" BorderThickness="0"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding NavigateProducts}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                    <TextBlock Text="☰" Foreground="White" HorizontalAlignment="Center" FontSize="16" />
-                    <TextBlock Text="Producten" Foreground="White" HorizontalAlignment="Center" FontSize="11" />
                 </StackPanel>
             </Button>
             <Button Background="Transparent" BorderThickness="0"

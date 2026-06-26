@@ -117,7 +117,7 @@ public class UserManager
             .FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<(int id, string email, string name)?> LenderScan(byte[] cardId)
+    public async Task<(int id, string email, string name)?> LenderScan(byte[] UserId)
     {
         User? user = await _context.Users
             .Include(u => u.UserRoles)
@@ -127,7 +127,7 @@ public class UserManager
                     ur.Role.Name == "Admin"
                 )
             )
-            .Where(u => u.CardId == cardId)
+            .Where(u => u.UserId == UserId)
             .FirstOrDefaultAsync();
 
         if (user == null) return null;

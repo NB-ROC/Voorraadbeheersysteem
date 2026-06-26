@@ -1,7 +1,6 @@
 using System;
 using System.Reactive;
 using Frontend.Services;
-using Frontend.ViewModels.CustomerProduct;
 using Frontend.ViewModels.Dashboard;
 using Frontend.ViewModels.Loan;
 using Frontend.ViewModels.User;
@@ -16,13 +15,11 @@ public class FooterViewModel : ViewModelBase
     {
 
         NavigateDashboard = ReactiveCommand.CreateFromTask(navigation.NavigateTo<DashboardPageViewModel>);
-        NavigateProducts = ReactiveCommand.CreateFromTask(navigation.NavigateTo<CustomerProductPageViewModel>);
         NavigateLoans = ReactiveCommand.CreateFromTask(navigation.NavigateTo<LoanPageViewModel>);
         NavigateUsers = ReactiveCommand.CreateFromTask(navigation.NavigateTo<UserPageViewModel>);
     }
 
     public ReactiveCommand<Unit, Unit> NavigateDashboard { get; }
-    public ReactiveCommand<Unit, Unit> NavigateProducts { get; }
     public ReactiveCommand<Unit, Unit> NavigateLoans { get; }
     public ReactiveCommand<Unit, Unit> NavigateUsers { get; }
 }

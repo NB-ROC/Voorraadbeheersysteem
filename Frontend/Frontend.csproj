@@ -91,7 +91,7 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\User\UserFormView.axaml.cs">
-            <DependentUpon>UserFormView.axaml</DependentUpon>
+            <DependentUpon>LoanFormView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\User\UserPageView.axaml.cs">
@@ -105,6 +105,10 @@
         <Compile Update="Views\User\UserPageView.axaml.cs">
             <DependentUpon>UserPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Loan\LoanFormView.axaml.cs">
+          <DependentUpon>UserFormView.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

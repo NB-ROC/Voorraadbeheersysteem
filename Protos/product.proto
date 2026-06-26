@@ -25,6 +25,7 @@ message MetaProduct {
   Role role = 5;
   string image = 6;
   repeated Role roles = 7;
+  int32 amount = 8;
 }
 
 message Role {
@@ -64,6 +65,7 @@ message ProductCreateRequest {
   int32 role_id = 4;
   bytes image = 5;
   repeated int32 role_ids = 6;
+  int32 amount = 7;
 }
 
 message ProductCreateResponse {
@@ -79,7 +81,8 @@ message ProductModifyRequest {
   optional Category category = 4;
   optional int32 role_id = 5;
   optional bytes image = 6;
-  repeated int32 role_ids = 7;
+  optional int32 amount = 7;
+  repeated int32 role_ids = 8;
 }
 
 message ProductModifyResponse {

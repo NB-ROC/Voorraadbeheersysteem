@@ -120,9 +120,17 @@
                                         <StackPanel Grid.Column="1"
                                                     VerticalAlignment="Center"
                                                     Spacing="4">
-                                            <TextBlock Text="{Binding CategoryName}"
-                                                       Foreground="#9CA3AF"
-                                                       FontSize="12" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding CategoryName}"
+                                                           Foreground="#9CA3AF"
+                                                           FontSize="12" />
+                                                <TextBlock Text=" ⋅ "
+                                                           Foreground="#9CA3AF"
+                                                           FontSize="12" />
+                                                <TextBlock Text="{Binding Amount}"
+                                                           Foreground="#9CA3AF"
+                                                           FontSize="12" />
+                                            </StackPanel>
                                             <TextBlock Text="{Binding Name}"
                                                        Foreground="#111827"
                                                        FontWeight="Bold"

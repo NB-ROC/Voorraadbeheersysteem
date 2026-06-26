@@ -41,6 +41,17 @@ public class ProductViewModel : ViewModelBase
         }
     }
 
+    public int Amount
+    {
+        get => _model.Amount;
+        set
+        {
+            if (_model.Amount == value) return;
+            _model.Amount = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
     public CategoryModel CategoryModel
     {
         get => _model.CategoryModel;

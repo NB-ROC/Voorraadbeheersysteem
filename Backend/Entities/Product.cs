@@ -10,6 +10,8 @@ public class Product
     public const int ImageLength = 16;
 
     public int Id { get; set; }
+    
+    public int Amount { get; set; }
 
     [MaxLength(NameLength)] public string Name { get; set; } = null!;
     [MaxLength(DescriptionLength)] public string Description { get; set; } = null!;
