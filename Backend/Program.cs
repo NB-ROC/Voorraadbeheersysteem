@@ -1,5 +1,38 @@
+using Backend.Database;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+IWebHostEnvironment env = builder.Environment;
+
+if (env.IsDevelopment())
+{
+    builder.Services.AddDbContext<TestDbContext>();
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>();
+}
 
 WebApplication app = builder.Build();
-        
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    
+    try
+    {
+        if (dbContext.Database.CanConnect())
+        {
+            Console.WriteLine("🚀 Database connection verification: SUCCESS!");
+        }
+        else
+        {
+            Console.WriteLine("❌ Database connection verification: FAILED (Database might not exist).");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"💥 Database connection verification: CRASHED! Error: {ex.Message}");
+    }
+}
+
 app.Run();
