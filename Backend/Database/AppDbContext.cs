@@ -8,13 +8,14 @@ public class AppDbContext : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        MySqlConnectionStringBuilder builder = new();
-
-        builder.Server = GetEnv("DB_SERVER");
-        builder.Port = GetEnvIntUnsigned("DB_PORT");
-        builder.Database = GetEnv("DB_NAME");
-        builder.UserID = GetEnv("DB_USERNAME");
-        builder.Password = GetEnv("DB_PASSWORD");
+        MySqlConnectionStringBuilder builder = new()
+        {
+            Server = GetEnv("DB_SERVER"),
+            Port = GetEnvIntUnsigned("DB_PORT"),
+            Database = GetEnv("DB_NAME"),
+            UserID = GetEnv("DB_USERNAME"),
+            Password = GetEnv("DB_PASSWORD")
+        };
 
         options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString));
     }
