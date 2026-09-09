@@ -17,7 +17,10 @@ using (IServiceScope scope = app.Services.CreateScope())
     try
     {
         if (dbContext.Database.CanConnect())
+        {
             Console.WriteLine("🚀 Database connection verification: SUCCESS!");
+            dbContext.Database.EnsureCreated();
+        }
         else
             Console.WriteLine("❌ Database connection verification: FAILED (Database might not exist).");
     }

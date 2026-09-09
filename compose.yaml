@@ -1,5 +1,7 @@
 ﻿services:
   db:
+    ports:
+      - "3306:3306"
     image: mariadb
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT}
@@ -9,7 +11,7 @@
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: [ "CMD", "mariadb-admin", "ping", "-u", "root", "-proot" ]
+      test: [ "CMD", "mariadb", "-u", "${DB_USER}", "-p${DB_PASS}", "-e", "SELECT 1" ]
       interval: 1s
       timeout: 5s
       retries: 15

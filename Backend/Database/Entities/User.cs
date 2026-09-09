@@ -20,9 +20,11 @@ public class User
 
     // Navigation properties
 
-    public ICollection<Log> Logs { get; set; } = [];
+    public ICollection<Log> InvokedLogs { get; set; } = [];
+    public ICollection<Log> RelatedLogs { get; set; } = [];
     public ICollection<Note> Notes { get; set; } = [];
-    public ICollection<Loan> Loans { get; set; } = [];
+    public ICollection<Loan> LentLoans { get; set; } = [];
+    public ICollection<Loan> BorrowedLoans { get; set; } = [];
     public ICollection<UserRole> UserRoles { get; set; } = [];
     public ICollection<UserNote> UserNotes { get; set; } = [];
 }
