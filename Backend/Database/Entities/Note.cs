@@ -16,5 +16,5 @@ public class Note
     
     // Navigation properties
 
-    [ForeignKey(nameof(WriterId))] public User Writer = null!;
+    [ForeignKey(nameof(WriterId))] public User Writer { get; set; }  = null!;
 }
