@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -6,6 +5,10 @@ namespace Backend.Database;
 
 public class AppDbContext : DbContext
 {
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         MySqlConnectionStringBuilder builder = new()
@@ -22,7 +25,8 @@ public class AppDbContext : DbContext
 
     private static string GetEnv(string key)
     {
-        return Environment.GetEnvironmentVariable(key) ?? throw new NullReferenceException("Environment value not found.");
+        return Environment.GetEnvironmentVariable(key) ??
+               throw new NullReferenceException("Environment value not found.");
     }
 
     private static uint GetEnvIntUnsigned(string key)

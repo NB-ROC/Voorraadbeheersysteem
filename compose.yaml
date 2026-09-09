@@ -1,8 +1,6 @@
 ﻿services:
   db:
     image: mariadb
-    ports: # !!! REMOVE IN PRODUCTION !!!
-      - "3306:3306"
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT}
       MARIADB_DATABASE: ${DB_NAME}

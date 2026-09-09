@@ -9,10 +9,10 @@ public class TestDbContext : AppDbContext
         const string relativePath = "Database/database.sqlite";
 
         if (!File.Exists(relativePath))
-        {
-            using (File.Create(relativePath)) {}
-        }
-        
+            using (File.Create(relativePath))
+            {
+            }
+
         options.UseSqlite("Data Source=" + relativePath);
     }
 }
