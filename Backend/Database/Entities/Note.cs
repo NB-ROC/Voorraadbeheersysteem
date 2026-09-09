@@ -5,10 +5,6 @@ namespace Backend.Database.Entities;
 
 public class Note
 {
-    // Navigation properties
-
-    [ForeignKey(nameof(WriterId))] public User Writer = null!;
-
     public ulong Id { get; set; }
 
     public ulong WriterId { get; set; }
@@ -17,4 +13,8 @@ public class Note
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    
+    // Navigation properties
+
+    [ForeignKey(nameof(WriterId))] public User Writer = null!;
 }

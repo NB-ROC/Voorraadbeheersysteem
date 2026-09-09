@@ -5,6 +5,8 @@ namespace Backend.Database.Entities;
 
 public enum RoleTree
 {
+    Permission,
+    Department
 }
 
 public class Role
