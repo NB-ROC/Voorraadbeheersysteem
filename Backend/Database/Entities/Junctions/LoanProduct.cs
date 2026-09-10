@@ -18,7 +18,7 @@ public class LoanProduct
 
     // Navigation properties
 
-    [ForeignKey(nameof(LoanId))] public Loan Loan { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(LoanId))] public Loan Loan { get; set; } = null!;
 
-    [ForeignKey(nameof(ProductId))] public Product Product { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(ProductId))] public Product Product { get; set; } = null!;
 }

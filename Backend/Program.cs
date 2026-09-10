@@ -4,7 +4,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IWebHostEnvironment env = builder.Environment;
 
 if (env.IsDevelopment())
-    builder.Services.AddDbContext<TestDbContext>();
+    builder.Services.AddDbContext<AppDbContext, TestDbContext>();
 else
     builder.Services.AddDbContext<AppDbContext>();
 
@@ -12,7 +12,7 @@ WebApplication app = builder.Build();
 
 using (IServiceScope scope = app.Services.CreateScope())
 {
-    TestDbContext dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+    AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     try
     {

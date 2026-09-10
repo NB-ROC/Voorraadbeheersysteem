@@ -14,7 +14,7 @@ public class UserNote
 
     // Navigation properties
 
-    [ForeignKey(nameof(UserId))] public User User { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(UserId))] public User User { get; set; } = null!;
 
-    [ForeignKey(nameof(NoteId))] public Note Note { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(NoteId))] public Note Note { get; set; } = null!;
 }

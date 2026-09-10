@@ -15,13 +15,15 @@ public class User
 
     [MinLength(1)] [MaxLength(255)] public string? PasswordHash { get; set; }
 
+    [Required] public bool IsActive { get; set; } = true;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation properties
 
     public ICollection<Log> InvokedLogs { get; set; } = [];
-    public ICollection<Log> RelatedLogs { get; set; } = [];
+    public ICollection<Log> TargetLogs { get; set; } = [];
     public ICollection<Note> Notes { get; set; } = [];
     public ICollection<Loan> LentLoans { get; set; } = [];
     public ICollection<Loan> BorrowedLoans { get; set; } = [];

@@ -7,9 +7,9 @@ public class Loan
 {
     public ulong Id { get; set; }
 
-    public ulong LenderId { get; set; }
+    public ulong? LenderId { get; set; }
 
-    public ulong BorrowerId { get; set; }
+    public ulong? BorrowerId { get; set; }
 
     public DateOnly DueAt { get; set; }
 
@@ -20,9 +20,9 @@ public class Loan
 
     // Navigation properties
 
-    [ForeignKey(nameof(LenderId))] public User Lender { get; set; } = null!;
+    [ForeignKey(nameof(LenderId))] public User? Lender { get; set; }
 
-    [ForeignKey(nameof(BorrowerId))] public User Borrower { get; set; } = null!;
+    [ForeignKey(nameof(BorrowerId))] public User? Borrower { get; set; }
 
     public ICollection<LoanProduct> LoanProducts { get; set; } = [];
 }

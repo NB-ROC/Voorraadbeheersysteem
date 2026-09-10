@@ -7,9 +7,9 @@ public class Log
 {
     public ulong Id { get; set; }
 
-    public ulong InvokerId { get; set; }
+    public ulong? InvokerId { get; set; }
 
-    public ulong RelatedId { get; set; }
+    public ulong? TargetId { get; set; }
 
     [MinLength(1)] [MaxLength(255)] public string Action { get; set; } = string.Empty;
 
@@ -17,7 +17,7 @@ public class Log
 
     // Navigation properties
 
-    [ForeignKey(nameof(InvokerId))] public User Invoker { get; set; } = null!;
+    [ForeignKey(nameof(InvokerId))] public User? Invoker { get; set; }
 
-    [ForeignKey(nameof(RelatedId))] public User Related { get; set; } = null!;
+    [ForeignKey(nameof(TargetId))] public User? Target { get; set; }
 }

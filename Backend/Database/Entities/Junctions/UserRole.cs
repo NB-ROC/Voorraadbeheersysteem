@@ -14,7 +14,7 @@ public class UserRole
 
     // Navigation properties
 
-    [ForeignKey(nameof(UserId))] public User User { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(UserId))] public User User { get; set; } = null!;
 
-    [ForeignKey(nameof(RoleId))] public Role Role { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(RoleId))] public Role Role { get; set; } = null!;
 }

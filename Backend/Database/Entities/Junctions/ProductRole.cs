@@ -14,7 +14,7 @@ public class ProductRole
 
     // Navigation properties
 
-    [ForeignKey(nameof(ProductId))] public Product Product { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(ProductId))] public Product Product { get; set; } = null!;
 
-    [ForeignKey(nameof(RoleId))] public Role Role { get; set; } = null!;
+    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(RoleId))] public Role Role { get; set; } = null!;
 }

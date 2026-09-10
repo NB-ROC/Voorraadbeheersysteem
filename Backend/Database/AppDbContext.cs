@@ -49,9 +49,9 @@ public class AppDbContext : DbContext
             .HasForeignKey(y => y.InvokerId);
         
         builder.Entity<Log>()
-            .HasOne(x => x.Related)
-            .WithMany(x => x.RelatedLogs)
-            .HasForeignKey(y => y.RelatedId);
+            .HasOne(x => x.Target)
+            .WithMany(x => x.TargetLogs)
+            .HasForeignKey(y => y.TargetId);
         
         builder.Entity<Loan>()
             .HasOne(x => x.Lender)
