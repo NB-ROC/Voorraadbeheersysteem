@@ -19,7 +19,7 @@ public class Role
 
     [MinLength(1)] [MaxLength(16)] public string Name { get; set; } = string.Empty;
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; }
 
     // Navigation properties
 

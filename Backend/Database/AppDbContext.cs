@@ -1,12 +1,15 @@
 using Backend.Database.Entities;
 using Backend.Database.Entities.Junctions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MySqlConnector;
 
 namespace Backend.Database;
 
 public class AppDbContext : DbContext
 {
+    protected virtual string CurrentDatetimeSyntax => "UTC_TIMESTAMP(6)";
+
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -104,6 +107,99 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         #endregion
+
+        #region Default Values
+
+        #region Dates
+
+        builder.Entity<User>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<User>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Role>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<Note>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<Note>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Loan>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<Loan>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Product>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<Product>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Log>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<LoanProduct>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<LoanProduct>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<ProductNote>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<ProductRole>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<UserNote>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<UserRole>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        #endregion
+
+        builder.Entity<User>()
+            .Property(x => x.IsActive)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValue(true);
+
+        #endregion
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -130,5 +226,12 @@ public class AppDbContext : DbContext
     {
         string parsable = GetEnv(key);
         return uint.Parse(parsable);
+    }
+
+    protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
+    {
+        builder
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
     }
 }

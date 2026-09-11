@@ -7,7 +7,7 @@ public class User
 {
     public ulong Id { get; set; }
 
-    [MinLength(7)] [MaxLength(7)] public byte[] CardBytes { get; set; } = new byte[7];
+    [MinLength(7)] [MaxLength(7)] public byte[]? CardBytes { get; set; }
 
     [MinLength(1)] [MaxLength(32)] public string Name { get; set; } = string.Empty;
 
@@ -17,8 +17,8 @@ public class User
 
     [Required] public bool IsActive { get; set; } = true;
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     // Navigation properties
 
