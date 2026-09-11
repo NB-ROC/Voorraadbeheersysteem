@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backend.Database.Entities.Junctions;
 
 namespace Backend.Database.Entities;
 
@@ -16,4 +17,7 @@ public class Note
     // Navigation properties
 
     public User? Writer { get; set; } = null!;
+    
+    public ICollection<UserNote> UserNotes { get; set; } = [];
+    public ICollection<ProductNote> ProductNotes { get; set; } = [];
 }

@@ -46,22 +46,62 @@ public class AppDbContext : DbContext
         builder.Entity<Log>()
             .HasOne(x => x.Invoker)
             .WithMany(x => x.InvokedLogs)
-            .HasForeignKey(y => y.InvokerId);
+            .HasForeignKey(y => y.InvokerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<Log>()
             .HasOne(x => x.Target)
             .WithMany(x => x.TargetLogs)
-            .HasForeignKey(y => y.TargetId);
+            .HasForeignKey(y => y.TargetId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<Loan>()
             .HasOne(x => x.Lender)
             .WithMany(x => x.LentLoans)
-            .HasForeignKey(y => y.LenderId);
+            .HasForeignKey(y => y.LenderId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<Loan>()
             .HasOne(x => x.Borrower)
             .WithMany(x => x.BorrowedLoans)
-            .HasForeignKey(y => y.BorrowerId);
+            .HasForeignKey(y => y.BorrowerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Note>()
+            .HasOne(x => x.Writer)
+            .WithMany(x => x.Notes)
+            .HasForeignKey(y => y.WriterId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.Entity<ProductNote>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.ProductNotes)
+            .HasForeignKey(y => y.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<ProductNote>()
+            .HasOne(x => x.Note)
+            .WithMany(x => x.ProductNotes)
+            .HasForeignKey(y => y.NoteId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<ProductRole>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.ProductRoles)
+            .HasForeignKey(y => y.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<UserNote>()
+            .HasOne(x => x.Note)
+            .WithMany(x => x.UserNotes)
+            .HasForeignKey(y => y.NoteId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<UserRole>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.UserRoles)
+            .HasForeignKey(y => y.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         #endregion
     }
