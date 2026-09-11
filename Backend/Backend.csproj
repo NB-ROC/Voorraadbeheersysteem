@@ -9,23 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Google.Protobuf" Version="3.36.1"/>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.83.0"/>
-        <PackageReference Include="Grpc.Core" Version="2.46.6"/>
-        <PackageReference Include="Grpc.Tools" Version="2.83.0">
-            <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="Google.Protobuf" />
+        <PackageReference Include="Grpc.AspNetCore" />
+        <PackageReference Include="Grpc.Core" />
+        <PackageReference Include="Grpc.Tools">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
-          <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.12" />
-        <PackageReference Include="Microting.EntityFrameworkCore.MySql" Version="10.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" />
+        <PackageReference Include="Microting.EntityFrameworkCore.MySql" />
     </ItemGroup>
 
     <ItemGroup>

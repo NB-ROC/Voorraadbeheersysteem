@@ -121,7 +121,7 @@ public class AppDbContext : DbContext
             builder.Entity<User>()
                 .Property(x => x.UpdatedAt)
         );
-
+        
         builder.Entity<Role>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
@@ -210,7 +210,7 @@ public class AppDbContext : DbContext
             Port = GetEnvIntUnsigned("DB_PORT"),
             Database = GetEnv("DB_NAME"),
             UserID = GetEnv("DB_USERNAME"),
-            Password = GetEnv("DB_PASSWORD"),
+            Password = GetEnv("DB_PASSWORD")
         };
 
         options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString));
