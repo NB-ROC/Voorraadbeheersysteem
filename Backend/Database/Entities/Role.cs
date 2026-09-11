@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Database.Entities.Junctions;
 
 namespace Backend.Database.Entities;
@@ -13,7 +12,7 @@ public enum RoleTree
 public class Role
 {
     public ulong Id { get; set; }
-    
+
     public ulong? ParentId { get; set; }
 
     [Required] public RoleTree Tree { get; set; }
@@ -24,7 +23,7 @@ public class Role
 
     // Navigation properties
 
-    [ForeignKey(nameof(ParentId))]
+
     public Role? Parent { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; } = [];

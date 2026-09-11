@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Entities.Junctions;
@@ -18,7 +17,7 @@ public class LoanProduct
 
     // Navigation properties
 
-    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(LoanId))] public Loan Loan { get; set; } = null!;
+    public Loan Loan { get; set; } = null!;
 
-    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(ProductId))] public Product Product { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 }

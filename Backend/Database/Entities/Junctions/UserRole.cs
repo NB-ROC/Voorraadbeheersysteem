@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Entities.Junctions;
@@ -14,7 +13,7 @@ public class UserRole
 
     // Navigation properties
 
-    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(UserId))] public User User { get; set; } = null!;
+    public User User { get; set; } = null!;
 
-    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(RoleId))] public Role Role { get; set; } = null!;
+    public Role Role { get; set; } = null!;
 }

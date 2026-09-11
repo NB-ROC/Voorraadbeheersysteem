@@ -13,13 +13,13 @@ public class AppDbContext : DbContext
     public DbSet<Note> Notes { get; set; }
     public DbSet<Log> Logs { get; set; }
     public DbSet<Loan> Loans { get; set; }
-    
+
     public DbSet<LoanProduct> LoanProducts { get; set; }
     public DbSet<ProductNote> ProductNotes { get; set; }
     public DbSet<ProductRole> ProductRoles { get; set; }
     public DbSet<UserNote> UserNotes { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         #region Junction Composite Keys
@@ -29,35 +29,35 @@ public class AppDbContext : DbContext
 
         builder.Entity<ProductNote>()
             .HasKey(x => new { x.ProductId, x.NoteId });
-        
+
         builder.Entity<ProductRole>()
             .HasKey(x => new { x.ProductId, x.RoleId });
-        
+
         builder.Entity<UserNote>()
             .HasKey(x => new { x.UserId, x.NoteId });
-        
+
         builder.Entity<UserRole>()
             .HasKey(x => new { x.UserId, x.RoleId });
 
         #endregion
 
-        #region User Reference Discrepancies
+        #region Foreign Keys
 
         builder.Entity<Log>()
             .HasOne(x => x.Invoker)
             .WithMany(x => x.InvokedLogs)
             .HasForeignKey(y => y.InvokerId);
-        
+
         builder.Entity<Log>()
             .HasOne(x => x.Target)
             .WithMany(x => x.TargetLogs)
             .HasForeignKey(y => y.TargetId);
-        
+
         builder.Entity<Loan>()
             .HasOne(x => x.Lender)
             .WithMany(x => x.LentLoans)
             .HasForeignKey(y => y.LenderId);
-        
+
         builder.Entity<Loan>()
             .HasOne(x => x.Borrower)
             .WithMany(x => x.BorrowedLoans)

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Database.Entities.Junctions;
 
 namespace Backend.Database.Entities;
@@ -20,9 +19,9 @@ public class Loan
 
     // Navigation properties
 
-    [ForeignKey(nameof(LenderId))] public User? Lender { get; set; }
+    public User? Lender { get; set; }
 
-    [ForeignKey(nameof(BorrowerId))] public User? Borrower { get; set; }
+    public User? Borrower { get; set; }
 
     public ICollection<LoanProduct> LoanProducts { get; set; } = [];
 }

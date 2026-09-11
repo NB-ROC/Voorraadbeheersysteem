@@ -22,7 +22,9 @@ using (IServiceScope scope = app.Services.CreateScope())
             dbContext.Database.EnsureCreated();
         }
         else
+        {
             Console.WriteLine("❌ Database connection verification: FAILED (Database might not exist).");
+        }
     }
     catch (Exception ex)
     {

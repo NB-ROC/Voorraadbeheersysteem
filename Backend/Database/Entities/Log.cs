@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Database.Entities;
 
@@ -17,7 +16,7 @@ public class Log
 
     // Navigation properties
 
-    [ForeignKey(nameof(InvokerId))] public User? Invoker { get; set; }
+    public User? Invoker { get; set; }
 
-    [ForeignKey(nameof(TargetId))] public User? Target { get; set; }
+    public User? Target { get; set; }
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Entities.Junctions;
@@ -14,7 +13,7 @@ public class ProductNote
 
     // Navigation properties
 
-    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(ProductId))] public Product Product { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 
-    [DeleteBehavior(DeleteBehavior.Cascade)] [ForeignKey(nameof(NoteId))] public Note Note { get; set; } = null!;
+    public Note Note { get; set; } = null!;
 }

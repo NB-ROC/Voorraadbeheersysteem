@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Database.Entities;
 
@@ -13,8 +12,8 @@ public class Note
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-    
+
     // Navigation properties
 
-    [ForeignKey(nameof(WriterId))] public User? Writer { get; set; }  = null!;
+    public User? Writer { get; set; } = null!;
 }
