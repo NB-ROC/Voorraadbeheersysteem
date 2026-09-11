@@ -38,6 +38,7 @@
         <Protobuf Update="..\Protos\notification.proto">
             <Link>Protos\notification.proto</Link>
         </Protobuf>
+        <Protobuf Remove="..\Protos\**" />
     </ItemGroup>
 
 </Project>

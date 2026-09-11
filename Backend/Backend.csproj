@@ -23,26 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\Protos\**\*.proto" GrpcServices="Server"/>
-        <Protobuf Update="..\Protos\product.proto">
-            <Link>Protos\product.proto</Link>
-        </Protobuf>
-        <Protobuf Update="..\Protos\scan.proto">
-            <Link>Protos\scan.proto</Link>
-        </Protobuf>
-        <Protobuf Update="..\Protos\audit-log.proto">
-            <Link>Protos\auditlog.proto</Link>
-        </Protobuf>
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Database\Repositories\"/>
     </ItemGroup>
 
 </Project>
