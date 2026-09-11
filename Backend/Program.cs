@@ -13,7 +13,6 @@ WebApplication app = builder.Build();
 using (IServiceScope scope = app.Services.CreateScope())
 {
     AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
     try
     {
         if (dbContext.Database.CanConnect())

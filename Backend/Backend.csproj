@@ -27,12 +27,4 @@
             <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
-
-    <ItemGroup>
-        <Compile Include="Protos\**\*.cs" />
-
-        <Compile Include="..\Protos\**\*.cs"
-                 Link="Shared\%(RecursiveDir)%(Filename)%(Extension)" />
-    </ItemGroup>
-
 </Project>
