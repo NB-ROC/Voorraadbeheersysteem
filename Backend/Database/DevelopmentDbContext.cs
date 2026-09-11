@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backend.Database;
 
-public class TestDbContext : AppDbContext
+public class DevelopmentDbContext : AppDbContext
 {
     protected override string CurrentDatetimeSyntax => "CURRENT_TIMESTAMP";
 

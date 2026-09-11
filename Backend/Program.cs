@@ -4,7 +4,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IWebHostEnvironment env = builder.Environment;
 
 if (env.IsDevelopment())
-    builder.Services.AddDbContext<AppDbContext, TestDbContext>();
+    builder.Services.AddDbContext<AppDbContext, DevelopmentDbContext>();
 else
     builder.Services.AddDbContext<AppDbContext>();
 

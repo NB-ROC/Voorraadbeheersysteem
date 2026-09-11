@@ -2,11 +2,11 @@
 // using System.Collections.Generic;
 // using System.Collections.ObjectModel;
 // using System.Threading.Tasks;
-// using Frontend.Models;
-// using Frontend.Services;
-// using Frontend.ViewModels.Components;
+// using FrontendLender.Models;
+// using FrontendLender.Services;
+// using FrontendLender.ViewModels.Components;
 //
-// namespace Frontend.ViewModels.Loan;
+// namespace FrontendLender.ViewModels.Loan;
 //
 // public class LoanProductSelectionViewModel : SelectionViewModelBase<ProductModel>
 // {
