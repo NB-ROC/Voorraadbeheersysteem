@@ -1,177 +1,237 @@
-using Backend.Entities;
-using Backend.Entities.Relations;
-using Microsoft.AspNetCore.Identity;
+using Backend.Database.Entities;
+using Backend.Database.Entities.Junctions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MySqlConnector;
 
 namespace Backend.Database;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+    protected virtual string CurrentDatetimeSyntax => "CURRENT_TIMESTAMP(6)";
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Note> Notes { get; set; }
+    public DbSet<Log> Logs { get; set; }
+    public DbSet<Loan> Loans { get; set; }
+
+    public DbSet<LoanProduct> LoanProducts { get; set; }
+    public DbSet<ProductNote> ProductNotes { get; set; }
+    public DbSet<ProductRole> ProductRoles { get; set; }
+    public DbSet<UserNote> UserNotes { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
+        #region Junction Composite Keys
+
+        builder.Entity<LoanProduct>()
+            .HasKey(x => new { x.LoanId, x.ProductId });
+
+        builder.Entity<ProductNote>()
+            .HasKey(x => new { x.ProductId, x.NoteId });
+
+        builder.Entity<ProductRole>()
+            .HasKey(x => new { x.ProductId, x.RoleId });
+
+        builder.Entity<UserNote>()
+            .HasKey(x => new { x.UserId, x.NoteId });
+
+        builder.Entity<UserRole>()
+            .HasKey(x => new { x.UserId, x.RoleId });
+
+        #endregion
+
+        #region Foreign Keys
+
+        builder.Entity<Log>()
+            .HasOne(x => x.Invoker)
+            .WithMany(x => x.InvokedLogs)
+            .HasForeignKey(y => y.InvokerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Log>()
+            .HasOne(x => x.Target)
+            .WithMany(x => x.TargetLogs)
+            .HasForeignKey(y => y.TargetId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Loan>()
+            .HasOne(x => x.Lender)
+            .WithMany(x => x.LentLoans)
+            .HasForeignKey(y => y.LenderId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Loan>()
+            .HasOne(x => x.Borrower)
+            .WithMany(x => x.BorrowedLoans)
+            .HasForeignKey(y => y.BorrowerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Note>()
+            .HasOne(x => x.Writer)
+            .WithMany(x => x.Notes)
+            .HasForeignKey(y => y.WriterId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.Entity<ProductNote>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.ProductNotes)
+            .HasForeignKey(y => y.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<ProductNote>()
+            .HasOne(x => x.Note)
+            .WithMany(x => x.ProductNotes)
+            .HasForeignKey(y => y.NoteId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<ProductRole>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.ProductRoles)
+            .HasForeignKey(y => y.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<UserNote>()
+            .HasOne(x => x.Note)
+            .WithMany(x => x.UserNotes)
+            .HasForeignKey(y => y.NoteId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<UserRole>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.UserRoles)
+            .HasForeignKey(y => y.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        #endregion
+
+        #region Default Values
+
+        #region Dates
+
+        builder.Entity<User>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<User>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Role>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<Note>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<Note>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Loan>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<Loan>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Product>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<Product>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<Log>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<LoanProduct>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        UpdatedAtColumn(
+            builder.Entity<LoanProduct>()
+                .Property(x => x.UpdatedAt)
+        );
+        
+        builder.Entity<ProductNote>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<ProductRole>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<UserNote>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        
+        builder.Entity<UserRole>()
+            .Property(x => x.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql(CurrentDatetimeSyntax);
+
+        #endregion
+
+        builder.Entity<User>()
+            .Property(x => x.IsActive)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValue(true);
+
+        #endregion
     }
 
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Loan> Loans => Set<Loan>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<Role> Role => Set<Role>();
-    public DbSet<User> Users => Set<User>();
-    public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
-    public DbSet<UserRole> UserRoles => Set<UserRole>();
-    public DbSet<ProductRole> ProductRoles => Set<ProductRole>();
-    public DbSet<Notification> Notifications { get; set; }
-    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        if (optionsBuilder.IsConfigured) return;
-
-        string server = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
-        string port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306";
-        string database = Environment.GetEnvironmentVariable("DB_DATABASE") ?? "storage";
-        string username = Environment.GetEnvironmentVariable("DB_USER") ?? "user";
-        string password = Environment.GetEnvironmentVariable("DB_PASS") ?? "pass";
-
-        string connectionString =
-            $"server={server};port={port};database={database};user={username};password={password}";
-
-        optionsBuilder
-            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // Relation Composite Keys
-        modelBuilder.Entity<LoanProduct>()
-            .HasKey(lp => new { lp.LoanId, lp.ProductId });
-        modelBuilder.Entity<UserRole>()
-            .HasKey(ur => new { ur.UserId, ur.RoleId });
-        modelBuilder.Entity<ProductRole>()
-            .HasKey(pr => new { pr.ProductId, pr.RoleId });
-
-        // Loan → User (borrower) and User (lender)
-        // Two FKs to the same table require explicit naming to avoid ambiguity
-        modelBuilder.Entity<Loan>()
-            .HasOne(l => l.User)
-            .WithMany()
-            .HasForeignKey(l => l.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Loan>()
-            .HasOne(l => l.Lender)
-            .WithMany()
-            .HasForeignKey(l => l.LenderId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Product → Category
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Category)
-            .WithMany()
-            .HasForeignKey(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // LoanProduct → Loan
-        modelBuilder.Entity<LoanProduct>()
-            .HasOne(lp => lp.Loan)
-            .WithMany()
-            .HasForeignKey(lp => lp.LoanId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // LoanProduct → Product
-        modelBuilder.Entity<LoanProduct>()
-            .HasOne(lp => lp.Product)
-            .WithMany()
-            .HasForeignKey(lp => lp.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // UserRole → User
-        modelBuilder.Entity<UserRole>()
-            .HasOne(ur => ur.User)
-            .WithMany(u => u.UserRoles)
-            .HasForeignKey(ur => ur.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // UserRole → Role
-        modelBuilder.Entity<UserRole>()
-            .HasOne(ur => ur.Role)
-            .WithMany()
-            .HasForeignKey(ur => ur.RoleId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // // ProductRole → Product
-        // modelBuilder.Entity<ProductRole>()
-        //     .HasOne(pr => pr.Product)
-        //     .WithMany()
-        //     .HasForeignKey(pr => pr.ProductId)
-        //     .OnDelete(DeleteBehavior.Cascade);
-        //
-        // modelBuilder.Entity<ProductRole>()
-        //     .HasOne(pr => pr.Role)
-        //     .WithMany()
-        //     .HasForeignKey(pr => pr.RoleId)
-        //     .OnDelete(DeleteBehavior.Cascade);
-
-        // Default roles
-        modelBuilder.Entity<Role>()
-            .HasData(
-                new Role(RoleType.Admin),
-                new Role(RoleType.Manager),
-                new Role(RoleType.Lender),
-                new Role(RoleType.Student),
-                new Role(RoleType.Personnel),
-                new Role(RoleType.Guest)
-            );
-        modelBuilder.Entity<AuditLog>()
-            .HasOne(a => a.Actor)
-            .WithMany()
-            .HasForeignKey(a => a.ActorId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Default category
-        modelBuilder.Entity<Category>()
-            .HasData(
-                new Category
-                {
-                    Id = 1,
-                    Name = "Test"
-                }
-            );
-    }
-
-    public static async Task SeedAsync(IServiceProvider services)
-    {
-        using IServiceScope scope = services.CreateScope();
-        AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        byte[] cardId = [4, 108, 200, 178, 200, 21, 144];
-
-        if (!context.Users.Any())
+        MySqlConnectionStringBuilder builder = new()
         {
-            PasswordHasher<User> hasher = new();
+            Server = GetEnv("DB_SERVER"),
+            Port = GetEnvIntUnsigned("DB_PORT"),
+            Database = GetEnv("DB_NAME"),
+            UserID = GetEnv("DB_USERNAME"),
+            Password = GetEnv("DB_PASSWORD")
+        };
 
-            User user = new()
-            {
-                CardId = cardId,
-                Number = 123456,
-                Email = "testmail@roc-nijmegen.nl",
-                PasswordHash = hasher.HashPassword(null!, "Placeholder1"),
-                FirstName = "Admin",
-                LastName = "Istrator",
-                CreatedAt = DateTime.Now
-            };
+        options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString));
+    }
 
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
-        }
+    private static string GetEnv(string key)
+    {
+        return Environment.GetEnvironmentVariable(key) ??
+               throw new NullReferenceException("Environment value not found.");
+    }
 
-        if (!context.UserRoles.Any())
-        {
-            context.UserRoles.Add(new UserRole
-            {
-                RoleId = RoleType.Admin,
-                UserId = 1
-            });
-            await context.SaveChangesAsync();
-        }
+    private static uint GetEnvIntUnsigned(string key)
+    {
+        string parsable = GetEnv(key);
+        return uint.Parse(parsable);
+    }
+
+    protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
+    {
+        builder
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
     }
 }

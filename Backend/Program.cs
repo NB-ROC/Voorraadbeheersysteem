@@ -1,83 +1,34 @@
-using System.Security.Claims;
 using Backend.Database;
-using Backend.Database.Managers;
-using Backend.Grpc.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
-internal class Program
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+IWebHostEnvironment env = builder.Environment;
+
+if (env.IsDevelopment())
+    builder.Services.AddDbContext<AppDbContext, DevelopmentDbContext>();
+else
+    builder.Services.AddDbContext<AppDbContext>();
+
+WebApplication app = builder.Build();
+
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    // TODO: Make this an environment variable !! URGENT !!
-    public static byte[] JwtSecret =
-        "super-secret-key-temp-dctygftgfgfguyefguwyegfwegfdefwfwefwefwfewfwefwfwfwefwfwfwef"u8.ToArray();
-
-    public static async Task Main(string[] args)
+    AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
     {
-        #region DB
-
-        // TODO: Make it so it dynamically creates these at runtime to avoid errors
-        Directory.CreateDirectory("Storage");
-        Directory.CreateDirectory("Storage/Products");
-
-        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-        string env = builder.Environment.EnvironmentName;
-
-        builder.Services.AddGrpc();
-
-        // TODO: Make this dynamically use the in-mem db when run locally, and the db in docker
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseInMemoryDatabase("testing"));
-        // builder.Services.AddDbContext<AppDbContext>();
-
-
-        builder.Services.AddDbContext<AppDbContext>();
-        builder.Services.AddScoped<UserManager>();
-        builder.Services.AddScoped<ProductManager>();
-        builder.Services.AddScoped<AuditLogManager>();
-
-        builder.Services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey(JwtSecret),
-
-                    NameClaimType = ClaimTypes.NameIdentifier,
-                    RoleClaimType = ClaimTypes.Role
-                };
-            });
-
-        builder.Services.AddAuthorization();
-
-        #endregion
-
-        #region GRPC
-
-        WebApplication app = builder.Build();
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        using (IServiceScope scope = app.Services.CreateScope())
+        if (dbContext.Database.CanConnect())
         {
-            AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.EnsureCreated();
+            Console.WriteLine("🚀 Database connection verification: SUCCESS!");
+            dbContext.Database.EnsureCreated();
         }
-
-        await AppDbContext.SeedAsync(app.Services);
-
-        app.MapGrpcService<UserService>();
-        app.MapGrpcService<ProductService>();
-        app.MapGrpcService<AuthService>();
-        app.MapGrpcService<NotificationService>();
-        app.MapGrpcService<AuditLogService>();
-        
-        app.Run();
-
-        #endregion
+        else
+        {
+            Console.WriteLine("❌ Database connection verification: FAILED (Database might not exist).");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"💥 Database connection verification: CRASHED! Error: {ex.Message}");
     }
 }
+
+app.Run();

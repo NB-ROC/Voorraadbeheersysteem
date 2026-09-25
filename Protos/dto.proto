@@ -1,0 +1,38 @@
+syntax = "proto3";
+package storage.dto;
+option csharp_namespace = "Storage.Dto";
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+enum RoleTree {
+  permission = 0;
+  title = 1;
+}
+
+// --------------------- //
+
+message Role {
+  uint64 id = 1;
+  RoleTree tree = 2;
+  string Name = 3;
+}
+
+message User {
+  uint64 id = 1;
+  optional bytes card_bytes = 2;
+  string name = 3;
+  string email = 4;
+  repeated Role roles = 5;
+  optional Timestamp created_at = 6;
+  optional Timestamp updated_at = 7;
+}
+
+message Note {
+  uint64 id = 1;
+  
+}
+
+

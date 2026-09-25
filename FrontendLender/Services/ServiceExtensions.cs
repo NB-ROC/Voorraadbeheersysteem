@@ -1,8 +1,8 @@
 using System;
-using FrontendAdmin.ViewModels;
+using FrontendLender.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FrontendAdmin.Services;
+namespace FrontendLender.Services;
 
 public static class ServiceExtensions
 {
@@ -12,6 +12,7 @@ public static class ServiceExtensions
         {
             collection
                 .AddSingleton<MainWindowViewModel>()
+                .AddSingleton<ISmartCardService, SmartCardService>()
 
                 // This is the function implementation that gets passed into the NavigationService
                 .AddSingleton<Func<Type, ViewModelBase?>>(provider =>

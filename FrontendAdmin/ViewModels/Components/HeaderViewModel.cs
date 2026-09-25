@@ -1,5 +1,0 @@
-namespace FrontendAdmin.ViewModels.Components;
-
-public class HeaderViewModel : ViewModelBase
-{
-}

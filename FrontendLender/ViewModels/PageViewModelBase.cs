@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace FrontendAdmin.ViewModels;
+namespace FrontendLender.ViewModels;
 
 public abstract class PageViewModelBase : ViewModelBase
 {

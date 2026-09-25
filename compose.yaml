@@ -1,8 +1,8 @@
 ﻿services:
   db:
-    image: mariadb
-    ports: # !!! REMOVE IN PRODUCTION !!!
+    ports:
       - "3306:3306"
+    image: mariadb
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT}
       MARIADB_DATABASE: ${DB_NAME}
@@ -11,7 +11,7 @@
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: [ "CMD", "mariadb-admin", "ping", "-u", "root", "-proot" ]
+      test: [ "CMD", "mariadb", "-u", "${DB_USER}", "-p${DB_PASS}", "-e", "SELECT 1" ]
       interval: 1s
       timeout: 5s
       retries: 15
@@ -24,8 +24,8 @@
       DB_SERVER: db
       DB_PORT: 3306
       DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
+      DB_USERNAME: ${DB_USER}
+      DB_PASSWORD: ${DB_PASS}
     ports:
       - "8080:8080"
       - "8081:8081"
