@@ -1,11 +1,8 @@
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Frontend.Services;
 using Frontend.ViewModels;
-using Frontend.ViewModels.Login;
 using Frontend.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,13 +20,11 @@ public class App : Application
         ServiceCollection serviceCollection = new();
 
         serviceCollection.AddCommonServices();
-        serviceCollection.AddPageServices();
-        serviceCollection.AddFormServices();
 
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
         INavigationService navigation = services.GetRequiredService<INavigationService>();
-        navigation.NavigateTo<LoginScannerPageViewModel>().Wait();
+        navigation.NavigateTo<PAGE_NAME>().Wait();
         
         switch (ApplicationLifetime)
         {

@@ -31,4 +31,10 @@
             <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+
+        <Protobuf Include="..\Protos\**\*.proto"
+                 Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"/>
+    </ItemGroup>
 </Project>
