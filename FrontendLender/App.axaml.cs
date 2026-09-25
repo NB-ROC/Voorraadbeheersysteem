@@ -1,12 +1,12 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Frontend.Services;
-using Frontend.ViewModels;
-using Frontend.Views;
+using FrontendLender.Services;
+using FrontendLender.ViewModels;
+using FrontendLender.Views;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Frontend;
+namespace FrontendLender;
 
 public class App : Application
 {

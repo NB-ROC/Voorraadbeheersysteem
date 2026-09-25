@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Frontend.ViewModels;
+using FrontendLender.ViewModels;
 
-namespace Frontend.Views;
+namespace FrontendLender.Views;
 
 public partial class MainWindowView : Window
 {

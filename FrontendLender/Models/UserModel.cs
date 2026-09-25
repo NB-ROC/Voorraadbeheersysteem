@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Frontend.Models;
+namespace FrontendLender.Models;
 
 public class UserModel
 {

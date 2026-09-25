@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace Frontend.ViewModels;
+namespace FrontendLender.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {

@@ -1,4 +1,4 @@
-namespace Frontend.Models;
+namespace FrontendLender.Models;
 
 public class CategoryModel
 {

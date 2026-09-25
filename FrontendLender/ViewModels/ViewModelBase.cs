@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace Frontend.ViewModels;
+namespace FrontendLender.ViewModels;
 
 public abstract class ViewModelBase : ReactiveObject
 {

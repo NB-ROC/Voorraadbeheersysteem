@@ -8,7 +8,7 @@ using PCSC;
 using PCSC.Exceptions;
 using PCSC.Monitoring;
 
-namespace Frontend.Services;
+namespace FrontendLender.Services;
 
 public interface ISmartCardService : IDisposable
 {

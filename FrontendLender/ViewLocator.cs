@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Frontend.ViewModels;
+using FrontendLender.ViewModels;
 
-namespace Frontend;
+namespace FrontendLender;
 
 /// <summary>
 ///     Given a view model, returns the corresponding view if possible.

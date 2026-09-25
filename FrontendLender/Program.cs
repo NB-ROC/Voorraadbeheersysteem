@@ -2,7 +2,7 @@
 using Avalonia;
 using ReactiveUI.Avalonia;
 
-namespace Frontend;
+namespace FrontendLender;
 
 internal sealed class Program
 {

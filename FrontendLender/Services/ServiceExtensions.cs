@@ -1,8 +1,8 @@
 using System;
-using Frontend.ViewModels;
+using FrontendLender.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Frontend.Services;
+namespace FrontendLender.Services;
 
 public static class ServiceExtensions
 {

@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Frontend.ViewModels;
+using FrontendLender.ViewModels;
 
-namespace Frontend.Services;
+namespace FrontendLender.Services;
 
 public interface INavigationService
 {
